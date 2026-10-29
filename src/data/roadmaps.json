@@ -1,0 +1,709 @@
+[
+  {
+    "id": "ai-web-design-workflow",
+    "title": "AI Web Design Workflow",
+    "description": "From prompt-to-layout to production UI with Figma AI, v0, Bolt, and Tailwind CSS.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 14,
+    "difficulty": "Intermediate",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Figma AI",
+      "v0",
+      "Bolt.new",
+      "Tailwind CSS"
+    ],
+    "publishedAt": "2026-10-15",
+    "updatedAt": "2026-10-18",
+    "status": "ready"
+  },
+  {
+    "id": "ai-full-stack-coding",
+    "title": "AI Full-Stack Coding",
+    "description": "Architecture planning, scaffolding, backend logic, and CI/CD with agentic coding assistants.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 18,
+    "difficulty": "Advanced",
+    "estimatedTime": "6 weeks",
+    "tools": [
+      "Cursor",
+      "Claude 3.7",
+      "Supabase",
+      "Docker"
+    ],
+    "publishedAt": "2026-10-12",
+    "updatedAt": "2026-10-19",
+    "status": "ready"
+  },
+  {
+    "id": "ai-video-content-creation",
+    "title": "AI Video & Content Creation",
+    "description": "Scripting, generative B-roll, voice synthesis, automated cutting, and motion graphics.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Intermediate",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Midjourney",
+      "ElevenLabs",
+      "Runway Gen-3",
+      "CapCut"
+    ],
+    "publishedAt": "2026-10-21",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-copywriting-seo",
+    "title": "AI Copywriting & SEO",
+    "description": "SERP analysis, programmatic content pipelines, semantic entity optimization, and editorial workflows.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 11,
+    "difficulty": "Beginner",
+    "estimatedTime": "3 weeks",
+    "tools": [
+      "Claude 3.7 Sonnet",
+      "SurferSEO",
+      "Ahrefs",
+      "Semrush",
+      "Perplexity"
+    ],
+    "publishedAt": "2026-10-22",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-automation-agents",
+    "title": "AI Automation & Agents",
+    "description": "Autonomous multi-agent loops, tool-calling pipelines, n8n integrations, and browser automations.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 16,
+    "difficulty": "Advanced",
+    "estimatedTime": "5 weeks",
+    "tools": [
+      "n8n",
+      "Make",
+      "LangGraph",
+      "Browser Use"
+    ],
+    "publishedAt": "2026-10-21",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "local-llms-privacy",
+    "title": "Local LLMs & Privacy",
+    "description": "Ollama, llama.cpp, quantized model selection, vLLM serving, and air-gapped confidential RAG.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 15,
+    "difficulty": "Advanced",
+    "estimatedTime": "5 weeks",
+    "tools": [
+      "Ollama",
+      "llama.cpp",
+      "LM Studio",
+      "vLLM",
+      "Open WebUI",
+      "DeepSeek-R1"
+    ],
+    "publishedAt": "2026-10-22",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-ui-ux-design-systems",
+    "title": "AI UI/UX & Design Systems",
+    "description": "Design production-ready interfaces, wireframes, and scalable component tokens using Figma, Relume, and v0.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Intermediate",
+    "estimatedTime": "5 weeks",
+    "tools": [
+      "Figma",
+      "Relume",
+      "v0",
+      "Tailwind CSS",
+      "Tokens Studio",
+      "Rive"
+    ],
+    "publishedAt": "2026-10-22",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-wordpress-woocommerce-builder",
+    "title": "AI WordPress & WooCommerce Builder",
+    "description": "Build, customize, and optimize high-converting WordPress sites, custom plugins, and WooCommerce stores with AI.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Beginner",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "WooCommerce",
+      "Kadence WP",
+      "Elementor AI",
+      "ACF",
+      "CodeWP",
+      "WP Rocket"
+    ],
+    "publishedAt": "2026-10-22",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-saas-micro-app-launchpad",
+    "title": "AI SaaS & Micro-App Launchpad",
+    "description": "Go from problem validation to a monetized micro-SaaS with authentication, billing, and AI core features.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 14,
+    "difficulty": "Advanced",
+    "estimatedTime": "6 weeks",
+    "tools": [
+      "Next.js",
+      "Supabase",
+      "Stripe",
+      "Cursor",
+      "Vercel AI SDK",
+      "Resend"
+    ],
+    "publishedAt": "2026-10-22",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-mobile-app-development",
+    "title": "AI Mobile App Development",
+    "description": "Build and ship cross-platform iOS and Android apps using React Native, Expo, Cursor, and Supabase.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 14,
+    "difficulty": "Advanced",
+    "estimatedTime": "6 weeks",
+    "tools": [
+      "React Native",
+      "Expo",
+      "NativeWind",
+      "RevenueCat",
+      "Cursor",
+      "Supabase"
+    ],
+    "publishedAt": "2026-10-22",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-ecommerce-product-branding",
+    "title": "AI E-Commerce & Product Branding",
+    "description": "Generate studio-grade product photography, brand kits, and high-converting storefront copy without a studio.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 10,
+    "difficulty": "Beginner",
+    "estimatedTime": "3 weeks",
+    "tools": [
+      "Midjourney",
+      "Flair AI",
+      "Shopify",
+      "Klaviyo",
+      "Photoroom",
+      "Claude"
+    ],
+    "publishedAt": "2026-10-23",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-data-analytics-bi",
+    "title": "AI Data Analytics & Business Intelligence",
+    "description": "Turn messy CSVs and databases into automated SQL queries, Python visualizations, and executive insights.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Intermediate",
+    "estimatedTime": "5 weeks",
+    "tools": [
+      "DuckDB",
+      "Python",
+      "dbt",
+      "Snowflake",
+      "Metabase",
+      "Claude"
+    ],
+    "publishedAt": "2026-10-23",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-youtube-faceless-shorts-engine",
+    "title": "AI YouTube Faceless & Shorts Engine",
+    "description": "Build an automated content pipeline for high-retention short-form and faceless documentary channels.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 10,
+    "difficulty": "Beginner",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "ElevenLabs",
+      "Runway Gen-3",
+      "CapCut",
+      "Midjourney",
+      "Claude",
+      "1of10"
+    ],
+    "publishedAt": "2026-10-23",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-digital-marketing-ad-funnels",
+    "title": "AI Digital Marketing & Ad Funnels",
+    "description": "Engineer high-ROAS ad creatives, landing page variants, and automated email conversion sequences.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Intermediate",
+    "estimatedTime": "5 weeks",
+    "tools": [
+      "Meta Ads",
+      "Google Ads",
+      "Claude",
+      "HeyGen",
+      "Klaviyo",
+      "Triple Whale"
+    ],
+    "publishedAt": "2026-10-23",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-technical-writing-docs-engineering",
+    "title": "AI Technical Writing & Docs Engineering",
+    "description": "Create developer documentation, API references, and interactive knowledge bases using AI-assisted workflows.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 10,
+    "difficulty": "Intermediate",
+    "estimatedTime": "3 weeks",
+    "tools": [
+      "Mintlify",
+      "Scalar",
+      "Claude",
+      "Vale",
+      "Mermaid.js",
+      "Inkeep"
+    ],
+    "publishedAt": "2026-10-23",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-cybersecurity-code-auditing",
+    "title": "AI Cybersecurity & Code Auditing",
+    "description": "Audit AI-generated codebases for vulnerabilities, secure API endpoints, and prevent prompt injection attacks.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Advanced",
+    "estimatedTime": "5 weeks",
+    "tools": [
+      "Semgrep",
+      "Snyk",
+      "Claude",
+      "Gitleaks",
+      "Promptfoo",
+      "Arcjet"
+    ],
+    "publishedAt": "2026-10-23",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "ai-game-dev-interactive-3d-worlds",
+    "title": "AI Game Dev & Interactive 3D Worlds",
+    "description": "Build playable 2D/3D browser and indie games using Cursor, Three.js, Meshy 3D assets, and AI audio pipelines.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 14,
+    "difficulty": "Intermediate",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Cursor",
+      "Three.js",
+      "Meshy 3D",
+      "ElevenLabs"
+    ],
+    "publishedAt": null,
+    "updatedAt": null,
+    "status": "coming-soon"
+  },
+  {
+    "id": "ai-fintech-quant-market-sentiment-agents",
+    "title": "AI FinTech, Quant & Market Sentiment Agents",
+    "description": "Engineer automated financial research pipelines, SEC filing parsers, and backtesting workflows with Python and LLMs.",
+    "category": "Role & Workflow Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Advanced",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Python",
+      "Perplexity API",
+      "Pandas",
+      "LangGraph"
+    ],
+    "publishedAt": null,
+    "updatedAt": null,
+    "status": "coming-soon"
+  },
+  {
+    "id": "full-stack-ai-engineer",
+    "title": "Full-Stack AI Engineer",
+    "description": "Master the complete AI engineering stack from LLM APIs and hybrid pgvector RAG to stateful LangGraph agents and production evals.",
+    "category": "AI Role-Based Roadmaps",
+    "stepCount": 18,
+    "difficulty": "Intermediate",
+    "estimatedTime": "6 weeks",
+    "tools": [
+      "TypeScript",
+      "Vercel AI SDK",
+      "Supabase",
+      "LangGraph"
+    ],
+    "publishedAt": null,
+    "updatedAt": null,
+    "status": "coming-soon"
+  },
+  {
+    "id": "ai-product-ui-ux-designer",
+    "title": "AI Product & UI/UX Designer",
+    "description": "Evolve from static wireframing to generative UI systems, design token automation, and direct Figma-to-code MCP handoffs.",
+    "category": "AI Role-Based Roadmaps",
+    "stepCount": 14,
+    "difficulty": "Beginner",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Figma",
+      "v0",
+      "Relume",
+      "Framelink MCP"
+    ],
+    "publishedAt": null,
+    "updatedAt": null,
+    "status": "coming-soon"
+  },
+  {
+    "id": "ai-automation-ops-architect",
+    "title": "AI Automation & Ops Architect",
+    "description": "Architect fault-tolerant enterprise automations, webhook pipelines, and autonomous multi-agent back-office operations.",
+    "category": "AI Role-Based Roadmaps",
+    "stepCount": 15,
+    "difficulty": "Intermediate",
+    "estimatedTime": "5 weeks",
+    "tools": [
+      "n8n",
+      "Make",
+      "Firecrawl",
+      "OpenRouter"
+    ],
+    "publishedAt": null,
+    "updatedAt": null,
+    "status": "coming-soon"
+  },
+  {
+    "id": "ai-growth-performance-marketer",
+    "title": "AI Growth & Performance Marketer",
+    "description": "Build scalable programmatic SEO engines, high-ROAS creative testing matrices, and automated lifecycle conversion funnels.",
+    "category": "AI Role-Based Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Beginner",
+    "estimatedTime": "3 weeks",
+    "tools": [
+      "Claude",
+      "Ahrefs",
+      "Framer",
+      "Klaviyo"
+    ],
+    "publishedAt": null,
+    "updatedAt": null,
+    "status": "coming-soon"
+  },
+  {
+    "id": "ai-data-scientist-ml-ops-engineer",
+    "title": "AI Data Scientist & ML Ops Engineer",
+    "description": "Bridge exploratory analytics, dataset curation, QLoRA open-weight fine-tuning, and high-throughput vLLM GPU serving.",
+    "category": "AI Role-Based Roadmaps",
+    "stepCount": 16,
+    "difficulty": "Advanced",
+    "estimatedTime": "5 weeks",
+    "tools": [
+      "Python",
+      "Unsloth",
+      "Hugging Face",
+      "vLLM"
+    ],
+    "publishedAt": null,
+    "updatedAt": null,
+    "status": "coming-soon"
+  },
+  {
+    "id": "ai-security-red-team-specialist",
+    "title": "AI Security & Red-Team Specialist",
+    "description": "Audit AI-generated codebases, run automated adversarial red-teaming, and harden LLM apps against prompt injection.",
+    "category": "AI Role-Based Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Advanced",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Semgrep",
+      "Promptfoo",
+      "Lakera Guard",
+      "Gitleaks"
+    ],
+    "publishedAt": null,
+    "updatedAt": null,
+    "status": "coming-soon"
+  },
+  {
+    "id": "cursor-ai-ides",
+    "title": "Cursor & AI IDEs",
+    "description": "Rules for AI (.cursorrules), codebase indexing, multi-file composer edits, and terminal integration.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Intermediate",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Cursor",
+      "Windsurf",
+      "Claude 3.7",
+      "VS Code"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "chatgpt-claude-mastery",
+    "title": "ChatGPT & Claude Mastery",
+    "description": "Advanced prompt engineering, system instructions, artifacts, reasoning models, and API parameters.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Beginner",
+    "estimatedTime": "3 weeks",
+    "tools": [
+      "Claude 3.7",
+      "ChatGPT o3-mini",
+      "Anthropic Console",
+      "OpenAI Playground"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "midjourney-flux-image-gen",
+    "title": "Midjourney & Flux Image Gen",
+    "description": "Flux Schnell/Dev, LoRA fine-tuning, ComfyUI node workflows, and parameter controls.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Intermediate",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Midjourney v6.1",
+      "Flux.1 Pro",
+      "Ideogram 2.0",
+      "ComfyUI"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "v0-bolt-lovable",
+    "title": "v0, Bolt & Lovable",
+    "description": "Full-stack generative app builders, shadcn/ui components, WebContainers, Supabase, and GitHub sync.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Intermediate",
+    "estimatedTime": "3 weeks",
+    "tools": [
+      "v0 by Vercel",
+      "Bolt.new",
+      "Lovable",
+      "Supabase"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "langchain-langgraph-crewai",
+    "title": "LangChain, LangGraph & CrewAI",
+    "description": "LCEL runnables, stateful LangGraph multi-agent systems, cyclic ReAct loops, and CrewAI role orchestration.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Advanced",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "LangChain",
+      "LangGraph",
+      "CrewAI",
+      "LangSmith"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "huggingface-ollama-models",
+    "title": "Hugging Face, Ollama & Open-Source Models",
+    "description": "Transformers API, quantized GGUF/AWQ models, custom Ollama Modelfiles, LoRA fine-tuning, and vLLM serving.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Advanced",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Hugging Face",
+      "Ollama",
+      "Transformers",
+      "vLLM",
+      "Gradio"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "n8n-make-automation-mastery",
+    "title": "n8n & Make Automation Mastery",
+    "description": "Master visual workflow orchestration, custom HTTP webhooks, JSON transformations, and autonomous agent nodes.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Intermediate",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "n8n",
+      "Make",
+      "Postman",
+      "Docker"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "supabase-firebase-ai-apps",
+    "title": "Supabase & Firebase for AI Apps",
+    "description": "Configure Postgres databases, Row-Level Security, Edge Functions, and pgvector embeddings for AI products.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Intermediate",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Supabase",
+      "pgvector",
+      "Firebase",
+      "PostgreSQL"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "figma-framer-ai-workflow",
+    "title": "Figma & Framer AI Workflow",
+    "description": "Bridge the gap from interactive Figma prototypes to live, responsive Framer production websites using AI plugins.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 10,
+    "difficulty": "Beginner",
+    "estimatedTime": "3 weeks",
+    "tools": [
+      "Figma AI",
+      "Framer AI",
+      "Relume"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "elevenlabs-ai-audio-studio",
+    "title": "ElevenLabs & AI Audio Studio",
+    "description": "Master professional voice cloning, emotional pacing, multilingual dubbing, and real-time conversational voice APIs.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 10,
+    "difficulty": "Intermediate",
+    "estimatedTime": "3 weeks",
+    "tools": [
+      "ElevenLabs",
+      "Audacity",
+      "Deepgram",
+      "Vapi"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "runway-kling-ai-video-models",
+    "title": "Runway, Kling & AI Video Models",
+    "description": "Control camera motion, keyframe consistency, motion brushes, and cinematic upscaling across frontier video models.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 10,
+    "difficulty": "Intermediate",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "Runway Gen-3",
+      "Kling AI",
+      "Luma Dream Machine",
+      "Topaz AI"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "perplexity-deep-research-systems",
+    "title": "Perplexity & Deep Research Systems",
+    "description": "Build rigorous market, technical, and academic research workflows with verified source citations and custom spaces.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 8,
+    "difficulty": "Beginner",
+    "estimatedTime": "2 weeks",
+    "tools": [
+      "Perplexity Pro",
+      "Notion",
+      "Claude",
+      "Obsidian"
+    ],
+    "publishedAt": "2026-10-24",
+    "updatedAt": null,
+    "status": "ready"
+  },
+  {
+    "id": "comfyui-node-based-visual-workflows",
+    "title": "ComfyUI & Node-Based Visual Workflows",
+    "description": "Build repeatable, studio-grade image and video diffusion pipelines using custom nodes, ControlNet, and IP-Adapters.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 12,
+    "difficulty": "Advanced",
+    "estimatedTime": "4 weeks",
+    "tools": [
+      "ComfyUI",
+      "Flux.1",
+      "ControlNet",
+      "Fal.ai"
+    ],
+    "publishedAt": null,
+    "updatedAt": null,
+    "status": "coming-soon"
+  },
+  {
+    "id": "vercel-ai-sdk-streaming-ui-engineering",
+    "title": "Vercel AI SDK & Streaming UI Engineering",
+    "description": "Master streamText, generateObject, multi-step tool calling, and generative React Server Components in Next.js.",
+    "category": "Tool Mastery Roadmaps",
+    "stepCount": 10,
+    "difficulty": "Intermediate",
+    "estimatedTime": "3 weeks",
+    "tools": [
+      "Vercel AI SDK",
+      "Next.js",
+      "Zod",
+      "OpenRouter"
+    ],
+    "publishedAt": null,
+    "updatedAt": null,
+    "status": "coming-soon"
+  }
+]

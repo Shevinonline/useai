@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-sans, .font-heading, h1, h2, h3, h4, h5, h6, p, span, button, a, div, input {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', 'Space Mono', monospace !important;
+}
+
+@layer base {
+  :root {
+    --bg-main: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --border-default: #E2E8F0;
+    --text-primary: #0F172A;
+    --text-muted: #64748B;
+    --accent-brand: #7C3AED;
+    --accent-hover-bg: rgba(124, 58, 237, 0.05);
+    --surface-hover: #F1F5F9;
+  }
+
+  .dark {
+    --bg-main: #13151A;
+    --bg-surface: #1C1F26;
+    --border-default: #2D323E;
+    --text-primary: #F8FAFC;
+    --text-muted: #94A3B8;
+    --accent-brand: #7C3AED;
+    --accent-hover-bg: rgba(124, 58, 237, 0.08);
+    --surface-hover: #232731;
+  }
+
+  * {
+    border-color: var(--border-default);
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    margin: 0;
+    min-height: 100vh;
+  }
+}
+
+/* Custom scrollbar matching utilitarian theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
