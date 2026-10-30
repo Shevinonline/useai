@@ -19,10 +19,12 @@ import {
   Terminal,
   Bookmark,
   Share2,
-  Check
+  Check,
+  FileDown
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { safeJsonParse } from '../utils/validation';
+import { exportRoadmapAsMarkdown } from '../utils/markdownExporter';
 
 export default function RoadmapDetail() {
   const { id } = useParams();
@@ -31,6 +33,7 @@ export default function RoadmapDetail() {
   const { isRoadmapBookmarked, toggleRoadmapBookmark } = useWorkspace();
   const isRoadmapSaved = isRoadmapBookmarked(id);
   const [copiedRoadmapLink, setCopiedRoadmapLink] = useState(false);
+  const [exportedMd, setExportedMd] = useState(false);
 
   // Find roadmap metadata
   const roadmapMeta = useMemo(() => {
@@ -222,6 +225,17 @@ export default function RoadmapDetail() {
     }
   };
 
+  // Export roadmap as Markdown blueprint (.md)
+  const handleExportMarkdown = () => {
+    try {
+      exportRoadmapAsMarkdown(roadmapMeta, roadmapData, completedSteps);
+      setExportedMd(true);
+      setTimeout(() => setExportedMd(false), 2000);
+    } catch (err) {
+      console.error('Failed to export roadmap as markdown', err);
+    }
+  };
+
   // If roadmap not found in roadmapsData
   if (!roadmapMeta) {
     return (
@@ -369,7 +383,32 @@ export default function RoadmapDetail() {
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Export .md Blueprint Button */}
+            <button
+              type="button"
+              onClick={handleExportMarkdown}
+              title="Export complete roadmap as Markdown blueprint for Cursor, Notion & Obsidian"
+              aria-label="Export complete roadmap as Markdown blueprint"
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-150 cursor-pointer shadow-xs ${
+                exportedMd
+                  ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                  : 'border-app-border bg-app-surface text-app-muted hover:text-app-text hover:border-brand-accent/50'
+              }`}
+            >
+              {exportedMd ? (
+                <>
+                  <Check className="h-3.5 w-3.5 text-emerald-500" />
+                  <span>✓ Downloaded!</span>
+                </>
+              ) : (
+                <>
+                  <FileDown className="h-3.5 w-3.5 text-brand-accent" />
+                  <span>Export .md</span>
+                </>
+              )}
+            </button>
+
             {/* Copy / Share Roadmap Link Button */}
             <button
               type="button"

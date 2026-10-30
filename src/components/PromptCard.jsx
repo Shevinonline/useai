@@ -11,9 +11,12 @@ import {
   CheckCircle2,
   Sliders,
   Layers,
-  Bookmark
+  Bookmark,
+  Compass
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
+import { generatePromptDeepLinks } from '../utils/promptLinks';
+import { sanitizeExternalUrl } from '../utils/validation';
 
 export default function PromptCard({ prompt }) {
   const { isPromptBookmarked, togglePromptBookmark } = useWorkspace();
@@ -44,6 +47,11 @@ export default function PromptCard({ prompt }) {
     }
     return text;
   }, [prompt.template, prompt.variables, selectedVariables]);
+
+  // Compute 1-click deep links for ChatGPT & Perplexity
+  const deepLinks = useMemo(() => {
+    return generatePromptDeepLinks(livePromptText);
+  }, [livePromptText]);
 
   // Handle variable chip selection
   const handleVariableChange = (varId, optionValue) => {
@@ -252,10 +260,41 @@ export default function PromptCard({ prompt }) {
       </div>
 
       {/* 5. Action Footer */}
-      <div className="px-4 sm:px-5 py-3 border-t border-app-border bg-app-surface/60 flex items-center justify-between gap-3">
-        <span className="text-[11px] font-mono text-app-muted">
-          Node #{prompt.stepNumber}
-        </span>
+      <div className="px-4 sm:px-5 py-3 border-t border-app-border bg-app-surface/60 flex flex-wrap items-center justify-between gap-2.5">
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-mono text-app-muted">
+            Node #{prompt.stepNumber}
+          </span>
+
+          {/* 1-Click Run in AI Action Links */}
+          <div className="flex items-center gap-1.5 pl-2 border-l border-app-border">
+            <a
+              href={sanitizeExternalUrl(deepLinks.chatgpt)}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Run customized prompt directly in ChatGPT (opens new tab)"
+              aria-label="Run customized prompt in ChatGPT"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded text-[11px] font-medium border border-app-border bg-app-bg text-app-muted hover:text-emerald-500 hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all duration-150 font-sans cursor-pointer group"
+            >
+              <Sparkles className="h-3 w-3 text-emerald-500 shrink-0" />
+              <span>ChatGPT</span>
+              <ExternalLink className="h-2.5 w-2.5 opacity-60 group-hover:opacity-100" />
+            </a>
+
+            <a
+              href={sanitizeExternalUrl(deepLinks.perplexity)}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Run customized prompt directly in Perplexity (opens new tab)"
+              aria-label="Run customized prompt in Perplexity"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded text-[11px] font-medium border border-app-border bg-app-bg text-app-muted hover:text-cyan-500 hover:border-cyan-500/40 hover:bg-cyan-500/5 transition-all duration-150 font-sans cursor-pointer group"
+            >
+              <Compass className="h-3 w-3 text-cyan-500 shrink-0" />
+              <span>Perplexity</span>
+              <ExternalLink className="h-2.5 w-2.5 opacity-60 group-hover:opacity-100" />
+            </a>
+          </div>
+        </div>
 
         <div className="flex items-center gap-2">
           {/* Bookmark Button */}

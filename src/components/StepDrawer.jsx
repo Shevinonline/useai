@@ -20,10 +20,12 @@ import {
   Bookmark,
   ChevronLeft,
   ChevronRight,
-  Link2
+  Link2,
+  Compass
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
 import { sanitizeExternalUrl } from '../utils/validation';
+import { generatePromptDeepLinks } from '../utils/promptLinks';
 
 export default function StepDrawer({
   step,
@@ -124,6 +126,11 @@ export default function StepDrawer({
     }
     return text;
   }, [step, selectedVariables]);
+
+  // Compute 1-click execution deep links for ChatGPT & Perplexity
+  const drawerDeepLinks = useMemo(() => {
+    return generatePromptDeepLinks(customizedPromptText);
+  }, [customizedPromptText]);
 
   const handleCopyPrompt = async () => {
     if (customizedPromptText) {
@@ -715,7 +722,7 @@ Output complete, verified code with zero conversational fluff.`,
                 <div className="space-y-2">
                   <div className="rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] overflow-hidden shadow-xs">
                     {/* Header Bar */}
-                    <div className="px-4 py-3 border-b border-[#E2E8F0] bg-white flex items-center justify-between text-xs">
+                    <div className="px-4 py-3 border-b border-[#E2E8F0] bg-white flex flex-wrap items-center justify-between gap-2.5 text-xs">
                       <div className="flex items-center gap-2">
                         <Terminal className="h-4 w-4 text-[#7C3AED]" />
                         <span className="text-xs font-medium text-[#64748B] truncate max-w-[280px]">
@@ -723,7 +730,35 @@ Output complete, verified code with zero conversational fluff.`,
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        {/* 1-Click Run in ChatGPT */}
+                        <a
+                          href={sanitizeExternalUrl(drawerDeepLinks.chatgpt)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Run customized prompt directly in ChatGPT (opens new tab)"
+                          aria-label="Run in ChatGPT"
+                          className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-[#E2E8F0] bg-[#F8FAFC] text-[#0F172A] hover:text-emerald-600 hover:border-emerald-500/40 hover:bg-emerald-50/50 transition-all duration-150 inline-flex items-center gap-1.5 cursor-pointer shadow-2xs group"
+                        >
+                          <Sparkles className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                          <span>ChatGPT</span>
+                          <ExternalLink className="h-3 w-3 text-[#94A3B8] group-hover:text-emerald-500" />
+                        </a>
+
+                        {/* 1-Click Run in Perplexity */}
+                        <a
+                          href={sanitizeExternalUrl(drawerDeepLinks.perplexity)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Run customized prompt directly in Perplexity (opens new tab)"
+                          aria-label="Run in Perplexity"
+                          className="px-2.5 py-1.5 text-xs font-semibold rounded-md border border-[#E2E8F0] bg-[#F8FAFC] text-[#0F172A] hover:text-cyan-600 hover:border-cyan-500/40 hover:bg-cyan-50/50 transition-all duration-150 inline-flex items-center gap-1.5 cursor-pointer shadow-2xs group"
+                        >
+                          <Compass className="h-3.5 w-3.5 text-cyan-500 shrink-0" />
+                          <span>Perplexity</span>
+                          <ExternalLink className="h-3 w-3 text-[#94A3B8] group-hover:text-cyan-500" />
+                        </a>
+
                         {/* Bookmark Prompt Button */}
                         <button
                           onClick={handleTogglePromptBookmark}
@@ -763,6 +798,40 @@ Output complete, verified code with zero conversational fluff.`,
                     <pre className="p-4 bg-[#0F172A] text-[#F8FAFC] font-mono text-xs sm:text-sm leading-relaxed whitespace-pre-wrap select-all overflow-x-auto max-h-80">
                       {customizedPromptText}
                     </pre>
+
+                    {/* Prompt Box Action Footer */}
+                    <div className="px-4 py-2.5 border-t border-[#E2E8F0] bg-white flex flex-wrap items-center justify-between gap-2 text-xs">
+                      <div className="flex items-center gap-2 text-[11px] text-[#64748B]">
+                        <span className="font-semibold text-[#0F172A]">1-Click Launch:</span>
+                        <a
+                          href={sanitizeExternalUrl(drawerDeepLinks.chatgpt)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-emerald-600 hover:underline font-medium"
+                          title="Open customized prompt in ChatGPT"
+                        >
+                          <span>Run in ChatGPT</span>
+                          <ExternalLink className="h-2.5 w-2.5" />
+                        </a>
+                        <span className="text-[#CBD5E1]">•</span>
+                        <a
+                          href={sanitizeExternalUrl(drawerDeepLinks.perplexity)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-cyan-600 hover:underline font-medium"
+                          title="Open customized prompt in Perplexity"
+                        >
+                          <span>Run in Perplexity</span>
+                          <ExternalLink className="h-2.5 w-2.5" />
+                        </a>
+                      </div>
+
+                      {drawerDeepLinks.isTruncated && (
+                        <span className="text-[10px] text-amber-600 font-mono">
+                          ⚠️ Prompt query truncated for browser URL limits
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
 

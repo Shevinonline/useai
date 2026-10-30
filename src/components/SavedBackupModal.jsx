@@ -24,6 +24,7 @@ import {
 import { useWorkspace } from '../context/WorkspaceContext';
 import { getCompletedStepsForRoadmap } from '../utils/badgeResolver';
 import { sanitizeExternalUrl, MAX_BACKUP_FILE_SIZE } from '../utils/validation';
+import { generatePromptDeepLinks } from '../utils/promptLinks';
 
 export default function SavedBackupModal() {
   const {
@@ -532,6 +533,33 @@ export default function SavedBackupModal() {
                                       </>
                                     )}
                                   </button>
+
+                                  {/* 1-Click Run in AI Links */}
+                                  <a
+                                    href={sanitizeExternalUrl(generatePromptDeepLinks(prompt.template).chatgpt)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="h-8 px-2 inline-flex items-center gap-1 rounded-md border border-app-border bg-app-surface text-app-muted hover:text-emerald-500 hover:border-emerald-500/40 text-xs font-semibold transition-colors duration-150 cursor-pointer"
+                                    title="Run in ChatGPT"
+                                    aria-label="Run in ChatGPT"
+                                  >
+                                    <Sparkles className="h-3 w-3 text-emerald-500" />
+                                    <span className="hidden sm:inline">ChatGPT</span>
+                                    <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                                  </a>
+
+                                  <a
+                                    href={sanitizeExternalUrl(generatePromptDeepLinks(prompt.template).perplexity)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="h-8 px-2 inline-flex items-center gap-1 rounded-md border border-app-border bg-app-surface text-app-muted hover:text-cyan-500 hover:border-cyan-500/40 text-xs font-semibold transition-colors duration-150 cursor-pointer"
+                                    title="Run in Perplexity"
+                                    aria-label="Run in Perplexity"
+                                  >
+                                    <Compass className="h-3 w-3 text-cyan-500" />
+                                    <span className="hidden sm:inline">Perplexity</span>
+                                    <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                                  </a>
 
                                   {prompt.roadmapId && prompt.stepId && (
                                     <Link
