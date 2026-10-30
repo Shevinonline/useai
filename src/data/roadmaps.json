@@ -360,9 +360,9 @@
       "Supabase",
       "LangGraph"
     ],
-    "publishedAt": null,
-    "updatedAt": null,
-    "status": "coming-soon"
+    "publishedAt": "2026-10-29",
+    "updatedAt": "2026-10-29",
+    "status": "ready"
   },
   {
     "id": "ai-product-ui-ux-designer",
@@ -378,9 +378,9 @@
       "Relume",
       "Framelink MCP"
     ],
-    "publishedAt": null,
-    "updatedAt": null,
-    "status": "coming-soon"
+    "publishedAt": "2026-10-29",
+    "updatedAt": "2026-10-29",
+    "status": "ready"
   },
   {
     "id": "ai-automation-ops-architect",
@@ -396,9 +396,9 @@
       "Firecrawl",
       "OpenRouter"
     ],
-    "publishedAt": null,
-    "updatedAt": null,
-    "status": "coming-soon"
+    "publishedAt": "2026-10-29",
+    "updatedAt": "2026-10-29",
+    "status": "ready"
   },
   {
     "id": "ai-growth-performance-marketer",
@@ -406,17 +406,17 @@
     "description": "Build scalable programmatic SEO engines, high-ROAS creative testing matrices, and automated lifecycle conversion funnels.",
     "category": "AI Role-Based Roadmaps",
     "stepCount": 12,
-    "difficulty": "Beginner",
-    "estimatedTime": "3 weeks",
+    "difficulty": "Intermediate",
+    "estimatedTime": "4 weeks",
     "tools": [
       "Claude",
       "Ahrefs",
-      "Framer",
-      "Klaviyo"
+      "Foreplay",
+      "PostHog"
     ],
-    "publishedAt": null,
-    "updatedAt": null,
-    "status": "coming-soon"
+    "publishedAt": "2026-10-29",
+    "updatedAt": "2026-10-29",
+    "status": "ready"
   },
   {
     "id": "ai-data-scientist-ml-ops-engineer",

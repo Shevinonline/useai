@@ -3078,6 +3078,196 @@ export const toolsData = [
     description: 'Enterprise security suite featuring CodeQL semantic code analysis, secret scanning push protection, and automated pull request security gates.',
     bestFor: 'Enterprise CodeQL scanning, push protection & automated PR gates',
     workflows: ['AI Cybersecurity & Code Auditing']
+  },
+  {
+    id: 'voyage-ai',
+    name: 'Voyage AI',
+    pricing: 'Freemium',
+    url: 'https://www.voyageai.com',
+    description: 'State-of-the-art domain-specific embedding models optimized for finance, code retrieval, and enterprise RAG search.',
+    bestFor: 'High-precision domain embeddings for enterprise RAG and code search',
+    workflows: ['Full-Stack AI Engineer']
+  },
+  {
+    id: 'browserbase',
+    name: 'Browserbase',
+    pricing: 'Freemium',
+    url: 'https://www.browserbase.com',
+    description: 'Developer platform for running headless Playwright browsers at scale with built-in stealth, residential proxies, and session replay.',
+    bestFor: 'Headless browser automation for AI agents & complex web interaction',
+    workflows: ['Full-Stack AI Engineer']
+  },
+  {
+    id: 'braintrust',
+    name: 'Braintrust',
+    pricing: 'Freemium',
+    url: 'https://www.braintrust.dev',
+    description: 'Enterprise evaluation, proxy, and logging platform designed to track model accuracy, RAG Triad regressions, and dataset curation.',
+    bestFor: 'Continuous LLM evaluation, golden dataset curation & regression tracking',
+    workflows: ['Full-Stack AI Engineer']
+  },
+  {
+    id: 'model-context-protocol-sdk',
+    name: 'Model Context Protocol (MCP) SDK',
+    pricing: 'Free',
+    url: 'https://modelcontextprotocol.io',
+    description: 'Open-source protocol SDK providing standardized Resources, Prompts, and Tools connectivity for LLM applications and desktop clients.',
+    bestFor: 'Standardized client-server tool integration & universal AI context access',
+    workflows: ['Full-Stack AI Engineer']
+  },
+  {
+    id: 'notebooklm',
+    name: 'Google NotebookLM',
+    pricing: 'Free',
+    url: 'https://notebooklm.google.com',
+    description: 'AI-first personalized research assistant powered by Gemini 1.5 Pro with grounded citations across source documents and user interviews.',
+    bestFor: 'Synthesizing user interview transcripts, grounded UX insights & thematic analysis',
+    workflows: ['AI Product & UI/UX Designer']
+  },
+  {
+    id: 'radix-colors',
+    name: 'Radix Colors',
+    pricing: 'Free',
+    url: 'https://www.radix-ui.com/colors',
+    description: 'Accessible, comprehensive color system for digital products designed with automatic dark mode parity and WCAG contrast compliance.',
+    bestFor: 'Semantic color scales, 12-step design tokens & accessible dark mode palettes',
+    workflows: ['AI Product & UI/UX Designer']
+  },
+  {
+    id: 'phosphor-icons',
+    name: 'Phosphor Icons',
+    pricing: 'Free',
+    url: 'https://phosphoricons.com',
+    description: 'Flexible, open-source icon family with 6 distinct weights and comprehensive Figma component library support.',
+    bestFor: 'Design system icon libraries, multi-weight iconography & UI component states',
+    workflows: ['AI Product & UI/UX Designer']
+  },
+  {
+    id: 'raycast',
+    name: 'Raycast',
+    pricing: 'Freemium',
+    url: 'https://www.raycast.com',
+    description: 'Blazingly fast, extensible launcher and productivity tool that defines modern Cmd+K navigation and AI extension patterns.',
+    bestFor: 'Command palette UX benchmarks, keyboard-first navigation & extension design',
+    workflows: ['AI Product & UI/UX Designer']
+  },
+  {
+    id: 'tldraw',
+    name: 'tldraw',
+    pricing: 'Open Source',
+    url: 'https://www.tldraw.com',
+    description: 'Infinite collaborative canvas SDK and whiteboard application with deep support for multimodal AI vision generation and sketch-to-UI.',
+    bestFor: 'Infinite canvas UX, spatial AI interfaces & multimodal sketch-to-code workflows',
+    workflows: ['AI Product & UI/UX Designer']
+  },
+  {
+    id: 'clay',
+    name: 'Clay',
+    pricing: 'Freemium',
+    url: 'https://www.clay.com',
+    description: 'Data enrichment platform connecting 75+ data providers, web scrapers, and AI models to automate outbound sales research.',
+    bestFor: 'Autonomous lead enrichment, data waterfall cascades & outbound intelligence',
+    workflows: ['AI Automation & Ops Architect']
+  },
+  {
+    id: 'apollo-io',
+    name: 'Apollo.io',
+    pricing: 'Freemium',
+    url: 'https://www.apollo.io',
+    description: 'B2B lead intelligence and sales engagement platform with contact verification, company firmographics, and REST APIs.',
+    bestFor: 'B2B contact verification, firmographic enrichment & outbound workflows',
+    workflows: ['AI Automation & Ops Architect']
+  },
+  {
+    id: 'jsonata',
+    name: 'JSONata',
+    pricing: 'Free',
+    url: 'https://jsonata.org',
+    description: 'Lightweight JSON query and transformation language for filtering, reshaping, and mapping complex nested payloads.',
+    bestFor: 'Declarative JSON payload transformations & schema normalization in n8n/Make',
+    workflows: ['AI Automation & Ops Architect']
+  },
+  {
+    id: 'mistral-ocr',
+    name: 'Mistral OCR API',
+    pricing: 'Usage-Based',
+    url: 'https://mistral.ai',
+    description: 'State-of-the-art multimodal document parsing and OCR engine that extracts structured markdown from complex PDFs and tables.',
+    bestFor: 'Document OCR, multi-page financial PDF extraction & table parsing',
+    workflows: ['AI Automation & Ops Architect']
+  },
+  {
+    id: 'fireflies-ai',
+    name: 'Fireflies.ai',
+    pricing: 'Freemium',
+    url: 'https://fireflies.ai',
+    description: 'AI meeting assistant that transcribes, summarizes, and extracts action items from video calls with deep CRM integrations.',
+    bestFor: 'Meeting transcript intelligence, automated CRM deal notes & action extraction',
+    workflows: ['AI Automation & Ops Architect']
+  },
+  {
+    id: 'upstash-qstash',
+    name: 'Upstash QStash',
+    pricing: 'Freemium',
+    url: 'https://upstash.com/docs/qstash/overall/getstarted',
+    description: 'Serverless message queue and task scheduler built for microservices and webhooks with automatic retries and deduplication.',
+    bestFor: 'Serverless task queuing, webhook dead-letter queues & automated retry logic',
+    workflows: ['AI Automation & Ops Architect']
+  },
+  {
+    id: 'infisical',
+    name: 'Infisical',
+    pricing: 'Freemium',
+    url: 'https://infisical.com',
+    description: 'Open-source secret management platform that syncs environment variables and API keys securely across team infrastructures.',
+    bestFor: 'Enterprise secret rotation, audit logging & automated credential sync',
+    workflows: ['AI Automation & Ops Architect']
+  },
+  {
+    id: 'dataforseo',
+    name: 'DataForSEO API',
+    pricing: 'Usage-Based',
+    url: 'https://dataforseo.com',
+    description: 'Comprehensive SEO, SERP, and keyword database API providing real-time search volume, intent classification, and backlink data.',
+    bestFor: 'Programmatic SEO keyword volume APIs, intent clustering & SERP analysis',
+    workflows: ['AI Growth & Performance Marketer']
+  },
+  {
+    id: 'arcads',
+    name: 'Arcads AI',
+    pricing: 'Paid',
+    url: 'https://www.arcads.ai',
+    description: 'AI video generation platform transforming direct-response ad scripts into realistic UGC-style video ads featuring AI actors.',
+    bestFor: 'Direct-response UGC video ads, actor lip-sync & rapid hook testing',
+    workflows: ['AI Growth & Performance Marketer']
+  },
+  {
+    id: 'customer-io',
+    name: 'Customer.io',
+    pricing: 'Paid',
+    url: 'https://customer.io',
+    description: 'Automated messaging platform for tech companies to craft behavioral, data-driven lifecycle emails, push notifications, and SMS campaigns.',
+    bestFor: 'Event-driven lifecycle onboarding, product activation flows & behavioral segmentation',
+    workflows: ['AI Growth & Performance Marketer']
+  },
+  {
+    id: 'meta-ad-library',
+    name: 'Meta Ad Library',
+    pricing: 'Free',
+    url: 'https://www.facebook.com/ads/library',
+    description: 'Comprehensive public database of all active advertisements running across Facebook, Instagram, Messenger, and Audience Network.',
+    bestFor: 'Competitor ad creative deconstruction, longevity analysis & hook extraction',
+    workflows: ['AI Growth & Performance Marketer']
+  },
+  {
+    id: 'tiktok-creative-center',
+    name: 'TikTok Creative Center',
+    pricing: 'Free',
+    url: 'https://ads.tiktok.com/business/creativecenter',
+    description: 'Official TikTok trend intelligence and creative showcase displaying top-performing ad creatives, trending music, and hashtag analytics.',
+    bestFor: 'Trending audio intelligence, viral hook structures & top-performing TikTok ad formats',
+    workflows: ['AI Growth & Performance Marketer']
   }
 ];
+
 
