@@ -21,25 +21,31 @@ code, pre, .font-mono {
 
 @layer base {
   :root {
-    --bg-main: #F8FAFC;
+    --bg-main: #F9F8F6;
     --bg-surface: #FFFFFF;
-    --border-default: #E2E8F0;
-    --text-primary: #0F172A;
-    --text-muted: #64748B;
-    --accent-brand: #7C3AED;
-    --accent-hover-bg: rgba(124, 58, 237, 0.05);
-    --surface-hover: #F1F5F9;
+    --bg-muted: #F2F0EC;
+    --border-default: #DCD9D0;
+    --border-strong: #18181B;
+    --text-primary: #141413;
+    --text-muted: #52524E;
+    --accent-brand: #6D28D9;
+    --accent-hover-bg: rgba(109, 40, 217, 0.06);
+    --surface-hover: #F2F0EC;
+    --accent-progress: #059669;
   }
 
   .dark {
-    --bg-main: #13151A;
-    --bg-surface: #1C1F26;
-    --border-default: #2D323E;
-    --text-primary: #F8FAFC;
-    --text-muted: #94A3B8;
+    --bg-main: #0B0B0D;
+    --bg-surface: #121215;
+    --bg-muted: #18181C;
+    --border-default: #242429;
+    --border-strong: #27272A;
+    --text-primary: #F4F4F5;
+    --text-muted: #A1A1AA;
     --accent-brand: #7C3AED;
-    --accent-hover-bg: rgba(124, 58, 237, 0.08);
-    --surface-hover: #232731;
+    --accent-hover-bg: rgba(124, 58, 237, 0.12);
+    --surface-hover: #18181D;
+    --accent-progress: #10B981;
   }
 
   * {
@@ -52,6 +58,79 @@ code, pre, .font-mono {
     margin: 0;
     min-height: 100vh;
   }
+}
+
+/* Swiss Grid Architectural Background */
+.swiss-grid-bg {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(24, 24, 27, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(24, 24, 27, 0.04) 1px, transparent 1px);
+}
+
+.dark .swiss-grid-bg,
+html.dark .swiss-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Tactile Codecademy-style Workspace Card */
+.workspace-card {
+  border-radius: 4px;
+  border: 1px solid #18181B;
+  background-color: #FFFFFF;
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1), border-color 150ms ease, background-color 150ms ease;
+}
+
+.dark .workspace-card,
+html.dark .workspace-card {
+  border-color: #27272A;
+  background-color: #121215;
+}
+
+.workspace-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0px 0px #18181B;
+}
+
+.dark .workspace-card:hover,
+html.dark .workspace-card:hover {
+  box-shadow: 3px 3px 0px 0px #7C3AED;
+}
+
+/* Tactile Workspace Button */
+.workspace-btn {
+  border-radius: 4px;
+  border: 1px solid #18181B;
+  background-color: #FFFFFF;
+  color: #141413;
+  box-shadow: 2px 2px 0px 0px #18181B;
+  transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 100ms cubic-bezier(0.4, 0, 0.2, 1), background-color 100ms ease, border-color 100ms ease, color 100ms ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dark .workspace-btn,
+html.dark .workspace-btn {
+  border-color: #3F3F46;
+  background-color: #18181C;
+  color: #F4F4F5;
+  box-shadow: 2px 2px 0px 0px #7C3AED;
+}
+
+.workspace-btn:hover {
+  background-color: #F2F0EC;
+}
+
+.dark .workspace-btn:hover,
+html.dark .workspace-btn:hover {
+  background-color: #24242A;
+}
+
+.workspace-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 0px 0px 0px 0px transparent !important;
 }
 
 /* Custom scrollbar matching utilitarian theme */

@@ -1,4 +1,3 @@
-import { Terminal } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { sanitizeExternalUrl } from '../utils/validation';
 
@@ -20,90 +19,87 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full border-t border-app-border bg-app-surface/40 mt-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-8 border-b border-app-border">
+    <footer className="w-full border-t border-zinc-900 dark:border-zinc-800 bg-[#F9F8F6]/95 dark:bg-[#0B0B0D]/95 mt-20 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-8 border-b border-zinc-300 dark:border-zinc-800">
           {/* Logo & description */}
           <div className="space-y-2">
-            <div className="flex items-center gap-1.5">
-              <div className="h-5 w-5 rounded border border-app-border bg-app-bg flex items-center justify-center text-brand-accent">
-                <Terminal className="h-3 w-3" />
+            <div className="flex items-center gap-2 select-none">
+              <div className="h-6 w-6 rounded-[3px] border border-zinc-900 dark:border-purple-500/70 bg-zinc-900 text-white dark:bg-purple-600 dark:text-white flex items-center justify-center font-mono text-[11px] font-bold shrink-0">
+                &gt;_
               </div>
-              <span className="font-heading font-bold text-sm tracking-tight text-app-text">
+              <span className="font-heading font-extrabold text-sm tracking-tight text-zinc-900 dark:text-zinc-100">
                 useai
               </span>
-              <span className="font-mono text-[10px] font-semibold px-1 py-0.2 rounded border border-brand-accent/40 bg-brand-accent/10 text-brand-accent">
+              <span className="bg-zinc-900 text-white dark:bg-purple-600 font-mono text-[10px] font-semibold px-1 py-0.5 rounded-[2px] tracking-wider">
                 .sh
               </span>
             </div>
-            <p className="text-xs text-app-muted max-w-sm font-sans leading-relaxed">
-              Utilitarian, step-by-step developer roadmaps and workflows for modern AI tools. Free and community-driven.
+            <p className="text-xs text-zinc-600 dark:text-zinc-400 max-w-sm font-sans leading-relaxed">
+              Utilitarian, step-by-step developer roadmaps and workflows for modern AI tools. Free and open-source.
             </p>
           </div>
 
           {/* Quick links */}
-          <div className="flex flex-wrap items-center gap-6 text-xs text-app-muted font-medium font-sans">
+          <div className="flex flex-wrap items-center gap-6 text-xs text-zinc-600 dark:text-zinc-400 font-mono font-medium">
             <Link
               to="/roadmaps"
-              className="hover:text-app-text transition-colors duration-150"
+              className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             >
-              Roadmaps
+              ROADMAPS
             </Link>
             <Link
               to="/prompts"
-              className="hover:text-app-text transition-colors duration-150"
+              className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             >
-              Prompts
+              PROMPTS
             </Link>
             <Link
               to="/tools"
-              className="hover:text-app-text transition-colors duration-150"
+              className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             >
-              AI Tools
+              AI TOOLS
             </Link>
             <button
               onClick={handleRequestRoadmap}
-              className="hover:text-app-text transition-colors duration-150 cursor-pointer"
+              className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer"
             >
-              Request Roadmap
+              REQUEST ROADMAP
             </button>
             <a
               href={githubRepoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-app-text transition-colors duration-150"
+              className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
             >
-              GitHub
+              GITHUB
             </a>
           </div>
         </div>
 
         {/* Bottom row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 text-xs text-app-muted font-sans">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 text-xs text-zinc-500 dark:text-zinc-400 font-mono">
           <div className="flex items-center gap-3">
             <span>&copy; {new Date().getFullYear()} useai.sh. Designed for engineers.</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             {/* Version Status Badge */}
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-app-border bg-app-bg text-[11px] text-app-muted font-sans">
-              <span className="relative flex h-1.5 w-1.5 shrink-0 items-center justify-center">
-                <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 opacity-60"></span>
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-              </span>
-              <span>v1.0 • All Systems Operational</span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] border border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC] dark:bg-zinc-900 text-[11px] text-zinc-700 dark:text-zinc-300 font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>v2.0 • ALL SYSTEMS OPERATIONAL</span>
             </span>
 
-            <span className="text-app-border">•</span>
+            <span className="text-zinc-400">•</span>
 
-            {/* MIT License Working Link */}
+            {/* MIT License */}
             <a
               href="https://opensource.org/licenses/MIT"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-app-muted hover:text-app-text hover:underline transition-colors duration-150"
+              className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline transition-colors"
             >
-              MIT License
+              MIT LICENSE
             </a>
           </div>
         </div>

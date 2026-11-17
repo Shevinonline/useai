@@ -9,8 +9,6 @@ import PromptCard from './PromptCard';
 import RoadmapRequestBox from './RoadmapRequestBox';
 import {
   Search,
-  Sparkles,
-  Filter,
   X,
   Layers,
   Wrench,
@@ -126,114 +124,111 @@ export default function PromptsPage() {
   };
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-20">
-      {/* 1. Hero Header */}
-      <section className="text-center max-w-3xl mx-auto mb-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-app-border bg-app-surface text-xs font-semibold text-app-muted mb-4 shadow-xs font-sans">
-          <Terminal className="h-3.5 w-3.5 text-brand-accent" />
-          <span>Prompt Engineering System</span>
-          <span className="text-app-border">•</span>
-          <span className="text-brand-accent font-semibold">{allPrompts.length} Live Templates</span>
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
+      {/* 1. Framed Swiss Grid Header Container */}
+      <section className="border-x border-b border-zinc-300 dark:border-zinc-800 bg-white/70 dark:bg-[#121215]/70 backdrop-blur-xs mb-10">
+        <div className="border-b border-zinc-300 dark:border-zinc-800 px-4 sm:px-6 py-2 text-xs font-mono text-zinc-600 dark:text-zinc-400 flex flex-wrap items-center justify-between gap-2 bg-[#F2F0EC]/70 dark:bg-zinc-900/40 select-none">
+          <div className="flex items-center gap-2">
+            <Terminal className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+            <span className="font-semibold text-zinc-900 dark:text-zinc-200">[ PROMPTS // BLUEPRINTS ]</span>
+          </div>
+          <span className="font-mono text-zinc-700 dark:text-zinc-300 font-medium">
+            [ {allPrompts.length} LIVE TEMPLATES ]
+          </span>
         </div>
 
-        <h1 className="font-heading font-bold text-3xl sm:text-4xl md:text-5xl tracking-tight text-app-text mb-3">
-          330+ Battle-Tested AI Prompts &amp; System Blueprints
-        </h1>
+        <div className="px-4 sm:px-8 py-10 text-center max-w-3xl mx-auto">
+          <h1 className="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl tracking-tight text-zinc-900 dark:text-zinc-100 mb-3">
+            330+ Battle-Tested AI Prompts
+          </h1>
+          <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto font-sans">
+            Search, customize dynamic variables in real-time, and run directly in ChatGPT or Perplexity.
+          </p>
 
-        <p className="text-base sm:text-lg text-app-muted leading-relaxed max-w-2xl mx-auto font-sans">
-          Search, customize dynamic variables in real-time, and copy ready-to-run prompts across coding, design, automations, and growth.
-        </p>
-
-        {/* 2. Prominent Search Bar */}
-        <div className="mt-8 max-w-xl mx-auto">
-          <div className="relative flex items-center">
-            <Search className="absolute left-3.5 h-4 w-4 text-app-muted pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search prompts by title, keywords, tools, or roadmap..."
-              className="w-full pl-10 pr-16 py-3 text-sm rounded-lg border border-app-border bg-app-surface text-app-text placeholder:text-app-muted focus:outline-none focus:border-brand-accent transition-colors duration-150 font-sans shadow-xs"
-            />
-            {searchQuery ? (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 px-2 py-1 text-xs font-medium rounded text-app-muted hover:text-app-text hover:bg-app-bg cursor-pointer font-sans"
-              >
-                Clear
-              </button>
-            ) : (
-              <span className="absolute right-3 px-1.5 py-0.5 text-xs rounded border border-app-border bg-app-bg text-app-muted select-none font-mono">
-                ESC
+          {/* Tactile Inline Search Bar */}
+          <div className="mt-8 max-w-xl mx-auto w-full">
+            <div className="relative flex items-center w-full rounded-[4px] border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-[#121215] shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#7C3AED] transition-all p-1.5 gap-2">
+              <span className="font-mono text-[11px] sm:text-xs font-bold px-2.5 py-1.5 bg-zinc-900 text-white dark:bg-purple-600 rounded-[2px] shrink-0 select-none tracking-wider">
+                [ SEARCH ]
               </span>
-            )}
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search prompts by title, keywords, tools, or roadmap..."
+                className="w-full py-1.5 px-1 bg-transparent text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none font-sans"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="p-1 rounded-[2px] text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
+                  title="Clear"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 3. Multi-Faceted Filter & Controls Surface */}
-      <section className="mb-8 p-4 sm:p-5 rounded-xl border border-app-border bg-app-surface/90 shadow-xs space-y-4">
+      {/* 2. Multi-Faceted Filter & Controls Surface */}
+      <section className="workspace-card mb-8 p-4 sm:p-5 space-y-4">
         {/* Top Controls Row: Categories + Roadmap Dropdown + Reset */}
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-          {/* Category Filter Pills */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 font-mono text-xs">
+          {/* Category Filter Buttons */}
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={() => setSelectedCategory('all')}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md border transition-all duration-150 cursor-pointer font-sans inline-flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-[3px] border transition-all cursor-pointer inline-flex items-center gap-1.5 ${
                 selectedCategory === 'all'
-                  ? 'bg-brand-accent/15 border-brand-accent text-brand-accent shadow-2xs'
-                  : 'bg-app-bg border-app-border text-app-muted hover:border-brand-accent/40 hover:text-app-text'
+                  ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                  : 'border-zinc-300 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-500'
               }`}
             >
               <span>All Prompts</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-app-surface border border-app-border">
-                {categoryCounts.total}
-              </span>
+              <span className="text-[10px] font-bold">[{categoryCounts.total}]</span>
             </button>
 
             <button
               type="button"
               onClick={() => setSelectedCategory('workflow')}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md border transition-all duration-150 cursor-pointer font-sans inline-flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-[3px] border transition-all cursor-pointer inline-flex items-center gap-1.5 ${
                 selectedCategory === 'workflow'
-                  ? 'bg-brand-accent/15 border-brand-accent text-brand-accent shadow-2xs'
-                  : 'bg-app-bg border-app-border text-app-muted hover:border-brand-accent/40 hover:text-app-text'
+                  ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                  : 'border-zinc-300 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-500'
               }`}
             >
               <Layers className="h-3 w-3" />
-              <span>Workflow Prompts</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-app-surface border border-app-border">
-                {categoryCounts.workflow}
-              </span>
+              <span>Workflow</span>
+              <span className="text-[10px] font-bold">[{categoryCounts.workflow}]</span>
             </button>
 
             <button
               type="button"
               onClick={() => setSelectedCategory('tool')}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md border transition-all duration-150 cursor-pointer font-sans inline-flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded-[3px] border transition-all cursor-pointer inline-flex items-center gap-1.5 ${
                 selectedCategory === 'tool'
-                  ? 'bg-brand-accent/15 border-brand-accent text-brand-accent shadow-2xs'
-                  : 'bg-app-bg border-app-border text-app-muted hover:border-brand-accent/40 hover:text-app-text'
+                  ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                  : 'border-zinc-300 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-500'
               }`}
             >
               <Wrench className="h-3 w-3" />
-              <span>Tool-Specific Prompts</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-app-surface border border-app-border">
-                {categoryCounts.tool}
-              </span>
+              <span>Tool-Specific</span>
+              <span className="text-[10px] font-bold">[{categoryCounts.tool}]</span>
             </button>
           </div>
 
           {/* Right Side Controls: Roadmap Dropdown + Reset */}
-          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+          <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
             {/* Roadmap Select Dropdown */}
             <div className="relative flex-1 sm:w-64">
               <select
                 value={selectedRoadmap}
                 onChange={(e) => setSelectedRoadmap(e.target.value)}
-                className="w-full appearance-none px-3 py-1.5 pr-8 text-xs font-medium rounded-md border border-app-border bg-app-bg text-app-text focus:outline-none focus:border-brand-accent transition-colors duration-150 cursor-pointer font-sans"
+                className="w-full appearance-none px-3 py-1.5 pr-8 text-xs font-mono font-medium rounded-[3px] border border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:outline-none cursor-pointer"
               >
                 <option value="all">Filter by Roadmap (All)</option>
                 {roadmapOptions.map((rm) => (
@@ -242,7 +237,7 @@ export default function PromptsPage() {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-app-muted pointer-events-none" />
+              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-500 pointer-events-none" />
             </div>
 
             {/* Reset Filters Button */}
@@ -250,32 +245,32 @@ export default function PromptsPage() {
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-md border border-brand-accent/30 bg-brand-accent/10 text-brand-accent hover:bg-brand-accent/20 transition-colors duration-150 cursor-pointer font-sans"
+                className="workspace-btn px-2.5 py-1.5 text-xs font-mono font-bold gap-1"
               >
                 <RotateCcw className="h-3 w-3" />
-                <span>Reset Filters</span>
+                <span>RESET</span>
               </button>
             )}
           </div>
         </div>
 
         {/* Bottom Controls Row: Quick Tool Filter Pills */}
-        <div className="pt-2 border-t border-app-border/60">
-          <div className="flex items-center gap-2 mb-2">
-            <SlidersHorizontal className="h-3 w-3 text-app-muted" />
-            <span className="text-[11px] font-semibold text-app-muted uppercase tracking-wider font-sans">
-              Filter by Tool:
+        <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
+          <div className="flex items-center gap-2 mb-2 font-mono text-[11px] text-zinc-500">
+            <SlidersHorizontal className="h-3 w-3" />
+            <span className="font-bold uppercase tracking-wider">
+              FILTER BY TOOL:
             </span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
             <button
               type="button"
               onClick={() => setSelectedTool('all')}
-              className={`px-2.5 py-1 text-xs rounded-md border transition-all duration-150 cursor-pointer font-sans ${
+              className={`px-2.5 py-1 rounded-[3px] border transition-all cursor-pointer ${
                 selectedTool === 'all'
-                  ? 'border-brand-accent bg-brand-accent/15 text-brand-accent font-semibold'
-                  : 'border-app-border bg-app-bg text-app-muted hover:border-brand-accent/40 hover:text-app-text'
+                  ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[1px_1px_0px_0px_#18181B] dark:shadow-none'
+                  : 'border-zinc-300 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-500'
               }`}
             >
               All Tools
@@ -288,14 +283,14 @@ export default function PromptsPage() {
                   key={tool}
                   type="button"
                   onClick={() => setSelectedTool(isSelected ? 'all' : tool)}
-                  className={`px-2.5 py-1 text-xs rounded-md border transition-all duration-150 cursor-pointer font-sans inline-flex items-center gap-1 ${
+                  className={`px-2.5 py-1 rounded-[3px] border transition-all cursor-pointer inline-flex items-center gap-1 ${
                     isSelected
-                      ? 'border-brand-accent bg-brand-accent/15 text-brand-accent font-semibold'
-                      : 'border-app-border bg-app-bg text-app-muted hover:border-brand-accent/40 hover:text-app-text'
+                      ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[1px_1px_0px_0px_#18181B] dark:shadow-none'
+                      : 'border-zinc-300 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-500'
                   }`}
                 >
                   <span>{tool}</span>
-                  <span className="text-[10px] opacity-70 font-mono">({count})</span>
+                  <span className="text-[10px] opacity-70">({count})</span>
                 </button>
               );
             })}
@@ -303,25 +298,25 @@ export default function PromptsPage() {
         </div>
       </section>
 
-      {/* 4. Live Counter & Active Results Bar */}
-      <div className="flex items-center justify-between pb-4 mb-6 border-b border-app-border">
+      {/* 3. Live Counter Bar */}
+      <div className="flex items-center justify-between pb-3 mb-6 border-b border-zinc-300 dark:border-zinc-800 font-mono text-xs">
         <div className="flex items-center gap-2">
-          <span className="font-heading font-semibold text-sm sm:text-base text-app-text">
-            Prompt Templates
+          <span className="font-bold text-zinc-900 dark:text-zinc-100">
+            PROMPT TEMPLATES
           </span>
-          <span className="text-xs font-mono text-app-muted">
-            (Showing {visiblePrompts.length} of {filteredPrompts.length} matches)
+          <span className="text-zinc-500">
+            (SHOWING {visiblePrompts.length} OF {filteredPrompts.length} MATCHES)
           </span>
         </div>
 
         {filteredPrompts.length > 0 && (
-          <span className="text-xs text-app-muted font-sans hidden sm:inline">
-            Total Catalog: <strong className="text-app-text font-mono">{allPrompts.length}</strong>
+          <span className="text-zinc-500 hidden sm:inline">
+            TOTAL CATALOG: <strong className="text-zinc-900 dark:text-zinc-100 font-bold">{allPrompts.length}</strong>
           </span>
         )}
       </div>
 
-      {/* 5. Responsive Grid of Prompt Cards */}
+      {/* 4. Responsive Grid of Prompt Cards */}
       {visiblePrompts.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
@@ -330,16 +325,16 @@ export default function PromptsPage() {
             ))}
           </div>
 
-          {/* 6. Lazy Load / Pagination Load More Trigger */}
+          {/* Load More Button */}
           {hasMore && (
             <div className="mt-12 text-center">
               <button
                 type="button"
                 onClick={handleLoadMore}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-app-border bg-app-surface text-app-text hover:border-brand-accent hover:text-brand-accent text-sm font-semibold transition-all duration-150 shadow-xs cursor-pointer font-sans"
+                className="workspace-btn px-6 py-2.5 text-xs font-mono font-bold inline-flex items-center gap-2"
               >
-                <span>Load More Prompts (+20)</span>
-                <span className="text-xs font-mono text-app-muted">
+                <span>LOAD MORE PROMPTS (+20)</span>
+                <span className="text-[11px] opacity-75">
                   ({filteredPrompts.length - visiblePrompts.length} remaining)
                 </span>
               </button>
@@ -348,36 +343,32 @@ export default function PromptsPage() {
 
           {!hasMore && filteredPrompts.length > 20 && (
             <div className="mt-12 text-center">
-              <span className="inline-block px-4 py-1.5 rounded-full border border-app-border bg-app-surface text-xs font-mono text-app-muted">
+              <span className="inline-block px-4 py-1.5 rounded-[2px] border border-zinc-300 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-zinc-900 text-xs font-mono text-zinc-500">
                 ✓ All {filteredPrompts.length} matching prompts loaded
               </span>
             </div>
           )}
         </>
       ) : (
-        /* Empty State */
-        <div className="text-center py-16 px-4 rounded-xl border border-dashed border-app-border bg-app-surface/50">
-          <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-app-bg border border-app-border flex items-center justify-center text-app-muted">
-            <Search className="h-4 w-4" />
-          </div>
-          <h3 className="font-heading font-semibold text-base text-app-text mb-1">
+        <div className="workspace-card p-12 text-center">
+          <Search className="h-10 w-10 text-zinc-400 mx-auto mb-3" />
+          <h3 className="font-heading font-bold text-base text-zinc-900 dark:text-zinc-100 mb-1">
             No prompt templates found
           </h3>
-          <p className="text-xs text-app-muted max-w-sm mx-auto mb-5 leading-relaxed font-sans">
-            No prompts matched your search query or filter criteria. Try clearing some filters or searching for broader terms like &quot;coding&quot;, &quot;architecture&quot;, or &quot;Claude&quot;.
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto mb-5 leading-relaxed font-sans">
+            No prompts matched your search query or filter criteria. Try clearing some filters or searching for broader terms.
           </p>
           <button
             type="button"
             onClick={handleResetFilters}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-md border border-app-border bg-app-bg hover:border-brand-accent hover:text-brand-accent transition-colors duration-150 cursor-pointer font-sans"
+            className="workspace-btn px-4 py-2 text-xs font-mono font-bold"
           >
-            <RotateCcw className="h-3.5 w-3.5" />
-            <span>Reset All Filters</span>
+            Reset All Filters
           </button>
         </div>
       )}
 
-      {/* 7. Community Roadmap Request Box */}
+      {/* Community Roadmap Request Box */}
       <div className="mt-16">
         <RoadmapRequestBox />
       </div>

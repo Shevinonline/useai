@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext({
-  theme: 'dark',
+  theme: 'light',
   toggleTheme: () => {},
 });
 
@@ -13,7 +13,7 @@ export function ThemeProvider({ children }) {
         return stored;
       }
     }
-    return 'dark'; // Dark mode default as specified
+    return 'light'; // Default to Light Mode (Codecademy Warm Paper + Stripe Precision)
   });
 
   useEffect(() => {

@@ -1,12 +1,27 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>useai.sh — Open-Source AI Workflows, Roadmaps & Prompt Engineering</title>
     <meta name="description" content="Community-curated, step-by-step developer roadmaps and guides for mastering AI tools, models, and workflows without the noise." />
-    <meta name="theme-color" content="#090D16" />
+    <meta name="theme-color" content="#F9F8F6" />
+
+    <script>
+      (function() {
+        try {
+          var stored = localStorage.getItem('useai_theme');
+          if (stored === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          } else {
+            document.documentElement.classList.add('light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
 
     <!-- OpenGraph Meta Tags -->
     <meta property="og:title" content="useai.sh — Open-Source AI Workflows, Roadmaps & Prompt Engineering" />

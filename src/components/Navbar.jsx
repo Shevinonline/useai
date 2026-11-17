@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Sun, Moon, Terminal, Star, Menu, X, Sparkles, Search, Bookmark } from 'lucide-react';
+import { Sun, Moon, Star, Menu, X, Sparkles, Search, Bookmark } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useCommandPalette } from '../context/CommandPaletteContext';
@@ -12,6 +12,7 @@ export default function Navbar() {
   const { openCommandPalette } = useCommandPalette();
   const { totalSavedCount, openSavedModal } = useWorkspace();
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const githubRepoUrl = sanitizeExternalUrl(import.meta.env.VITE_GITHUB_REPO_URL || 'https://github.com');
 
@@ -52,42 +53,47 @@ export default function Navbar() {
   const isToolsActive = location.pathname === '/tools';
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-app-border bg-app-surface/95 backdrop-blur-sm">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
-        {/* Left: Brand Logo & Desktop Nav Links */}
-        <div className="flex items-center gap-5 sm:gap-6 shrink-0 whitespace-nowrap">
+    <header className="sticky top-0 z-50 w-full bg-[#F9F8F6]/95 dark:bg-[#0B0B0D]/95 backdrop-blur-sm border-b border-zinc-900 dark:border-zinc-800 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-stretch justify-between">
+        {/* Left: Brand Zone with Vertical 1px Section Divider */}
+        <div className="flex items-center gap-3 pr-4 sm:pr-6 border-r border-zinc-300 dark:border-zinc-800 h-full shrink-0">
           <Link
             to="/"
             onClick={() => {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/' } }));
             }}
-            className="flex items-center gap-1.5 group select-none whitespace-nowrap shrink-0"
+            className="flex items-center gap-2 group select-none whitespace-nowrap shrink-0"
             aria-label="useai.sh homepage"
           >
-            <div className="h-6 w-6 rounded border border-app-border bg-app-bg flex items-center justify-center text-brand-accent group-hover:border-brand-accent transition-colors duration-150">
-              <Terminal className="h-3.5 w-3.5" />
+            {/* Boxed [>_] terminal mark */}
+            <div className="h-7 w-7 rounded-[3px] border border-zinc-900 dark:border-purple-500/70 bg-zinc-900 text-white dark:bg-purple-600 dark:text-white flex items-center justify-center font-mono text-xs font-bold shrink-0 shadow-xs group-hover:-translate-y-0.5 transition-transform duration-150">
+              &gt;_
             </div>
-            <span className="font-heading font-bold text-base tracking-tight text-app-text">
+            {/* Crisp wordmark */}
+            <span className="font-heading font-extrabold text-base tracking-tight text-zinc-900 dark:text-zinc-100">
               useai
             </span>
-            <span className="font-mono text-xs font-semibold px-1.5 py-0.5 rounded border border-brand-accent/50 bg-brand-accent/10 text-brand-accent">
+            {/* Boxed .sh badge */}
+            <span className="bg-zinc-900 text-white dark:bg-purple-600 font-mono text-xs font-semibold px-1.5 py-0.5 rounded-[2px] tracking-wider">
               .sh
             </span>
           </Link>
+        </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1.5 pl-2 font-sans whitespace-nowrap">
+        {/* Center: Navigation Links with Linear/Stripe Active Bottom Underline */}
+        <nav className="hidden md:flex items-stretch px-4 sm:px-6 border-r border-zinc-300 dark:border-zinc-800 h-full flex-1 font-sans">
+          <div className="flex items-stretch gap-1 sm:gap-2 h-full">
             <Link
               to="/roadmaps"
               onClick={() => {
                 setMobileMenuOpen(false);
                 window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/roadmaps' } }));
               }}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors duration-150 whitespace-nowrap ${
+              className={`flex items-center px-3 sm:px-4 text-xs font-medium transition-colors duration-150 whitespace-nowrap -mb-[1px] ${
                 isRoadmapsActive
-                  ? 'text-app-text bg-app-bg border border-app-border shadow-2xs'
-                  : 'text-app-muted hover:text-app-text hover:bg-app-bg/60 border border-transparent'
+                  ? 'text-zinc-900 dark:text-zinc-100 font-bold border-b-2 border-zinc-900 dark:border-purple-500'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 border-b-2 border-transparent'
               }`}
             >
               Roadmaps
@@ -98,10 +104,10 @@ export default function Navbar() {
                 setMobileMenuOpen(false);
                 window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/prompts' } }));
               }}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors duration-150 whitespace-nowrap ${
+              className={`flex items-center px-3 sm:px-4 text-xs font-medium transition-colors duration-150 whitespace-nowrap -mb-[1px] ${
                 isPromptsActive
-                  ? 'text-app-text bg-app-bg border border-app-border shadow-2xs'
-                  : 'text-app-muted hover:text-app-text hover:bg-app-bg/60 border border-transparent'
+                  ? 'text-zinc-900 dark:text-zinc-100 font-bold border-b-2 border-zinc-900 dark:border-purple-500'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 border-b-2 border-transparent'
               }`}
             >
               Prompts
@@ -112,45 +118,44 @@ export default function Navbar() {
                 setMobileMenuOpen(false);
                 window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/tools' } }));
               }}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors duration-150 whitespace-nowrap ${
+              className={`flex items-center px-3 sm:px-4 text-xs font-medium transition-colors duration-150 whitespace-nowrap -mb-[1px] ${
                 isToolsActive
-                  ? 'text-app-text bg-app-bg border border-app-border shadow-2xs'
-                  : 'text-app-muted hover:text-app-text hover:bg-app-bg/60 border border-transparent'
+                  ? 'text-zinc-900 dark:text-zinc-100 font-bold border-b-2 border-zinc-900 dark:border-purple-500'
+                  : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 border-b-2 border-transparent'
               }`}
             >
               AI Tools
             </Link>
             <button
               onClick={handleRequestRoadmap}
-              className="px-3 py-1.5 text-xs font-semibold rounded-md text-app-muted hover:text-app-text hover:bg-app-bg/60 border border-transparent transition-colors duration-150 cursor-pointer flex items-center gap-1.5 whitespace-nowrap"
+              type="button"
+              className="flex items-center gap-1.5 px-3 sm:px-4 text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 border-b-2 border-transparent -mb-[1px] transition-colors duration-150 cursor-pointer whitespace-nowrap"
             >
-              <Sparkles className="h-3 w-3 text-brand-accent/80" />
+              <Sparkles className="h-3 w-3 text-purple-600 dark:text-purple-400" />
               <span>Request Roadmap</span>
             </button>
-          </nav>
-        </div>
+          </div>
+        </nav>
 
-        {/* Right Actions */}
-        <div className="flex items-center gap-3 sm:gap-4 shrink-0 whitespace-nowrap">
-          {/* Saved & Workspace Trigger */}
+        {/* Right: Utility Zone with Tactile .workspace-btn pills */}
+        <div className="flex items-center gap-2.5 sm:gap-3 pl-4 sm:pl-6 h-full shrink-0 whitespace-nowrap">
+          {/* Saved [N] Workspace Button */}
           <button
             onClick={() => openSavedModal('library')}
             type="button"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-app-border bg-app-surface hover:border-brand-accent/60 text-app-text hover:text-brand-accent text-xs font-semibold transition-all duration-150 group font-sans shadow-xs cursor-pointer whitespace-nowrap"
+            className="workspace-btn px-2.5 sm:px-3 py-1.5 text-xs font-medium gap-1.5"
             aria-label={`Open Saved Library (${totalSavedCount} saved items)`}
             title="Saved Steps, Prompts & Local Backup"
           >
             <Bookmark
               className={`h-3.5 w-3.5 transition-colors ${
-                totalSavedCount > 0 ? 'fill-amber-500 text-amber-500' : 'text-app-muted group-hover:text-brand-accent'
+                totalSavedCount > 0 ? 'fill-amber-500 text-amber-500' : 'text-zinc-500 dark:text-zinc-400'
               }`}
             />
             <span className="font-sans">Saved</span>
-            {totalSavedCount > 0 ? (
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-brand-accent/15 border border-brand-accent/30 text-brand-accent font-bold">
-                {totalSavedCount}
-              </span>
-            ) : null}
+            <span className="font-mono text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">
+              [{totalSavedCount}]
+            </span>
           </button>
 
           {/* Star on GitHub Button */}
@@ -159,10 +164,10 @@ export default function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Star on GitHub"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-app-border bg-app-surface hover:border-brand-accent text-app-text hover:text-brand-accent text-xs font-semibold transition-colors duration-150 group font-sans shadow-xs whitespace-nowrap"
+            className="workspace-btn hidden sm:inline-flex px-2.5 sm:px-3 py-1.5 text-xs font-medium gap-1.5"
           >
             <svg
-              className="h-3.5 w-3.5 fill-current text-app-muted group-hover:text-brand-accent transition-colors duration-150"
+              className="h-3.5 w-3.5 fill-current text-zinc-700 dark:text-zinc-300"
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
@@ -173,7 +178,7 @@ export default function Navbar() {
               />
             </svg>
             <Star className="h-3 w-3 text-amber-500 fill-amber-500/20" />
-            <span>Star on GitHub</span>
+            <span className="font-sans">Star on GitHub</span>
           </a>
 
           {/* Theme Toggle Button */}
@@ -182,12 +187,12 @@ export default function Navbar() {
             type="button"
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            className="h-8 w-8 inline-flex items-center justify-center rounded border border-app-border bg-app-surface hover:border-brand-accent hover:bg-brand-hover-bg text-app-muted hover:text-app-text transition-colors duration-150 cursor-pointer whitespace-nowrap shrink-0"
+            className="workspace-btn h-8 w-8"
           >
             {theme === 'dark' ? (
-              <Sun className="h-4 w-4" />
+              <Sun className="h-4 w-4 text-amber-400" />
             ) : (
-              <Moon className="h-4 w-4" />
+              <Moon className="h-4 w-4 text-zinc-700" />
             )}
           </button>
 
@@ -196,7 +201,7 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             type="button"
             aria-label="Toggle navigation menu"
-            className="md:hidden h-8 w-8 inline-flex items-center justify-center rounded border border-app-border bg-app-surface hover:border-brand-accent text-app-muted hover:text-app-text transition-colors duration-150 cursor-pointer whitespace-nowrap shrink-0"
+            className="md:hidden workspace-btn h-8 w-8"
           >
             {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -205,7 +210,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-app-border bg-app-surface/98 px-4 pt-2 pb-4 space-y-1 font-sans shadow-lg animate-in fade-in duration-150">
+        <div className="md:hidden border-b border-zinc-900 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-[#0B0B0D] px-4 pt-3 pb-5 space-y-2 font-sans shadow-lg animate-in fade-in duration-150">
           {/* Mobile Search Button */}
           <button
             onClick={() => {
@@ -213,13 +218,13 @@ export default function Navbar() {
               openCommandPalette();
             }}
             type="button"
-            className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold rounded-md border border-app-border bg-app-bg text-app-muted hover:text-app-text mb-2 cursor-pointer font-sans"
+            className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-[4px] border border-zinc-900 dark:border-zinc-700 bg-white dark:bg-[#121215] text-zinc-600 dark:text-zinc-300 mb-2 cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <Search className="h-4 w-4 text-brand-accent" />
+              <Search className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
               <span>Search everything...</span>
             </div>
-            <kbd className="px-1.5 py-0.5 text-[11px] font-mono rounded border border-app-border bg-app-surface text-app-muted">
+            <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded border border-zinc-300 dark:border-zinc-700 bg-[#F2F0EC] dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
               {shortcutBadge}
             </kbd>
           </button>
@@ -231,21 +236,19 @@ export default function Navbar() {
               openSavedModal('library');
             }}
             type="button"
-            className="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold rounded-md border border-app-border bg-app-bg text-app-text hover:border-brand-accent mb-2 cursor-pointer font-sans"
+            className="w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-[4px] border border-zinc-900 dark:border-zinc-700 bg-white dark:bg-[#121215] text-zinc-900 dark:text-zinc-100 mb-2 cursor-pointer"
           >
             <div className="flex items-center gap-2">
               <Bookmark
-                className={`h-4 w-4 ${
-                  totalSavedCount > 0 ? 'fill-amber-500 text-amber-500' : 'text-brand-accent'
+                className={`h-3.5 w-3.5 ${
+                  totalSavedCount > 0 ? 'fill-amber-500 text-amber-500' : 'text-purple-600 dark:text-purple-400'
                 }`}
               />
-              <span>Saved & Backup</span>
+              <span>Saved &amp; Workspace</span>
             </div>
-            {totalSavedCount > 0 && (
-              <span className="px-2 py-0.5 text-xs font-mono rounded-full bg-brand-accent/15 border border-brand-accent/30 text-brand-accent font-bold">
-                {totalSavedCount}
-              </span>
-            )}
+            <span className="font-mono text-xs font-bold text-zinc-700 dark:text-zinc-300">
+              [{totalSavedCount}]
+            </span>
           </button>
 
           <Link
@@ -254,10 +257,10 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/roadmaps' } }));
             }}
-            className={`block px-3 py-2 text-sm font-semibold rounded-md ${
+            className={`block px-3 py-2 text-xs font-semibold rounded-[4px] ${
               isRoadmapsActive
-                ? 'bg-app-bg text-brand-accent border border-app-border'
-                : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                ? 'bg-zinc-900 text-white dark:bg-purple-600'
+                : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-800'
             }`}
           >
             Roadmaps
@@ -268,10 +271,10 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/prompts' } }));
             }}
-            className={`block px-3 py-2 text-sm font-semibold rounded-md ${
+            className={`block px-3 py-2 text-xs font-semibold rounded-[4px] ${
               isPromptsActive
-                ? 'bg-app-bg text-brand-accent border border-app-border'
-                : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                ? 'bg-zinc-900 text-white dark:bg-purple-600'
+                : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-800'
             }`}
           >
             Prompts
@@ -282,27 +285,29 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/tools' } }));
             }}
-            className={`block px-3 py-2 text-sm font-semibold rounded-md ${
+            className={`block px-3 py-2 text-xs font-semibold rounded-[4px] ${
               isToolsActive
-                ? 'bg-app-bg text-brand-accent border border-app-border'
-                : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                ? 'bg-zinc-900 text-white dark:bg-purple-600'
+                : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-800'
             }`}
           >
             AI Tools
           </Link>
           <button
             onClick={handleRequestRoadmap}
-            className="w-full text-left px-3 py-2 text-sm font-semibold rounded-md text-app-muted hover:text-app-text hover:bg-app-bg cursor-pointer flex items-center gap-1.5"
+            type="button"
+            className="w-full text-left px-3 py-2 text-xs font-semibold rounded-[4px] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-800 cursor-pointer flex items-center gap-1.5"
           >
-            <Sparkles className="h-3.5 w-3.5 text-brand-accent" />
+            <Sparkles className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
             <span>Request Roadmap</span>
           </button>
-          <div className="pt-2 border-t border-app-border">
+
+          <div className="pt-2 border-t border-zinc-300 dark:border-zinc-800">
             <a
               href={githubRepoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-1.5 w-full py-2 text-xs font-semibold rounded-md border border-app-border bg-app-bg hover:border-brand-accent text-app-text transition-colors duration-150"
+              className="workspace-btn flex items-center justify-center gap-1.5 w-full py-2 text-xs font-semibold"
             >
               <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500/20" />
               <span>Star on GitHub</span>

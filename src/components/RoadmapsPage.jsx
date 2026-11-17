@@ -3,7 +3,7 @@ import roadmapsData from '../data/roadmaps.json';
 import RoadmapCard from './RoadmapCard';
 import RoadmapRequestBox from './RoadmapRequestBox';
 import { getCompletedStepsForRoadmap } from '../utils/badgeResolver';
-import { Search, Compass, CheckCircle2, Clock, Sparkles, Filter, X, RotateCcw } from 'lucide-react';
+import { Search, Compass, CheckCircle2, Filter, X } from 'lucide-react';
 
 export default function RoadmapsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -102,7 +102,6 @@ export default function RoadmapsPage() {
     [filteredRoadmaps]
   );
 
-  // Reset all filters
   const handleResetFilters = () => {
     setSearchQuery('');
     setSelectedCategory('all');
@@ -111,7 +110,6 @@ export default function RoadmapsPage() {
 
   const isFiltered = searchQuery.trim() !== '' || selectedCategory !== 'all' || selectedStatus !== 'all';
 
-  // Construct active heading label
   const getHeadingLabel = () => {
     let catLabel = 'All Roadmaps';
     if (selectedCategory === 'workflow') catLabel = 'Workflow Roadmaps';
@@ -130,47 +128,51 @@ export default function RoadmapsPage() {
   };
 
   return (
-    <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-20">
-      {/* Top Header Area */}
-      <section className="text-center max-w-3xl mx-auto mb-10">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-app-border bg-app-surface text-xs font-semibold text-app-muted mb-4 shadow-xs font-sans">
-          <Compass className="h-3.5 w-3.5 text-brand-accent" />
-          <span>Interactive Directory</span>
-          <span className="text-app-border">•</span>
-          <span className="text-brand-accent font-semibold">{roadmapsData.length} Roadmaps</span>
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
+      {/* Framed Swiss Grid Header Container */}
+      <section className="border-x border-b border-zinc-300 dark:border-zinc-800 bg-white/70 dark:bg-[#121215]/70 backdrop-blur-xs mb-10">
+        <div className="border-b border-zinc-300 dark:border-zinc-800 px-4 sm:px-6 py-2 text-xs font-mono text-zinc-600 dark:text-zinc-400 flex flex-wrap items-center justify-between gap-2 bg-[#F2F0EC]/70 dark:bg-zinc-900/40 select-none">
+          <div className="flex items-center gap-2">
+            <Compass className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+            <span className="font-semibold text-zinc-900 dark:text-zinc-200">[ DIRECTORY // TRACKS ]</span>
+          </div>
+          <span className="font-mono text-zinc-700 dark:text-zinc-300 font-medium">
+            [ {roadmapsData.length} TOTAL CURRICULUMS ]
+          </span>
         </div>
 
-        <h1 className="font-heading font-bold text-3xl sm:text-4xl md:text-5xl tracking-tight text-app-text mb-3">
-          Explore AI Roadmaps
-        </h1>
+        <div className="px-4 sm:px-8 py-10 text-center max-w-3xl mx-auto">
+          <h1 className="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl tracking-tight text-zinc-900 dark:text-zinc-100 mb-3">
+            Explore AI Roadmaps
+          </h1>
+          <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto font-sans">
+            Step-by-step interactive workflows, tool masterclasses, and engineering playbooks.
+          </p>
 
-        <p className="text-base sm:text-lg text-app-muted leading-relaxed max-w-2xl mx-auto font-sans">
-          Step-by-step interactive workflows, tool masterclasses, and engineering playbooks.
-        </p>
-
-        {/* Prominent Search Bar */}
-        <div className="mt-8 max-w-xl mx-auto">
-          <div className="relative flex items-center">
-            <Search className="absolute left-3.5 h-4 w-4 text-app-muted pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search roadmaps by title, tool, or workflow..."
-              className="w-full pl-10 pr-16 py-3 text-sm rounded-lg border border-app-border bg-app-surface text-app-text placeholder:text-app-muted focus:outline-none focus:border-brand-accent transition-colors duration-150 font-sans shadow-xs"
-            />
-            {searchQuery ? (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 px-2 py-1 text-xs font-medium rounded text-app-muted hover:text-app-text hover:bg-app-bg cursor-pointer font-sans"
-              >
-                Clear
-              </button>
-            ) : (
-              <span className="absolute right-3 px-1.5 py-0.5 text-xs rounded border border-app-border bg-app-bg text-app-muted select-none font-mono">
-                ESC
+          {/* Tactile Inline Search Bar */}
+          <div className="mt-8 max-w-xl mx-auto w-full">
+            <div className="relative flex items-center w-full rounded-[4px] border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-[#121215] shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#7C3AED] transition-all p-1.5 gap-2">
+              <span className="font-mono text-[11px] sm:text-xs font-bold px-2.5 py-1.5 bg-zinc-900 text-white dark:bg-purple-600 rounded-[2px] shrink-0 select-none tracking-wider">
+                [ SEARCH ]
               </span>
-            )}
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search roadmaps by title, tool, or workflow..."
+                className="w-full py-1.5 px-1 bg-transparent text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none font-sans"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="p-1 rounded-[2px] text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
+                  title="Clear"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -178,180 +180,142 @@ export default function RoadmapsPage() {
       {/* Two-Column Layout (Sidebar + Grid) */}
       <div className="flex flex-col md:flex-row gap-8 items-start">
         {/* Left Filter Sidebar */}
-        <aside className="w-full md:w-64 shrink-0 space-y-6">
-          {/* Active Filter Clear Button (if any filter active) */}
+        <aside className="w-full md:w-64 shrink-0 space-y-5">
+          {/* Active Filter Clear Button */}
           {isFiltered && (
-            <div className="flex items-center justify-between p-2.5 rounded-lg border border-brand-accent/20 bg-brand-accent/5">
-              <span className="text-xs font-medium text-app-muted font-sans">Filters Active</span>
+            <div className="flex items-center justify-between p-3 rounded-[4px] border border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-xs font-mono">
+              <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">FILTERS ACTIVE</span>
               <button
+                type="button"
                 onClick={handleResetFilters}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-brand-accent hover:underline cursor-pointer font-sans"
+                className="text-xs font-bold text-purple-700 dark:text-purple-400 hover:underline cursor-pointer inline-flex items-center gap-1"
               >
                 <X className="h-3 w-3" />
-                <span>Reset All</span>
+                <span>RESET</span>
               </button>
             </div>
           )}
 
           {/* Group 1: Categories */}
-          <div className="p-4 rounded-lg border border-app-border bg-app-surface">
-            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-app-border text-xs font-bold text-app-muted uppercase tracking-wider font-sans">
+          <div className="workspace-card p-4">
+            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-zinc-200 dark:border-zinc-800 text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider font-mono">
               <Filter className="h-3.5 w-3.5" />
-              <span>Categories</span>
+              <span>CATEGORIES</span>
             </div>
-            <div className="space-y-1 font-sans">
-              {/* All Roadmaps */}
+            <div className="space-y-1.5 font-mono text-xs">
               <button
+                type="button"
                 onClick={() => setSelectedCategory('all')}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-md transition-colors duration-150 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-[3px] border transition-all cursor-pointer ${
                   selectedCategory === 'all'
-                    ? 'bg-brand-accent/10 border border-brand-accent/40 text-brand-accent font-semibold'
-                    : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                    ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                    : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:bg-[#F2F0EC] dark:hover:bg-zinc-800'
                 }`}
               >
                 <span>All Roadmaps</span>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono ${
-                  selectedCategory === 'all' ? 'bg-brand-accent/20 text-brand-accent' : 'bg-app-bg text-app-muted border border-app-border'
-                }`}>
-                  {categoryCounts.total}
-                </span>
+                <span className="text-[11px] font-bold">[{categoryCounts.total}]</span>
               </button>
 
-              {/* Workflow Roadmaps */}
               <button
+                type="button"
                 onClick={() => setSelectedCategory('workflow')}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-md transition-colors duration-150 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-[3px] border transition-all cursor-pointer ${
                   selectedCategory === 'workflow'
-                    ? 'bg-brand-accent/10 border border-brand-accent/40 text-brand-accent font-semibold'
-                    : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                    ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                    : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:bg-[#F2F0EC] dark:hover:bg-zinc-800'
                 }`}
               >
                 <span>Workflow Roadmaps</span>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono ${
-                  selectedCategory === 'workflow' ? 'bg-brand-accent/20 text-brand-accent' : 'bg-app-bg text-app-muted border border-app-border'
-                }`}>
-                  {categoryCounts.workflow}
-                </span>
+                <span className="text-[11px] font-bold">[{categoryCounts.workflow}]</span>
               </button>
 
-              {/* AI Role-Based Roadmaps */}
               <button
+                type="button"
                 onClick={() => setSelectedCategory('role')}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-md transition-colors duration-150 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-[3px] border transition-all cursor-pointer ${
                   selectedCategory === 'role'
-                    ? 'bg-brand-accent/10 border border-brand-accent/40 text-brand-accent font-semibold'
-                    : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                    ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                    : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:bg-[#F2F0EC] dark:hover:bg-zinc-800'
                 }`}
               >
-                <span>AI Role-Based Roadmaps</span>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono ${
-                  selectedCategory === 'role' ? 'bg-brand-accent/20 text-brand-accent' : 'bg-app-bg text-app-muted border border-app-border'
-                }`}>
-                  {categoryCounts.role}
-                </span>
+                <span>AI Role Tracks</span>
+                <span className="text-[11px] font-bold">[{categoryCounts.role}]</span>
               </button>
 
-              {/* Tool-Specific Roadmaps */}
               <button
+                type="button"
                 onClick={() => setSelectedCategory('tool')}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-md transition-colors duration-150 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-[3px] border transition-all cursor-pointer ${
                   selectedCategory === 'tool'
-                    ? 'bg-brand-accent/10 border border-brand-accent/40 text-brand-accent font-semibold'
-                    : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                    ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                    : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:bg-[#F2F0EC] dark:hover:bg-zinc-800'
                 }`}
               >
-                <span>Tool-Specific Roadmaps</span>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono ${
-                  selectedCategory === 'tool' ? 'bg-brand-accent/20 text-brand-accent' : 'bg-app-bg text-app-muted border border-app-border'
-                }`}>
-                  {categoryCounts.tool}
-                </span>
+                <span>Tool Mastery</span>
+                <span className="text-[11px] font-bold">[{categoryCounts.tool}]</span>
               </button>
             </div>
           </div>
 
           {/* Group 2: Status Filter */}
-          <div className="p-4 rounded-lg border border-app-border bg-app-surface">
-            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-app-border text-xs font-bold text-app-muted uppercase tracking-wider font-sans">
-              <Clock className="h-3.5 w-3.5" />
-              <span>Status</span>
+          <div className="workspace-card p-4">
+            <div className="flex items-center gap-2 mb-3 pb-2 border-b border-zinc-200 dark:border-zinc-800 text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider font-mono">
+              <span>STATUS</span>
             </div>
-            <div className="space-y-1 font-sans">
-              {/* All Statuses */}
+            <div className="space-y-1.5 font-mono text-xs">
               <button
+                type="button"
                 onClick={() => setSelectedStatus('all')}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-md transition-colors duration-150 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-[3px] border transition-all cursor-pointer ${
                   selectedStatus === 'all'
-                    ? 'bg-brand-accent/10 border border-brand-accent/40 text-brand-accent font-semibold'
-                    : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                    ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                    : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:bg-[#F2F0EC] dark:hover:bg-zinc-800'
                 }`}
               >
                 <span>All Statuses</span>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono ${
-                  selectedStatus === 'all' ? 'bg-brand-accent/20 text-brand-accent' : 'bg-app-bg text-app-muted border border-app-border'
-                }`}>
-                  {statusCounts.total}
-                </span>
+                <span className="text-[11px] font-bold">[{statusCounts.total}]</span>
               </button>
 
-              {/* Available Now */}
               <button
+                type="button"
                 onClick={() => setSelectedStatus('ready')}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-md transition-colors duration-150 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-[3px] border transition-all cursor-pointer ${
                   selectedStatus === 'ready'
-                    ? 'bg-brand-accent/10 border border-brand-accent/40 text-brand-accent font-semibold'
-                    : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                    ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                    : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:bg-[#F2F0EC] dark:hover:bg-zinc-800'
                 }`}
               >
-                <div className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                  <span>Available Now</span>
-                </div>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono ${
-                  selectedStatus === 'ready' ? 'bg-brand-accent/20 text-brand-accent' : 'bg-app-bg text-app-muted border border-app-border'
-                }`}>
-                  {statusCounts.ready}
-                </span>
+                <span>Available Now</span>
+                <span className="text-[11px] font-bold">[{statusCounts.ready}]</span>
               </button>
 
-              {/* In Progress */}
               <button
+                type="button"
                 onClick={() => setSelectedStatus('in-progress')}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-md transition-colors duration-150 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-[3px] border transition-all cursor-pointer ${
                   selectedStatus === 'in-progress'
-                    ? 'bg-brand-accent/10 border border-brand-accent/40 text-brand-accent font-semibold'
-                    : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                    ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                    : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:bg-[#F2F0EC] dark:hover:bg-zinc-800'
                 }`}
               >
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
                   <span>In Progress</span>
                 </div>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono ${
-                  selectedStatus === 'in-progress' ? 'bg-brand-accent/20 text-brand-accent' : 'bg-app-bg text-app-muted border border-app-border'
-                }`}>
-                  {statusCounts.inProgress}
-                </span>
+                <span className="text-[11px] font-bold">[{statusCounts.inProgress}]</span>
               </button>
 
-              {/* Coming Soon */}
               <button
+                type="button"
                 onClick={() => setSelectedStatus('coming-soon')}
-                className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-md transition-colors duration-150 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-[3px] border transition-all cursor-pointer ${
                   selectedStatus === 'coming-soon'
-                    ? 'bg-brand-accent/10 border border-brand-accent/40 text-brand-accent font-semibold'
-                    : 'text-app-muted hover:text-app-text hover:bg-app-bg'
+                    ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
+                    : 'border-transparent text-zinc-600 dark:text-zinc-400 hover:bg-[#F2F0EC] dark:hover:bg-zinc-800'
                 }`}
               >
-                <div className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-app-border shrink-0" />
-                  <span>Coming Soon</span>
-                </div>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono ${
-                  selectedStatus === 'coming-soon' ? 'bg-brand-accent/20 text-brand-accent' : 'bg-app-bg text-app-muted border border-app-border'
-                }`}>
-                  {statusCounts.comingSoon}
-                </span>
+                <span>Coming Soon</span>
+                <span className="text-[11px] font-bold">[{statusCounts.comingSoon}]</span>
               </button>
             </div>
           </div>
@@ -360,38 +324,40 @@ export default function RoadmapsPage() {
         {/* Right Content Area */}
         <section className="flex-1 w-full">
           {/* Active Filter Heading */}
-          <div className="flex items-center justify-between pb-4 mb-6 border-b border-app-border">
-            <h2 className="font-heading font-semibold text-lg text-app-text">
-              {getHeadingLabel()} <span className="text-app-muted font-normal text-sm font-mono">({filteredRoadmaps.length})</span>
+          <div className="flex items-center justify-between pb-3 mb-6 border-b border-zinc-300 dark:border-zinc-800">
+            <h2 className="font-heading font-bold text-lg text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+              <span>{getHeadingLabel()}</span>
+              <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded-[2px] border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300">
+                [{filteredRoadmaps.length} TRACKS]
+              </span>
             </h2>
             {isFiltered && (
               <button
+                type="button"
                 onClick={handleResetFilters}
-                className="text-xs font-medium text-app-muted hover:text-app-text transition-colors duration-150 cursor-pointer font-sans"
+                className="workspace-btn px-2.5 py-1 text-xs font-mono font-medium"
               >
-                Reset Filters
+                Clear Filters
               </button>
             )}
           </div>
 
-          {/* Grid of Roadmap Cards: Grouped by 3 sections in order when 'all', or flat grid when single category */}
+          {/* Grid of Roadmap Cards */}
           {filteredRoadmaps.length > 0 ? (
             selectedCategory === 'all' ? (
               <div className="space-y-12">
                 {/* 1. Workflow Roadmaps */}
                 {workflowFiltered.length > 0 && (
                   <div>
-                    <div className="relative mb-6 flex items-center justify-center">
-                      <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                        <div className="w-full border-t border-app-border"></div>
-                      </div>
-                      <div className="relative flex justify-center">
-                        <span className="bg-app-bg px-3.5 py-1 text-xs font-semibold text-app-muted border border-app-border rounded-full font-sans">
-                          Workflow Roadmaps
-                        </span>
-                      </div>
+                    <div className="border-y border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC]/70 dark:bg-zinc-900/40 px-4 py-2.5 mb-5 flex items-center justify-between font-mono">
+                      <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 tracking-wider">
+                        01 // WORKFLOW ROADMAPS
+                      </span>
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-[2px] border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300">
+                        [{workflowFiltered.length}]
+                      </span>
                     </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                       {workflowFiltered.map((roadmap) => (
                         <RoadmapCard key={roadmap.id} roadmap={roadmap} />
                       ))}
@@ -399,20 +365,18 @@ export default function RoadmapsPage() {
                   </div>
                 )}
 
-                {/* 2. AI Role-Based Roadmaps (Positioned 2nd in the Middle) */}
+                {/* 2. AI Role-Based Roadmaps */}
                 {roleFiltered.length > 0 && (
                   <div>
-                    <div className="relative mb-6 flex items-center justify-center">
-                      <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                        <div className="w-full border-t border-app-border"></div>
-                      </div>
-                      <div className="relative flex justify-center">
-                        <span className="bg-app-bg px-3.5 py-1 text-xs font-semibold text-app-muted border border-app-border rounded-full font-sans">
-                          AI Role-Based Roadmaps
-                        </span>
-                      </div>
+                    <div className="border-y border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC]/70 dark:bg-zinc-900/40 px-4 py-2.5 mb-5 flex items-center justify-between font-mono">
+                      <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 tracking-wider">
+                        02 // AI ROLE-BASED TRACKS
+                      </span>
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-[2px] border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300">
+                        [{roleFiltered.length}]
+                      </span>
                     </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                       {roleFiltered.map((roadmap) => (
                         <RoadmapCard key={roadmap.id} roadmap={roadmap} />
                       ))}
@@ -423,17 +387,15 @@ export default function RoadmapsPage() {
                 {/* 3. Tool-Specific Roadmaps */}
                 {toolFiltered.length > 0 && (
                   <div>
-                    <div className="relative mb-6 flex items-center justify-center">
-                      <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                        <div className="w-full border-t border-app-border"></div>
-                      </div>
-                      <div className="relative flex justify-center">
-                        <span className="bg-app-bg px-3.5 py-1 text-xs font-semibold text-app-muted border border-app-border rounded-full font-sans">
-                          Tool-Specific Roadmaps
-                        </span>
-                      </div>
+                    <div className="border-y border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC]/70 dark:bg-zinc-900/40 px-4 py-2.5 mb-5 flex items-center justify-between font-mono">
+                      <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 tracking-wider">
+                        03 // TOOL-SPECIFIC ROADMAPS
+                      </span>
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-[2px] border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300">
+                        [{toolFiltered.length}]
+                      </span>
                     </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                       {toolFiltered.map((roadmap) => (
                         <RoadmapCard key={roadmap.id} roadmap={roadmap} />
                       ))}
@@ -442,37 +404,33 @@ export default function RoadmapsPage() {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 {filteredRoadmaps.map((roadmap) => (
                   <RoadmapCard key={roadmap.id} roadmap={roadmap} />
                 ))}
               </div>
             )
           ) : (
-            /* Clean Empty State */
-            <div className="text-center py-16 px-4 rounded-lg border border-dashed border-app-border bg-app-surface/50">
-              <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-app-bg border border-app-border flex items-center justify-center text-app-muted">
-                <Search className="h-4 w-4" />
-              </div>
-              <h3 className="font-heading font-semibold text-base text-app-text mb-1">
+            <div className="workspace-card p-12 text-center">
+              <Search className="h-10 w-10 text-zinc-400 mx-auto mb-3" />
+              <h3 className="font-heading font-bold text-base text-zinc-900 dark:text-zinc-100 mb-1">
                 No roadmaps match your criteria
               </h3>
-              <p className="text-xs text-app-muted max-w-sm mx-auto mb-5 leading-relaxed font-sans">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto mb-5 leading-relaxed font-sans">
                 Try adjusting your search query, or clear your category and status filters to view all roadmaps.
               </p>
               <button
+                type="button"
                 onClick={handleResetFilters}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-md border border-app-border bg-app-bg hover:border-brand-accent hover:text-brand-accent transition-colors duration-150 cursor-pointer font-sans"
+                className="workspace-btn px-4 py-2 text-xs font-mono font-bold"
               >
-                <X className="h-3.5 w-3.5" />
-                <span>Reset Filters</span>
+                Reset Filters
               </button>
             </div>
           )}
         </section>
       </div>
 
-      {/* Community Roadmap Request Section */}
       <div className="mt-16">
         <RoadmapRequestBox />
       </div>
