@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -11,41 +10,47 @@ html, body, #root {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.font-sans, .font-heading, h1, h2, h3, h4, h5, h6, p, span, button, a, div, input {
+.font-display, .font-heading, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.font-sans, p, span, div, input, textarea {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-code, pre, .font-mono {
-  font-family: 'JetBrains Mono', 'Space Mono', monospace !important;
+code, pre, .font-mono, kbd {
+  font-family: 'Space Mono', monospace !important;
 }
 
 @layer base {
   :root {
-    --bg-main: #F9F8F6;
+    --bg-main: #FFF8F2;
     --bg-surface: #FFFFFF;
-    --bg-muted: #F2F0EC;
-    --border-default: #DCD9D0;
-    --border-strong: #18181B;
-    --text-primary: #141413;
-    --text-muted: #52524E;
-    --accent-brand: #6D28D9;
-    --accent-hover-bg: rgba(109, 40, 217, 0.06);
-    --surface-hover: #F2F0EC;
-    --accent-progress: #059669;
+    --bg-muted: #F5EFE6;
+    --border-default: #10162F;
+    --border-strong: #10162F;
+    --text-primary: #10162F;
+    --text-muted: #4F5568;
+    --accent-brand: #3A10E5;
+    --accent-hover-bg: rgba(58, 16, 229, 0.08);
+    --surface-hover: #F5EFE6;
+    --accent-progress: #008A5E;
+    --accent-highlight: #FFD300;
   }
 
   .dark {
-    --bg-main: #0B0B0D;
-    --bg-surface: #121215;
-    --bg-muted: #18181C;
-    --border-default: #242429;
-    --border-strong: #27272A;
-    --text-primary: #F4F4F5;
-    --text-muted: #A1A1AA;
-    --accent-brand: #7C3AED;
-    --accent-hover-bg: rgba(124, 58, 237, 0.12);
-    --surface-hover: #18181D;
-    --accent-progress: #10B981;
+    --bg-main: #0B1021;
+    --bg-surface: #131A33;
+    --bg-muted: #1B2447;
+    --border-default: #3B497E;
+    --border-strong: #F5F5F0;
+    --text-primary: #F8F7F4;
+    --text-muted: #9BA4C2;
+    --accent-brand: #3A10E5;
+    --accent-hover-bg: rgba(58, 16, 229, 0.2);
+    --surface-hover: #1E284F;
+    --accent-progress: #008A5E;
+    --accent-highlight: #FFD300;
   }
 
   * {
@@ -60,72 +65,144 @@ code, pre, .font-mono {
   }
 }
 
-/* Swiss Grid Architectural Background */
+/* Swiss Grid removed - pure clean canvas */
 .swiss-grid-bg {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(24, 24, 27, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(24, 24, 27, 0.04) 1px, transparent 1px);
+  background-image: none !important;
 }
 
-.dark .swiss-grid-bg,
-html.dark .swiss-grid-bg {
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+/* Codecademy Brutalist Card */
+.cc-card {
+  background-color: #FFFFFF;
+  border: 2px solid #10162F;
+  border-radius: 4px;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Tactile Codecademy-style Workspace Card */
+.dark .cc-card,
+html.dark .cc-card {
+  background-color: #131A33;
+  border-color: #3B497E;
+}
+
+.cc-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 5px 0px 0px #10162F;
+}
+
+.dark .cc-card:hover,
+html.dark .cc-card:hover {
+  box-shadow: 5px 5px 0px 0px #FFD300;
+}
+
+/* Codecademy Primary Button */
+.cc-btn-primary {
+  background-color: #3A10E5;
+  color: #FFFFFF;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  border: 2px solid #10162F;
+  border-radius: 4px;
+  box-shadow: 3px 3px 0px 0px #10162F;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-btn-primary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #10162F;
+}
+
+.cc-btn-primary:active {
+  transform: translate(1px, 1px);
+  box-shadow: 0px 0px 0px 0px transparent !important;
+}
+
+/* Codecademy Secondary Button */
+.cc-btn-secondary {
+  background-color: #FFFFFF;
+  color: #10162F;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  border: 2px solid #10162F;
+  border-radius: 4px;
+  box-shadow: 3px 3px 0px 0px #10162F;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark .cc-btn-secondary,
+html.dark .cc-btn-secondary {
+  background-color: #131A33;
+  color: #FFFFFF;
+  border-color: #3B497E;
+  box-shadow: 3px 3px 0px 0px #000000;
+}
+
+.cc-btn-secondary:hover {
+  transform: translate(-1px, -1px);
+}
+
+.cc-btn-secondary:active {
+  transform: translate(1px, 1px);
+  box-shadow: 0px 0px 0px 0px transparent !important;
+}
+
+/* Backward-compatible workspace aliases */
 .workspace-card {
   border-radius: 4px;
-  border: 1px solid #18181B;
+  border: 2px solid #10162F;
   background-color: #FFFFFF;
-  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1), border-color 150ms ease, background-color 150ms ease;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark .workspace-card,
 html.dark .workspace-card {
-  border-color: #27272A;
-  background-color: #121215;
+  border-color: #3B497E;
+  background-color: #131A33;
 }
 
 .workspace-card:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 3px 3px 0px 0px #18181B;
+  box-shadow: 4px 4px 0px 0px #10162F;
 }
 
 .dark .workspace-card:hover,
 html.dark .workspace-card:hover {
-  box-shadow: 3px 3px 0px 0px #7C3AED;
+  box-shadow: 4px 4px 0px 0px #FFD300;
 }
 
-/* Tactile Workspace Button */
 .workspace-btn {
   border-radius: 4px;
-  border: 1px solid #18181B;
+  border: 2px solid #10162F;
   background-color: #FFFFFF;
-  color: #141413;
-  box-shadow: 2px 2px 0px 0px #18181B;
-  transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 100ms cubic-bezier(0.4, 0, 0.2, 1), background-color 100ms ease, border-color 100ms ease, color 100ms ease;
+  color: #10162F;
+  box-shadow: 2px 2px 0px 0px #10162F;
+  transition: all 100ms cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dark .workspace-btn,
 html.dark .workspace-btn {
-  border-color: #3F3F46;
-  background-color: #18181C;
-  color: #F4F4F5;
-  box-shadow: 2px 2px 0px 0px #7C3AED;
+  border-color: #3B497E;
+  background-color: #131A33;
+  color: #FFFFFF;
+  box-shadow: 2px 2px 0px 0px #000000;
 }
 
 .workspace-btn:hover {
-  background-color: #F2F0EC;
-}
-
-.dark .workspace-btn:hover,
-html.dark .workspace-btn:hover {
-  background-color: #24242A;
+  transform: translate(-1px, -1px);
 }
 
 .workspace-btn:active {
@@ -133,7 +210,7 @@ html.dark .workspace-btn:hover {
   box-shadow: 0px 0px 0px 0px transparent !important;
 }
 
-/* Custom scrollbar matching utilitarian theme */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -144,10 +221,10 @@ html.dark .workspace-btn:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-default);
+  background: #10162F;
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+.dark ::-webkit-scrollbar-thumb {
+  background: #3B497E;
 }

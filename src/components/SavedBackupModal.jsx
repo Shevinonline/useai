@@ -99,13 +99,22 @@ export default function SavedBackupModal() {
       setCopiedId(prompt.id);
       setTimeout(() => setCopiedId(null), 2000);
     } catch (err) {
-      console.error('Failed to copy prompt', err);
+      console.error('Failed to copy prompt to clipboard', err);
     }
   };
 
   const handleRoadmapClick = (roadmap) => {
     closeSavedModal();
     navigate(`/roadmap/${roadmap.id}`);
+  };
+
+  const handlePromptClick = (prompt) => {
+    closeSavedModal();
+    if (prompt.roadmapId && prompt.stepId) {
+      navigate(`/roadmap/${prompt.roadmapId}?step=${prompt.stepId}&tab=promptLab`);
+    } else {
+      navigate('/prompts');
+    }
   };
 
   const handleExportClick = () => {
@@ -116,10 +125,10 @@ export default function SavedBackupModal() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > (MAX_BACKUP_FILE_SIZE || 512 * 1024)) {
+    if (file.size > MAX_BACKUP_FILE_SIZE) {
       setImportNotice({
         type: 'error',
-        message: 'File size exceeds maximum permitted limit of 512 KB.'
+        message: 'File size exceeds safety limit of 10 MB.'
       });
       e.target.value = '';
       return;
@@ -127,32 +136,21 @@ export default function SavedBackupModal() {
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      try {
-        const text = event.target?.result;
-        const res = importBackup(text);
-        if (res.success) {
+      const content = event.target?.result;
+      if (typeof content === 'string') {
+        const result = importBackup(content);
+        if (result.success) {
           setImportNotice({
             type: 'success',
-            message: res.message || 'Backup restored successfully!'
+            message: `Backup restored successfully! Loaded ${result.restoredRoadmaps} roadmaps and ${result.restoredBookmarks} bookmarks.`
           });
         } else {
           setImportNotice({
             type: 'error',
-            message: res.message || 'Failed to parse backup file.'
+            message: result.error || 'Invalid or corrupted backup JSON file.'
           });
         }
-      } catch (err) {
-        setImportNotice({
-          type: 'error',
-          message: `Import error: ${err.message}`
-        });
       }
-    };
-    reader.onerror = () => {
-      setImportNotice({
-        type: 'error',
-        message: 'Could not read the selected file.'
-      });
     };
     reader.readAsText(file);
     e.target.value = '';
@@ -163,14 +161,14 @@ export default function SavedBackupModal() {
       setIsConfirmingReset(true);
       resetTimeoutRef.current = setTimeout(() => {
         setIsConfirmingReset(false);
-      }, 5000);
+      }, 4000);
     } else {
-      if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
-      setIsConfirmingReset(false);
+      clearTimeout(resetTimeoutRef.current);
       resetLocalData();
+      setIsConfirmingReset(false);
       setImportNotice({
         type: 'success',
-        message: 'All local progress checkmarks and bookmarks have been reset.'
+        message: 'Local progress and saved library have been completely reset.'
       });
     }
   };
@@ -178,34 +176,38 @@ export default function SavedBackupModal() {
   const savedRoadmaps = bookmarks.roadmaps || [];
   const savedPrompts = bookmarks.prompts || [];
   const savedTools = bookmarks.tools || [];
+  const hasSavedItems = totalSavedCount > 0;
 
-  const filteredRoadmaps = filterType === 'prompts' || filterType === 'tools' ? [] : savedRoadmaps;
-  const filteredPrompts = filterType === 'roadmaps' || filterType === 'tools' ? [] : savedPrompts;
-  const filteredTools = filterType === 'roadmaps' || filterType === 'prompts' ? [] : savedTools;
-
-  const hasSavedItems = savedRoadmaps.length > 0 || savedPrompts.length > 0 || savedTools.length > 0;
+  const filteredRoadmaps = filterType === 'all' || filterType === 'roadmaps' ? savedRoadmaps : [];
+  const filteredPrompts = filterType === 'all' || filterType === 'prompts' ? savedPrompts : [];
+  const filteredTools = filterType === 'all' || filterType === 'tools' ? savedTools : [];
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-150"
       role="dialog"
       aria-modal="true"
       aria-labelledby="saved-modal-title"
     >
-      {/* Backdrop overlay */}
-      <div className="fixed inset-0" onClick={closeSavedModal} />
+      {/* Backdrop */}
+      <div
+        onClick={closeSavedModal}
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+      />
 
-      {/* Modal Dialog Card */}
-      <div className="relative w-full max-w-3xl rounded-[4px] border-2 border-zinc-900 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-[#0E0E11] text-zinc-900 dark:text-zinc-100 shadow-[6px_6px_0px_0px_#18181B] dark:shadow-[6px_6px_0px_0px_#7C3AED] flex flex-col max-h-[90vh] overflow-hidden z-10 font-sans">
+      {/* Modal Surface */}
+      <div
+        className="relative w-full max-w-3xl rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-[#F8F7F4] shadow-[6px_6px_0px_0px_#10162F] dark:shadow-[6px_6px_0px_0px_#000000] flex flex-col max-h-[90vh] overflow-hidden z-10 font-sans"
+      >
         {/* Header */}
-        <div className="px-5 sm:px-6 py-3.5 border-b border-zinc-300 dark:border-zinc-800 flex items-center justify-between gap-4 bg-[#F2F0EC]/80 dark:bg-zinc-900/80 shrink-0">
+        <div className="px-5 sm:px-6 py-4 border-b-2 border-[#10162F] dark:border-[#3B497E] flex items-center justify-between gap-4 bg-[#F5EFE6] dark:bg-[#131A33] shrink-0">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[2px] bg-zinc-900 text-white dark:bg-purple-600">
-              [ WORKSPACE ]
+            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] shadow-[1px_1px_0px_0px_#10162F]">
+              SAVED
             </span>
             <h2
               id="saved-modal-title"
-              className="font-heading font-extrabold text-base tracking-tight text-zinc-900 dark:text-zinc-100"
+              className="font-display font-bold text-lg text-[#10162F] dark:text-white"
             >
               Saved Library &amp; Backup
             </h2>
@@ -215,39 +217,39 @@ export default function SavedBackupModal() {
             onClick={closeSavedModal}
             type="button"
             aria-label="Close modal"
-            className="workspace-btn h-7 w-7 text-xs"
+            className="cc-btn-secondary h-8 w-8 p-0"
           >
-            <X className="h-3.5 w-3.5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Tab Navigation */}
-        <div className="px-5 sm:px-6 py-2.5 border-b border-zinc-300 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-[#0E0E11] flex items-center gap-2 shrink-0 font-mono text-xs">
+        <div className="px-5 sm:px-6 py-3 border-b-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] flex items-center gap-2.5 shrink-0 font-display text-xs sm:text-sm font-bold">
           <button
             type="button"
             onClick={() => setSavedModalTab('library')}
-            className={`px-3 py-1.5 rounded-[3px] border transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-4 py-1.5 rounded-[4px] border-2 transition-all cursor-pointer flex items-center gap-2 ${
               savedModalTab === 'library'
-                ? 'border-2 border-zinc-900 dark:border-purple-500 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
-                : 'border border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC] dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
+                ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
+                : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 hover:-translate-y-0.5'
             }`}
           >
-            <Bookmark className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
-            <span>01. SAVED LIBRARY</span>
-            <span className="font-bold">[{totalSavedCount}]</span>
+            <Bookmark className="h-4 w-4" />
+            <span>01. Saved Library</span>
+            <span className="font-mono text-xs opacity-80">[{totalSavedCount}]</span>
           </button>
 
           <button
             type="button"
             onClick={() => setSavedModalTab('backup')}
-            className={`px-3 py-1.5 rounded-[3px] border transition-all cursor-pointer flex items-center gap-1.5 ${
+            className={`px-4 py-1.5 rounded-[4px] border-2 transition-all cursor-pointer flex items-center gap-2 ${
               savedModalTab === 'backup'
-                ? 'border-2 border-zinc-900 dark:border-purple-500 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
-                : 'border border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC] dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
+                ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
+                : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 hover:-translate-y-0.5'
             }`}
           >
-            <Database className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
-            <span>02. PROGRESS &amp; BACKUP</span>
+            <Database className="h-4 w-4" />
+            <span>02. Progress &amp; Backup</span>
           </button>
         </div>
 
@@ -259,14 +261,14 @@ export default function SavedBackupModal() {
               {/* Filter pills if items exist */}
               {hasSavedItems && (
                 <div className="flex flex-wrap items-center justify-between gap-3 pb-1 font-mono text-xs">
-                  <div className="flex flex-wrap items-center gap-1.5">
+                  <div className="flex flex-wrap items-center gap-2">
                     <button
                       type="button"
                       onClick={() => setFilterType('all')}
-                      className={`px-2.5 py-1 rounded-[3px] border transition-all cursor-pointer ${
+                      className={`px-3 py-1 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
                         filterType === 'all'
-                          ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[1px_1px_0px_0px_#18181B] dark:shadow-none'
-                          : 'border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-500'
+                          ? 'border-[#10162F] bg-[#10162F] text-white'
+                          : 'border-[#10162F]/30 dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 hover:-translate-y-0.5'
                       }`}
                     >
                       ALL [{totalSavedCount}]
@@ -274,10 +276,10 @@ export default function SavedBackupModal() {
                     <button
                       type="button"
                       onClick={() => setFilterType('roadmaps')}
-                      className={`px-2.5 py-1 rounded-[3px] border transition-all cursor-pointer ${
+                      className={`px-3 py-1 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
                         filterType === 'roadmaps'
-                          ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[1px_1px_0px_0px_#18181B] dark:shadow-none'
-                          : 'border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-500'
+                          ? 'border-[#10162F] bg-[#10162F] text-white'
+                          : 'border-[#10162F]/30 dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 hover:-translate-y-0.5'
                       }`}
                     >
                       ROADMAPS [{savedRoadmaps.length}]
@@ -285,10 +287,10 @@ export default function SavedBackupModal() {
                     <button
                       type="button"
                       onClick={() => setFilterType('prompts')}
-                      className={`px-2.5 py-1 rounded-[3px] border transition-all cursor-pointer ${
+                      className={`px-3 py-1 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
                         filterType === 'prompts'
-                          ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[1px_1px_0px_0px_#18181B] dark:shadow-none'
-                          : 'border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-500'
+                          ? 'border-[#10162F] bg-[#10162F] text-white'
+                          : 'border-[#10162F]/30 dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 hover:-translate-y-0.5'
                       }`}
                     >
                       PROMPTS [{savedPrompts.length}]
@@ -296,10 +298,10 @@ export default function SavedBackupModal() {
                     <button
                       type="button"
                       onClick={() => setFilterType('tools')}
-                      className={`px-2.5 py-1 rounded-[3px] border transition-all cursor-pointer ${
+                      className={`px-3 py-1 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
                         filterType === 'tools'
-                          ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[1px_1px_0px_0px_#18181B] dark:shadow-none'
-                          : 'border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:border-zinc-500'
+                          ? 'border-[#10162F] bg-[#10162F] text-white'
+                          : 'border-[#10162F]/30 dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 hover:-translate-y-0.5'
                       }`}
                     >
                       AI TOOLS [{savedTools.length}]
@@ -310,39 +312,39 @@ export default function SavedBackupModal() {
 
               {/* Empty State */}
               {!hasSavedItems ? (
-                <div className="workspace-card py-12 px-4 text-center max-w-md mx-auto space-y-4">
-                  <div className="h-12 w-12 rounded-[4px] border-2 border-zinc-900 dark:border-purple-500 bg-white dark:bg-zinc-900 mx-auto flex items-center justify-center text-purple-600 dark:text-purple-400 shadow-xs">
+                <div className="cc-card py-12 px-5 text-center max-w-md mx-auto space-y-4">
+                  <div className="h-12 w-12 rounded-[4px] border-2 border-[#10162F] bg-[#FFD300] mx-auto flex items-center justify-center text-[#10162F] shadow-[2px_2px_0px_0px_#10162F]">
                     <Bookmark className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-heading font-bold text-lg text-zinc-900 dark:text-zinc-100 mb-1">
+                    <h3 className="font-display font-bold text-lg text-[#10162F] dark:text-white mb-1">
                       Your Saved Library is Empty
                     </h3>
-                    <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
+                    <p className="text-xs sm:text-sm text-[#10162F]/70 dark:text-slate-300 leading-relaxed font-sans">
                       Bookmark entire learning roadmaps, high-leverage prompts, and curated AI tools to build your personal quick-access workspace.
                     </p>
                   </div>
 
-                  <div className="pt-2 flex flex-wrap justify-center gap-2 font-mono text-xs">
+                  <div className="pt-2 flex flex-wrap justify-center gap-2 font-display text-xs">
                     <Link
                       to="/roadmaps"
                       onClick={closeSavedModal}
-                      className="workspace-btn px-3 py-1.5 font-bold gap-1"
+                      className="cc-btn-primary px-3.5 py-2 font-bold gap-1"
                     >
                       <span>Explore Roadmaps</span>
-                      <ArrowRight className="h-3 w-3" />
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                     <Link
                       to="/prompts"
                       onClick={closeSavedModal}
-                      className="workspace-btn px-3 py-1.5 font-bold"
+                      className="cc-btn-secondary px-3.5 py-2 font-bold"
                     >
                       <span>Browse Prompts</span>
                     </Link>
                     <Link
                       to="/tools"
                       onClick={closeSavedModal}
-                      className="workspace-btn px-3 py-1.5 font-bold"
+                      className="cc-btn-secondary px-3.5 py-2 font-bold"
                     >
                       <span>AI Tools</span>
                     </Link>
@@ -352,13 +354,13 @@ export default function SavedBackupModal() {
                 <div className="space-y-6">
                   {/* 1. SAVED ROADMAPS SECTION */}
                   {filteredRoadmaps.length > 0 && (
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-2 font-mono text-xs font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
-                        <Compass className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 font-display text-sm font-bold text-[#10162F] dark:text-white">
+                        <Compass className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
                         <span>Saved Roadmaps ({filteredRoadmaps.length})</span>
                       </div>
 
-                      <div className="space-y-2.5">
+                      <div className="space-y-3">
                         {filteredRoadmaps.map((roadmap) => {
                           const completedCount = getCompletedStepsForRoadmap(roadmap.id).length;
                           const totalSteps = roadmap.stepCount || 10;
@@ -367,48 +369,48 @@ export default function SavedBackupModal() {
                           return (
                             <div
                               key={roadmap.id}
-                              className="workspace-card p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-left"
+                              className="cc-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-left"
                             >
                               <div
                                 onClick={() => handleRoadmapClick(roadmap)}
                                 className="flex-1 cursor-pointer min-w-0"
                               >
-                                <div className="flex flex-wrap items-center gap-2 mb-1">
-                                  <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300">
+                                <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                                  <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] bg-[#FFD300] text-[#10162F] border border-[#10162F]">
                                     {roadmap.category || 'Roadmap'}
                                   </span>
                                   {completedCount > 0 ? (
-                                    <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] border border-emerald-500/50 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
+                                    <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] border border-[#008A5E] bg-[#008A5E]/15 text-[#008A5E]">
                                       {progressPercent}% DONE
                                     </span>
                                   ) : (
-                                    <span className="font-mono text-[10px] text-zinc-500">
+                                    <span className="font-mono text-xs text-[#10162F]/60 dark:text-slate-400">
                                       {totalSteps} Steps
                                     </span>
                                   )}
                                 </div>
-                                <h4 className="font-heading font-bold text-sm sm:text-base text-zinc-900 dark:text-zinc-100 group-hover:text-purple-600 transition-colors truncate">
+                                <h4 className="font-display font-bold text-base text-[#10162F] dark:text-white truncate">
                                   {roadmap.title}
                                 </h4>
                               </div>
 
-                              <div className="flex items-center gap-2 shrink-0 font-mono text-xs">
+                              <div className="flex items-center gap-2 shrink-0 font-display text-xs">
                                 <button
                                   type="button"
                                   onClick={() => handleRoadmapClick(roadmap)}
-                                  className="workspace-btn px-2.5 py-1 gap-1 font-bold"
+                                  className="cc-btn-primary px-3 py-1.5 font-bold gap-1"
                                 >
                                   <span>OPEN</span>
-                                  <ExternalLink className="h-3 w-3" />
+                                  <ExternalLink className="h-3.5 w-3.5" />
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => removeRoadmapBookmark(roadmap.id)}
                                   title="Remove from saved roadmaps"
                                   aria-label="Remove from saved roadmaps"
-                                  className="workspace-btn h-7 w-7 text-xs text-rose-600 dark:text-rose-400"
+                                  className="cc-btn-secondary h-8 w-8 p-0 text-red-600 hover:text-red-700"
                                 >
-                                  <Trash2 className="h-3.5 w-3.5" />
+                                  <Trash2 className="h-4 w-4" />
                                 </button>
                               </div>
                             </div>
@@ -420,49 +422,49 @@ export default function SavedBackupModal() {
 
                   {/* 2. SAVED PROMPTS SECTION */}
                   {filteredPrompts.length > 0 && (
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-2 font-mono text-xs font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
-                        <Terminal className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 font-display text-sm font-bold text-[#10162F] dark:text-white">
+                        <Terminal className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
                         <span>Saved Prompt Templates ({filteredPrompts.length})</span>
                       </div>
 
-                      <div className="space-y-2.5">
+                      <div className="space-y-3">
                         {filteredPrompts.map((prompt) => {
                           const isCopied = copiedId === prompt.id;
                           return (
                             <div
                               key={prompt.id}
-                              className="workspace-card p-3.5 sm:p-4 flex flex-col justify-between gap-3 text-left"
+                              className="cc-card p-4 flex flex-col justify-between gap-3 text-left"
                             >
                               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div className="min-w-0">
-                                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                                    <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/30">
+                                  <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                                    <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] bg-[#FFD300] text-[#10162F] border border-[#10162F]">
                                       PROMPT
                                     </span>
-                                    <span className="text-xs text-zinc-500 truncate font-mono">
+                                    <span className="text-xs text-[#10162F]/60 dark:text-slate-400 truncate font-mono">
                                       {prompt.roadmapTitle}
                                     </span>
                                   </div>
-                                  <h4 className="font-heading font-bold text-sm sm:text-base text-zinc-900 dark:text-zinc-100 truncate">
+                                  <h4 className="font-display font-bold text-base text-[#10162F] dark:text-white truncate">
                                     {prompt.title}
                                   </h4>
                                 </div>
 
-                                <div className="flex items-center gap-1.5 shrink-0 font-mono text-xs">
+                                <div className="flex items-center gap-2 shrink-0 font-display text-xs">
                                   <button
                                     type="button"
                                     onClick={() => handleCopyPrompt(prompt)}
-                                    className="workspace-btn px-2.5 py-1 font-bold gap-1"
+                                    className="cc-btn-secondary px-3 py-1.5 font-bold gap-1"
                                   >
                                     {isCopied ? (
                                       <>
-                                        <Check className="h-3 w-3 text-emerald-600" />
+                                        <Check className="h-3.5 w-3.5 text-[#008A5E]" />
                                         <span>COPIED!</span>
                                       </>
                                     ) : (
                                       <>
-                                        <Copy className="h-3 w-3" />
+                                        <Copy className="h-3.5 w-3.5" />
                                         <span>COPY</span>
                                       </>
                                     )}
@@ -472,10 +474,10 @@ export default function SavedBackupModal() {
                                     href={sanitizeExternalUrl(generatePromptDeepLinks(prompt.template).chatgpt)}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="workspace-btn px-2 py-1 font-bold text-emerald-700 dark:text-emerald-400 gap-1"
+                                    className="cc-btn-secondary px-2.5 py-1.5 font-bold text-[#008A5E] gap-1"
                                     title="Run in ChatGPT"
                                   >
-                                    <Sparkles className="h-3 w-3" />
+                                    <Sparkles className="h-3.5 w-3.5" />
                                     <span>GPT ↗</span>
                                   </a>
 
@@ -484,14 +486,14 @@ export default function SavedBackupModal() {
                                     onClick={() => removePromptBookmark(prompt.id)}
                                     title="Remove prompt bookmark"
                                     aria-label="Remove prompt bookmark"
-                                    className="workspace-btn h-7 w-7 text-xs text-rose-600 dark:text-rose-400"
+                                    className="cc-btn-secondary h-8 w-8 p-0 text-red-600 hover:text-red-700"
                                   >
-                                    <Trash2 className="h-3.5 w-3.5" />
+                                    <Trash2 className="h-4 w-4" />
                                   </button>
                                 </div>
                               </div>
 
-                              <div className="p-2.5 rounded-[3px] bg-[#0E0E12] border border-zinc-800 text-zinc-100 font-mono text-xs line-clamp-2 select-all">
+                              <div className="p-3 rounded-[3px] bg-[#10162F] dark:bg-[#0B1021] text-white font-mono text-xs line-clamp-2 select-all border border-[#10162F]">
                                 {prompt.template}
                               </div>
                             </div>
@@ -503,39 +505,39 @@ export default function SavedBackupModal() {
 
                   {/* 3. SAVED AI TOOLS SECTION */}
                   {filteredTools.length > 0 && (
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-2 font-mono text-xs font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
-                        <Wrench className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 font-display text-sm font-bold text-[#10162F] dark:text-white">
+                        <Wrench className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
                         <span>Saved AI Tools ({filteredTools.length})</span>
                       </div>
 
-                      <div className="space-y-2.5">
+                      <div className="space-y-3">
                         {filteredTools.map((tool) => (
                           <div
                             key={tool.id || tool.name}
-                            className="workspace-card p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-left"
+                            className="cc-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-left"
                           >
                             <div className="flex-1 min-w-0">
-                              <div className="flex flex-wrap items-center gap-2 mb-1">
-                                <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300">
+                              <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                                <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] bg-[#FFD300] text-[#10162F] border border-[#10162F]">
                                   {tool.pricing || 'FREEMIUM'}
                                 </span>
                               </div>
-                              <h4 className="font-heading font-bold text-sm sm:text-base text-zinc-900 dark:text-zinc-100 truncate">
+                              <h4 className="font-display font-bold text-base text-[#10162F] dark:text-white truncate">
                                 {tool.name}
                               </h4>
                             </div>
 
-                            <div className="flex items-center gap-2 shrink-0 font-mono text-xs">
+                            <div className="flex items-center gap-2 shrink-0 font-display text-xs">
                               {tool.url && (
                                 <a
                                   href={sanitizeExternalUrl(tool.url)}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="workspace-btn px-2.5 py-1 font-bold gap-1"
+                                  className="cc-btn-primary px-3 py-1.5 font-bold gap-1"
                                 >
                                   <span>VISIT</span>
-                                  <ExternalLink className="h-3 w-3" />
+                                  <ExternalLink className="h-3.5 w-3.5" />
                                 </a>
                               )}
                               <button
@@ -543,9 +545,9 @@ export default function SavedBackupModal() {
                                 onClick={() => removeToolBookmark(tool.id || tool.name)}
                                 title="Remove tool from saved"
                                 aria-label="Remove tool from saved"
-                                className="workspace-btn h-7 w-7 text-xs text-rose-600 dark:text-rose-400"
+                                className="cc-btn-secondary h-8 w-8 p-0 text-red-600 hover:text-red-700"
                               >
-                                <Trash2 className="h-3.5 w-3.5" />
+                                <Trash2 className="h-4 w-4" />
                               </button>
                             </div>
                           </div>
@@ -564,17 +566,17 @@ export default function SavedBackupModal() {
               {/* Feedback Alert Banner */}
               {importNotice && (
                 <div
-                  className={`p-3.5 rounded-[4px] border font-mono text-xs flex items-start justify-between gap-3 ${
+                  className={`p-4 rounded-[4px] border-2 font-mono text-xs flex items-start justify-between gap-3 ${
                     importNotice.type === 'success'
-                      ? 'border-emerald-600 bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300'
-                      : 'border-rose-600 bg-rose-50 text-rose-800 dark:bg-rose-950/40 dark:text-rose-300'
+                      ? 'border-[#008A5E] bg-[#008A5E]/15 text-[#008A5E]'
+                      : 'border-red-600 bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300'
                   }`}
                 >
                   <div className="flex items-start gap-2">
                     {importNotice.type === 'success' ? (
-                      <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 mt-0.5" />
+                      <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
                     ) : (
-                      <AlertTriangle className="h-4 w-4 shrink-0 text-rose-600 mt-0.5" />
+                      <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
                     )}
                     <span>{importNotice.message}</span>
                   </div>
@@ -583,19 +585,19 @@ export default function SavedBackupModal() {
                     onClick={() => setImportNotice(null)}
                     className="cursor-pointer"
                   >
-                    <X className="h-3.5 w-3.5" />
+                    <X className="h-4 w-4" />
                   </button>
                 </div>
               )}
 
               {/* Privacy Notice Banner */}
-              <div className="bg-white dark:bg-[#141418] border border-zinc-300 dark:border-zinc-800 rounded-[4px] p-4 flex items-start gap-3">
-                <ShieldCheck className="h-5 w-5 text-purple-600 dark:text-purple-400 shrink-0 mt-0.5" />
+              <div className="cc-card p-5 flex items-start gap-3 bg-[#FFF8F2] dark:bg-[#131A33]">
+                <ShieldCheck className="h-5 w-5 text-[#3A10E5] dark:text-[#FFD300] shrink-0 mt-0.5" />
                 <div className="space-y-1 text-xs font-sans">
-                  <span className="font-heading font-bold text-zinc-900 dark:text-zinc-100 block">
+                  <span className="font-display font-bold text-sm text-[#10162F] dark:text-white block">
                     Zero-Login &amp; Privacy-First Architecture
                   </span>
-                  <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                  <p className="text-[#10162F]/80 dark:text-slate-300 leading-relaxed">
                     useai.sh never sends your progress or bookmarks to an external cloud database.
                     Everything lives strictly inside your browser&apos;s local storage. Use the backup tools below to transfer your data across machines safely.
                   </p>
@@ -604,41 +606,41 @@ export default function SavedBackupModal() {
 
               {/* Live Stats Summary Cards */}
               <div className="space-y-2">
-                <span className="font-mono text-xs font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
+                <span className="font-mono text-xs font-bold text-[#10162F] dark:text-white uppercase tracking-wider">
                   Live Local Storage Metrics
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="workspace-card p-3.5 space-y-1">
-                    <div className="flex items-center justify-between text-zinc-500 text-xs font-mono">
+                  <div className="cc-card p-4 space-y-1">
+                    <div className="flex items-center justify-between text-[#10162F]/60 dark:text-slate-400 text-xs font-mono">
                       <span>Tracks Started</span>
-                      <Compass className="h-4 w-4 text-purple-600" />
+                      <Compass className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
                     </div>
-                    <div className="text-2xl font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                    <div className="text-2xl font-bold font-mono text-[#10162F] dark:text-white">
                       {stats.roadmapsStarted}
                     </div>
-                    <span className="text-[11px] font-mono text-zinc-500">with ≥ 1 step done</span>
+                    <span className="text-[11px] font-mono text-[#10162F]/50 dark:text-slate-400">with ≥ 1 step done</span>
                   </div>
 
-                  <div className="workspace-card p-3.5 space-y-1">
-                    <div className="flex items-center justify-between text-zinc-500 text-xs font-mono">
+                  <div className="cc-card p-4 space-y-1">
+                    <div className="flex items-center justify-between text-[#10162F]/60 dark:text-slate-400 text-xs font-mono">
                       <span>Steps Completed</span>
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      <CheckCircle2 className="h-4 w-4 text-[#008A5E]" />
                     </div>
-                    <div className="text-2xl font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                    <div className="text-2xl font-bold font-mono text-[#10162F] dark:text-white">
                       {stats.stepsCompleted}
                     </div>
-                    <span className="text-[11px] font-mono text-zinc-500">across all roadmaps</span>
+                    <span className="text-[11px] font-mono text-[#10162F]/50 dark:text-slate-400">across all roadmaps</span>
                   </div>
 
-                  <div className="workspace-card p-3.5 space-y-1">
-                    <div className="flex items-center justify-between text-zinc-500 text-xs font-mono">
+                  <div className="cc-card p-4 space-y-1">
+                    <div className="flex items-center justify-between text-[#10162F]/60 dark:text-slate-400 text-xs font-mono">
                       <span>Saved Bookmarks</span>
-                      <Bookmark className="h-4 w-4 text-amber-500" />
+                      <Bookmark className="h-4 w-4 text-[#FFD300]" />
                     </div>
-                    <div className="text-2xl font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                    <div className="text-2xl font-bold font-mono text-[#10162F] dark:text-white">
                       {stats.savedBookmarks}
                     </div>
-                    <span className="text-[11px] font-mono text-zinc-500">total saved items</span>
+                    <span className="text-[11px] font-mono text-[#10162F]/50 dark:text-slate-400">total saved items</span>
                   </div>
                 </div>
               </div>
@@ -646,40 +648,40 @@ export default function SavedBackupModal() {
               {/* Export / Import Action Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Export Card */}
-                <div className="workspace-card p-4 sm:p-5 flex flex-col justify-between gap-4">
+                <div className="cc-card p-5 flex flex-col justify-between gap-4">
                   <div className="space-y-2">
-                    <div className="h-7 w-7 rounded-[3px] border border-zinc-900 dark:border-zinc-700 bg-[#F2F0EC] dark:bg-zinc-800 flex items-center justify-center text-zinc-900 dark:text-zinc-100">
-                      <Download className="h-3.5 w-3.5" />
+                    <div className="h-8 w-8 rounded-[4px] border-2 border-[#10162F] bg-[#FFD300] flex items-center justify-center text-[#10162F] shadow-[1px_1px_0px_0px_#10162F]">
+                      <Download className="h-4 w-4" />
                     </div>
-                    <h3 className="font-heading font-bold text-sm sm:text-base text-zinc-900 dark:text-zinc-100">
+                    <h3 className="font-display font-bold text-base text-[#10162F] dark:text-white">
                       Export Progress Backup
                     </h3>
-                    <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
-                      Download a timestamped <code className="font-mono text-[11px] text-purple-600 font-bold">.json</code> file containing all your checked roadmap steps and saved bookmarks.
+                    <p className="text-xs text-[#10162F]/75 dark:text-slate-300 leading-relaxed font-sans">
+                      Download a timestamped <code className="font-mono text-xs text-[#3A10E5] dark:text-[#FFD300] font-bold">.json</code> file containing all your checked roadmap steps and saved bookmarks.
                     </p>
                   </div>
 
                   <button
                     type="button"
                     onClick={handleExportClick}
-                    className="workspace-btn py-2 px-3 text-xs font-mono font-bold gap-2 bg-zinc-900 text-white dark:bg-purple-600"
+                    className="cc-btn-primary py-2.5 px-4 text-xs font-mono font-bold gap-2"
                   >
-                    <Download className="h-3.5 w-3.5" />
+                    <Download className="h-4 w-4" />
                     <span>Download Backup (.json)</span>
                   </button>
                 </div>
 
                 {/* Import Card */}
-                <div className="workspace-card p-4 sm:p-5 flex flex-col justify-between gap-4">
+                <div className="cc-card p-5 flex flex-col justify-between gap-4">
                   <div className="space-y-2">
-                    <div className="h-7 w-7 rounded-[3px] border border-zinc-900 dark:border-zinc-700 bg-[#F2F0EC] dark:bg-zinc-800 flex items-center justify-center text-emerald-600">
-                      <Upload className="h-3.5 w-3.5" />
+                    <div className="h-8 w-8 rounded-[4px] border-2 border-[#10162F] bg-[#008A5E] flex items-center justify-center text-white shadow-[1px_1px_0px_0px_#10162F]">
+                      <Upload className="h-4 w-4" />
                     </div>
-                    <h3 className="font-heading font-bold text-sm sm:text-base text-zinc-900 dark:text-zinc-100">
+                    <h3 className="font-display font-bold text-base text-[#10162F] dark:text-white">
                       Import &amp; Restore Backup
                     </h3>
-                    <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
-                      Restore your step progress and saved roadmaps, prompts, and tools from a previously saved <code className="font-mono text-[11px] text-purple-600 font-bold">.json</code> backup safely.
+                    <p className="text-xs text-[#10162F]/75 dark:text-slate-300 leading-relaxed font-sans">
+                      Restore your step progress and saved roadmaps, prompts, and tools from a previously saved <code className="font-mono text-xs text-[#3A10E5] dark:text-[#FFD300] font-bold">.json</code> backup safely.
                     </p>
                   </div>
 
@@ -694,9 +696,9 @@ export default function SavedBackupModal() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="workspace-btn py-2 px-3 text-xs font-mono font-bold gap-2 w-full"
+                      className="cc-btn-secondary py-2.5 px-4 text-xs font-mono font-bold gap-2 w-full"
                     >
-                      <Upload className="h-3.5 w-3.5" />
+                      <Upload className="h-4 w-4" />
                       <span>Select Backup File (.json)</span>
                     </button>
                   </div>
@@ -704,14 +706,14 @@ export default function SavedBackupModal() {
               </div>
 
               {/* Reset Section */}
-              <div className="pt-3 border-t border-zinc-200 dark:border-zinc-800">
-                <div className="p-4 rounded-[4px] border border-rose-500/30 bg-rose-50/20 dark:bg-rose-950/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="pt-3 border-t-2 border-[#10162F]/15 dark:border-white/10">
+                <div className="p-4 rounded-[4px] border-2 border-red-500/40 bg-red-50/30 dark:bg-red-950/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   <div className="space-y-0.5">
-                    <span className="font-mono text-xs font-bold text-rose-600 flex items-center gap-1.5">
-                      <AlertTriangle className="h-3.5 w-3.5" />
+                    <span className="font-mono text-xs font-bold text-red-600 dark:text-red-400 flex items-center gap-1.5">
+                      <AlertTriangle className="h-4 w-4" />
                       <span>RESET LOCAL DATA</span>
                     </span>
-                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 font-sans">
+                    <p className="text-xs text-[#10162F]/60 dark:text-slate-400 font-sans">
                       Clears all completed checkmarks and removes all bookmarks from this browser.
                     </p>
                   </div>
@@ -719,8 +721,10 @@ export default function SavedBackupModal() {
                   <button
                     type="button"
                     onClick={handleResetClick}
-                    className={`workspace-btn px-3 py-1.5 text-xs font-mono font-bold shrink-0 ${
-                      isConfirmingReset ? 'bg-rose-600 text-white animate-pulse' : 'text-rose-600 dark:text-rose-400'
+                    className={`px-4 py-2 text-xs font-mono font-bold rounded-[4px] border-2 border-[#10162F] transition-all cursor-pointer shrink-0 ${
+                      isConfirmingReset
+                        ? 'bg-red-600 text-white animate-pulse shadow-[2px_2px_0px_0px_#10162F]'
+                        : 'bg-white dark:bg-[#131A33] text-red-600 dark:text-red-400 shadow-[2px_2px_0px_0px_#10162F]'
                     }`}
                   >
                     {isConfirmingReset ? 'CONFIRM RESET!' : 'RESET DATA'}
@@ -732,12 +736,12 @@ export default function SavedBackupModal() {
         </div>
 
         {/* Modal Footer */}
-        <div className="px-5 sm:px-6 py-2.5 border-t border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC]/80 dark:bg-zinc-900/80 flex items-center justify-between text-xs text-zinc-500 shrink-0 font-mono">
-          <span>LOCAL-FIRST WORKSPACE</span>
+        <div className="px-5 sm:px-6 py-3 border-t-2 border-[#10162F] dark:border-[#3B497E] bg-[#F5EFE6] dark:bg-[#131A33] flex items-center justify-between text-xs text-[#10162F]/70 dark:text-slate-400 shrink-0 font-mono">
+          <span className="font-bold">LOCAL-FIRST WORKSPACE</span>
           <button
             type="button"
             onClick={closeSavedModal}
-            className="workspace-btn px-3 py-1 text-xs font-bold"
+            className="cc-btn-secondary px-3 py-1 text-xs font-bold"
           >
             CLOSE
           </button>

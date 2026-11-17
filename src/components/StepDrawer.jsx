@@ -5,7 +5,6 @@ import {
   Circle,
   Copy,
   Check,
-  ExternalLink,
   BookOpen,
   FileCode,
   Terminal,
@@ -17,7 +16,6 @@ import {
   Link2,
   Compass,
   Sparkles,
-  Layers,
   Wrench
 } from 'lucide-react';
 import { useWorkspace } from '../context/WorkspaceContext';
@@ -244,7 +242,7 @@ export default function StepDrawer({
     ? callouts.proTip
     : [
         callouts.proTip ||
-          'Enforce TypeScript strict mode and Tailwind CSS 1px border tokens to prevent visual hallucinations.'
+          'Enforce TypeScript strict mode and clear boundary constraints to prevent visual hallucinations.'
       ];
 
   const conceptGuide = step.conceptGuide || {
@@ -326,16 +324,16 @@ Output complete, verified code with zero conversational fluff.`,
         className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-200"
       />
 
-      {/* Drawer Panel: Slide-over with crisp 2px left border */}
+      {/* Drawer Panel: Slide-over with crisp 2px left border & warm cream canvas */}
       <div className="fixed inset-y-0 right-0 flex max-w-full pl-0 sm:pl-10">
-        <div className="w-screen sm:w-auto max-w-full sm:max-w-2xl bg-[#F9F8F6] dark:bg-[#0E0E11] text-zinc-900 dark:text-zinc-100 border-l-2 border-zinc-900 dark:border-zinc-700 flex flex-col shadow-2xl font-sans">
-          {/* 1. Monospace Top Telemetry Bar */}
-          <div className="relative z-30 px-4 sm:px-6 py-2.5 border-b border-zinc-300 dark:border-zinc-800 flex items-center justify-between gap-3 bg-[#F2F0EC]/90 dark:bg-zinc-900/90 shrink-0 font-mono text-xs">
+        <div className="w-screen sm:w-auto max-w-full sm:max-w-2xl bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-[#F8F7F4] border-l-2 border-[#10162F] dark:border-[#3B497E] flex flex-col shadow-2xl font-sans">
+          {/* 1. Top Telemetry Bar */}
+          <div className="relative z-30 px-4 sm:px-6 py-2.5 border-b-2 border-[#10162F] dark:border-[#3B497E] flex items-center justify-between gap-3 bg-[#F5EFE6] dark:bg-[#131A33] shrink-0 font-mono text-xs">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-zinc-900 dark:text-zinc-100">
+              <span className="font-bold text-[#10162F] dark:text-white">
                 MODULE {formatStepNumber(step.stepNumber)} OF {formatStepNumber(allSteps.length || 10)}
               </span>
-              <span className="hidden sm:inline text-zinc-500 dark:text-zinc-400">
+              <span className="hidden sm:inline text-[#10162F]/60 dark:text-slate-400">
                 // {step.id.toUpperCase()}
               </span>
             </div>
@@ -347,11 +345,11 @@ Output complete, verified code with zero conversational fluff.`,
                 type="button"
                 title="Copy shareable link to this step"
                 aria-label="Copy shareable link to this step"
-                className="workspace-btn px-2.5 py-1 text-xs font-mono font-medium gap-1"
+                className="cc-btn-secondary px-2.5 py-1 text-xs font-mono font-bold gap-1"
               >
                 {copiedStepLink ? (
                   <>
-                    <Check className="h-3 w-3 text-emerald-600" />
+                    <Check className="h-3 w-3 text-[#008A5E]" />
                     <span>COPIED!</span>
                   </>
                 ) : (
@@ -366,13 +364,15 @@ Output complete, verified code with zero conversational fluff.`,
               <button
                 onClick={() => onToggleComplete(step.id)}
                 type="button"
-                className={`workspace-btn px-2.5 py-1 text-xs font-mono font-bold gap-1 ${
-                  isCompleted ? 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-600' : ''
+                className={`px-2.5 py-1 text-xs font-mono font-bold rounded-[3px] border-2 transition-all cursor-pointer flex items-center gap-1 ${
+                  isCompleted
+                    ? 'border-[#008A5E] bg-[#008A5E] text-white shadow-[1px_1px_0px_0px_#10162F]'
+                    : 'border-[#10162F] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white shadow-[1px_1px_0px_0px_#10162F]'
                 }`}
               >
                 {isCompleted ? (
                   <>
-                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                    <CheckCircle2 className="h-3.5 w-3.5 text-white" />
                     <span>DONE ✓</span>
                   </>
                 ) : (
@@ -388,59 +388,69 @@ Output complete, verified code with zero conversational fluff.`,
                 onClick={onClose}
                 type="button"
                 aria-label="Close drawer"
-                className="workspace-btn h-7 w-7 text-xs"
+                className="cc-btn-secondary h-8 w-8 p-0"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-4 w-4" />
               </button>
             </div>
           </div>
 
-          {/* 2. Scrollable Body: Title and 3 Boxed Architectural Tabs */}
+          {/* 2. Scrollable Body */}
           <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
-            {/* Header Block: Node Title & Description */}
-            <div ref={headerRef} className="px-4 sm:px-6 pt-5 pb-4 bg-white/70 dark:bg-[#121215]/70 border-b border-zinc-200 dark:border-zinc-800">
-              <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight mb-2">
+            {/* Header Block */}
+            <div ref={headerRef} className="px-4 sm:px-6 pt-5 pb-5 bg-white dark:bg-[#131A33] border-b-2 border-[#10162F] dark:border-[#3B497E]">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] shadow-[1px_1px_0px_0px_#10162F]">
+                  STEP {formatStepNumber(step.stepNumber)}
+                </span>
+                {step.tools && step.tools.length > 0 && (
+                  <span className="font-mono text-xs text-[#10162F]/60 dark:text-slate-400">
+                    {step.tools.map((t) => t.name).join(' • ')}
+                  </span>
+                )}
+              </div>
+              <h2 className="text-xl sm:text-2xl font-display font-bold text-[#10162F] dark:text-white tracking-tight mb-2">
                 {step.title}
               </h2>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
+              <p className="text-sm text-[#10162F]/80 dark:text-slate-300 leading-relaxed font-sans">
                 {step.description || step.summary}
               </p>
             </div>
 
-            {/* Sticky 3 Boxed Architectural Tabs */}
-            <div className="sticky top-0 z-20 px-4 sm:px-6 py-2.5 border-b border-zinc-300 dark:border-zinc-800 bg-[#F9F8F6]/95 dark:bg-[#0E0E11]/95 backdrop-blur-xs flex gap-2">
+            {/* Clean Codecademy-style Tabs */}
+            <div className="sticky top-0 z-20 px-4 sm:px-6 py-2.5 border-b-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] flex gap-2">
               <button
                 type="button"
                 onClick={() => handleTabChange('playbook')}
-                className={`px-3 py-1.5 font-mono text-xs cursor-pointer transition-all ${
+                className={`px-3.5 py-1.5 font-display text-xs sm:text-sm font-bold rounded-[4px] border-2 transition-all cursor-pointer ${
                   activeTab === 'playbook'
-                    ? 'border-2 border-zinc-900 dark:border-zinc-600 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none rounded-[3px]'
-                    : 'border border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC] dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-[3px]'
+                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
+                    : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-200 hover:-translate-y-0.5'
                 }`}
               >
-                01. PLAYBOOK
+                01. Playbook
               </button>
               <button
                 type="button"
                 onClick={() => handleTabChange('promptLab')}
-                className={`px-3 py-1.5 font-mono text-xs cursor-pointer transition-all ${
+                className={`px-3.5 py-1.5 font-display text-xs sm:text-sm font-bold rounded-[4px] border-2 transition-all cursor-pointer ${
                   activeTab === 'promptLab'
-                    ? 'border-2 border-zinc-900 dark:border-zinc-600 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none rounded-[3px]'
-                    : 'border border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC] dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-[3px]'
+                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
+                    : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-200 hover:-translate-y-0.5'
                 }`}
               >
-                02. PROMPT LAB
+                02. Prompt Lab
               </button>
               <button
                 type="button"
                 onClick={() => handleTabChange('learnRefs')}
-                className={`px-3 py-1.5 font-mono text-xs cursor-pointer transition-all ${
+                className={`px-3.5 py-1.5 font-display text-xs sm:text-sm font-bold rounded-[4px] border-2 transition-all cursor-pointer ${
                   activeTab === 'learnRefs'
-                    ? 'border-2 border-zinc-900 dark:border-zinc-600 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none rounded-[3px]'
-                    : 'border border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC] dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-[3px]'
+                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
+                    : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-200 hover:-translate-y-0.5'
                 }`}
               >
-                03. RESOURCES
+                03. Resources
               </button>
             </div>
 
@@ -450,54 +460,54 @@ Output complete, verified code with zero conversational fluff.`,
               {activeTab === 'playbook' && (
                 <div className="space-y-6">
                   {/* 3-Step Execution Micro-Guide */}
-                  <div className="bg-white dark:bg-[#141418] border border-zinc-300 dark:border-zinc-800 rounded-[4px] p-4 sm:p-5 shadow-xs">
-                    <h3 className="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4 uppercase tracking-wider">
-                      <Terminal className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                  <div className="bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] p-5 shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000]">
+                    <h3 className="font-display text-base font-bold text-[#10162F] dark:text-white flex items-center gap-2 mb-4">
+                      <Terminal className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
                       <span>3-Step Execution Micro-Guide</span>
                     </h3>
 
-                    <div className="space-y-4">
+                    <div className="space-y-3.5">
                       {/* Step 1: Setup */}
-                      <div className="p-3.5 rounded-[3px] border border-zinc-200 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-zinc-900/60">
+                      <div className="p-4 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021]">
                         <div className="flex items-center gap-2 mb-1.5">
-                          <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] bg-zinc-900 text-white dark:bg-purple-600">
+                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] bg-[#10162F] text-white dark:bg-white dark:text-[#10162F]">
                             01. SETUP
                           </span>
-                          <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                          <span className="font-display font-bold text-sm text-[#10162F] dark:text-white">
                             Context &amp; Priming
                           </span>
                         </div>
-                        <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
+                        <p className="text-sm text-[#10162F]/80 dark:text-slate-300 leading-relaxed font-sans">
                           {playbook.setup}
                         </p>
                       </div>
 
                       {/* Step 2: Execute */}
-                      <div className="p-3.5 rounded-[3px] border border-zinc-200 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-zinc-900/60">
+                      <div className="p-4 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021]">
                         <div className="flex items-center gap-2 mb-1.5">
-                          <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] bg-zinc-900 text-white dark:bg-purple-600">
+                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] bg-[#3A10E5] text-white">
                             02. EXECUTE
                           </span>
-                          <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                          <span className="font-display font-bold text-sm text-[#10162F] dark:text-white">
                             Action &amp; Operation
                           </span>
                         </div>
-                        <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
+                        <p className="text-sm text-[#10162F]/80 dark:text-slate-300 leading-relaxed font-sans">
                           {playbook.execute}
                         </p>
                       </div>
 
                       {/* Step 3: Verify */}
-                      <div className="p-3.5 rounded-[3px] border border-emerald-500/40 bg-emerald-50/20 dark:bg-emerald-950/20">
+                      <div className="p-4 rounded-[4px] border-2 border-[#008A5E] bg-[#008A5E]/10">
                         <div className="flex items-center gap-2 mb-1.5">
-                          <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] bg-emerald-600 text-white">
+                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] bg-[#008A5E] text-white">
                             03. VERIFY
                           </span>
-                          <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
+                          <span className="font-display font-bold text-sm text-[#008A5E]">
                             Deterministic Verification
                           </span>
                         </div>
-                        <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
+                        <p className="text-sm text-[#10162F]/80 dark:text-slate-300 leading-relaxed font-sans">
                           {playbook.verify}
                         </p>
                       </div>
@@ -506,22 +516,22 @@ Output complete, verified code with zero conversational fluff.`,
 
                   {/* Concept Guide */}
                   {conceptGuide && (
-                    <div className="bg-white dark:bg-[#141418] border border-zinc-300 dark:border-zinc-800 rounded-[4px] p-4 sm:p-5 shadow-xs space-y-3">
+                    <div className="bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] p-5 shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000] space-y-3">
                       <div className="flex items-center gap-2">
-                        <BookOpen className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                        <h3 className="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
+                        <BookOpen className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
+                        <h3 className="font-display text-base font-bold text-[#10162F] dark:text-white">
                           Concept Guide: {conceptGuide.title}
                         </h3>
                       </div>
-                      <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
+                      <p className="text-sm text-[#10162F]/80 dark:text-slate-300 leading-relaxed font-sans">
                         {conceptGuide.overview}
                       </p>
 
                       {conceptGuide.keyPoints && (
-                        <div className="space-y-2 pt-2">
+                        <div className="space-y-2.5 pt-2">
                           {conceptGuide.keyPoints.map((kp, idx) => (
-                            <div key={idx} className="p-3 rounded-[3px] border border-zinc-200 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-zinc-900/50 text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
-                              <strong className="text-zinc-900 dark:text-zinc-100 font-bold block mb-0.5 font-mono">
+                            <div key={idx} className="p-3.5 rounded-[4px] border-2 border-[#10162F]/20 dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] text-xs sm:text-sm text-[#10162F]/85 dark:text-slate-300 leading-relaxed font-sans">
+                              <strong className="text-[#10162F] dark:text-white font-display font-bold block mb-1">
                                 • {kp.lead}
                               </strong>
                               <span>{kp.text}</span>
@@ -532,18 +542,18 @@ Output complete, verified code with zero conversational fluff.`,
                     </div>
                   )}
 
-                  {/* Common Mistakes */}
+                  {/* Critical Pitfalls to Avoid */}
                   {mistakes.length > 0 && (
-                    <div className="bg-white dark:bg-[#141418] border border-zinc-300 dark:border-zinc-800 rounded-[4px] p-4 sm:p-5 shadow-xs space-y-3">
-                      <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400">
-                        <AlertTriangle className="h-4 w-4" />
-                        <h3 className="font-mono text-xs font-bold uppercase tracking-wider">
+                    <div className="bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] p-5 shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000] space-y-3">
+                      <div className="flex items-center gap-2 text-[#10162F] dark:text-white">
+                        <AlertTriangle className="h-4 w-4 text-amber-500" />
+                        <h3 className="font-display text-base font-bold">
                           Critical Pitfalls to Avoid
                         </h3>
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-2.5">
                         {mistakes.map((m, idx) => (
-                          <div key={idx} className="p-3 rounded-[3px] border border-amber-500/30 bg-amber-50/30 dark:bg-amber-950/20 text-xs text-zinc-800 dark:text-zinc-200 leading-relaxed font-sans">
+                          <div key={idx} className="p-3.5 rounded-[4px] border-2 border-amber-500/50 bg-amber-50/50 dark:bg-amber-950/20 text-xs sm:text-sm text-[#10162F] dark:text-slate-200 leading-relaxed font-sans">
                             {m}
                           </div>
                         ))}
@@ -553,16 +563,16 @@ Output complete, verified code with zero conversational fluff.`,
 
                   {/* Pro Tips */}
                   {proTips.length > 0 && (
-                    <div className="bg-white dark:bg-[#141418] border border-zinc-300 dark:border-zinc-800 rounded-[4px] p-4 sm:p-5 shadow-xs space-y-3">
-                      <div className="flex items-center gap-2 text-purple-700 dark:text-purple-400">
-                        <Lightbulb className="h-4 w-4" />
-                        <h3 className="font-mono text-xs font-bold uppercase tracking-wider">
+                    <div className="bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] p-5 shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000] space-y-3">
+                      <div className="flex items-center gap-2 text-[#10162F] dark:text-white">
+                        <Lightbulb className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
+                        <h3 className="font-display text-base font-bold">
                           Engineering Pro Tips
                         </h3>
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-2.5">
                         {proTips.map((pt, idx) => (
-                          <div key={idx} className="p-3 rounded-[3px] border border-purple-500/30 bg-purple-50/30 dark:bg-purple-950/20 text-xs text-zinc-800 dark:text-zinc-200 leading-relaxed font-sans">
+                          <div key={idx} className="p-3.5 rounded-[4px] border-2 border-[#3A10E5]/40 bg-[#3A10E5]/5 text-xs sm:text-sm text-[#10162F] dark:text-slate-200 leading-relaxed font-sans">
                             {pt}
                           </div>
                         ))}
@@ -577,22 +587,22 @@ Output complete, verified code with zero conversational fluff.`,
                 <div className="space-y-6">
                   {/* Interactive Variable Chips */}
                   {promptLab.variables && promptLab.variables.length > 0 && (
-                    <div className="bg-white dark:bg-[#141418] border border-zinc-300 dark:border-zinc-800 rounded-[4px] p-4 sm:p-5 shadow-xs space-y-3">
+                    <div className="bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] p-5 shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000] space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-                          <Sparkles className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
-                          <span>Customize Prompt Variables</span>
+                        <span className="font-display text-sm font-bold text-[#10162F] dark:text-white flex items-center gap-1.5">
+                          <Sparkles className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
+                          <span>Customize Variables</span>
                         </span>
-                        <span className="font-mono text-[11px] text-zinc-500">Updates live below</span>
+                        <span className="font-mono text-xs text-[#10162F]/60 dark:text-slate-400">Updates live below</span>
                       </div>
 
-                      <div className="space-y-3 pt-1">
+                      <div className="space-y-3 pt-2">
                         {promptLab.variables.map((v) => (
                           <div key={v.id} className="space-y-1.5">
-                            <span className="font-mono text-xs text-zinc-600 dark:text-zinc-400 font-semibold block">
+                            <span className="font-mono text-xs font-bold text-[#10162F] dark:text-slate-300 block">
                               [{v.label}]:
                             </span>
-                            <div className="flex flex-wrap gap-1.5">
+                            <div className="flex flex-wrap gap-2">
                               {v.options.map((opt) => {
                                 const isSelected = (selectedVariables[v.id] || v.defaultOption) === opt;
                                 return (
@@ -600,10 +610,10 @@ Output complete, verified code with zero conversational fluff.`,
                                     key={opt}
                                     type="button"
                                     onClick={() => handleVariableChange(v.id, opt)}
-                                    className={`px-2.5 py-1 text-xs font-mono rounded-[3px] border transition-all cursor-pointer ${
+                                    className={`px-3 py-1.5 text-xs font-mono rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
                                       isSelected
-                                        ? 'border-2 border-zinc-900 dark:border-purple-500 bg-zinc-900 text-white dark:bg-purple-600 font-bold shadow-[2px_2px_0px_0px_#18181B] dark:shadow-none'
-                                        : 'border-zinc-300 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-zinc-500'
+                                        ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
+                                        : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 hover:-translate-y-0.5'
                                     }`}
                                   >
                                     {opt}
@@ -618,43 +628,43 @@ Output complete, verified code with zero conversational fluff.`,
                   )}
 
                   {/* Clean Code-Editor Container */}
-                  <div className="rounded-[4px] border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-[#121215] shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#7C3AED] overflow-hidden">
+                  <div className="rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000] overflow-hidden">
                     {/* Top Bar */}
-                    <div className="border-b border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC] dark:bg-zinc-900 px-4 py-2 flex items-center justify-between font-mono text-xs text-zinc-700 dark:text-zinc-300 select-none">
+                    <div className="border-b-2 border-[#10162F] dark:border-[#3B497E] bg-[#F5EFE6] dark:bg-[#131A33] px-4 py-2.5 flex items-center justify-between font-mono text-xs text-[#10162F] dark:text-white select-none">
                       <div className="flex items-center gap-2">
-                        <Terminal className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+                        <Terminal className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
                         <span className="font-bold">prompt_blueprint.md</span>
                       </div>
-                      <span className="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
+                      <span className="font-mono text-xs font-bold text-[#10162F]/60 dark:text-slate-400">
                         [{promptLab.recommendedModel}]
                       </span>
                     </div>
 
                     {/* Code Text Area */}
-                    <pre className="p-4 sm:p-5 font-mono text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 leading-relaxed whitespace-pre-wrap select-all overflow-x-auto max-h-72 bg-[#FAF9F6] dark:bg-[#0E0E12]">
+                    <pre className="p-5 font-mono text-xs sm:text-sm text-white leading-relaxed whitespace-pre-wrap select-all overflow-x-auto max-h-72 bg-[#10162F] dark:bg-[#0B1021]">
                       {customizedPromptText}
                     </pre>
 
                     {/* Action Bar */}
-                    <div className="border-t border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC]/60 dark:bg-zinc-900/60 p-3 flex flex-wrap items-center justify-between gap-2 font-mono">
+                    <div className="border-t-2 border-[#10162F] dark:border-[#3B497E] bg-[#F5EFE6] dark:bg-[#131A33] p-3.5 flex flex-wrap items-center justify-between gap-2.5 font-display">
                       <div className="flex items-center gap-2">
                         <a
                           href={sanitizeExternalUrl(drawerDeepLinks.chatgpt)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="workspace-btn px-2.5 py-1 text-xs gap-1 font-bold text-emerald-700 dark:text-emerald-400"
+                          className="cc-btn-secondary px-3 py-1.5 text-xs font-bold text-[#008A5E]"
                         >
-                          <Sparkles className="h-3 w-3" />
-                          <span>CHATGPT ↗</span>
+                          <Sparkles className="h-3.5 w-3.5 mr-1" />
+                          <span>ChatGPT ↗</span>
                         </a>
                         <a
                           href={sanitizeExternalUrl(drawerDeepLinks.perplexity)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="workspace-btn px-2.5 py-1 text-xs gap-1 font-bold text-cyan-700 dark:text-cyan-400"
+                          className="cc-btn-secondary px-3 py-1.5 text-xs font-bold text-[#3A10E5] dark:text-[#FFD300]"
                         >
-                          <Compass className="h-3 w-3" />
-                          <span>PERPLEXITY ↗</span>
+                          <Compass className="h-3.5 w-3.5 mr-1" />
+                          <span>Perplexity ↗</span>
                         </a>
                       </div>
 
@@ -662,24 +672,24 @@ Output complete, verified code with zero conversational fluff.`,
                         <button
                           type="button"
                           onClick={handleTogglePromptBookmark}
-                          className="workspace-btn px-2.5 py-1 text-xs gap-1 font-medium"
+                          className="cc-btn-secondary px-3 py-1.5 text-xs font-bold"
                         >
-                          <Bookmark className={`h-3 w-3 ${isPromptSaved ? 'fill-purple-600 text-purple-600' : ''}`} />
+                          <Bookmark className={`h-3.5 w-3.5 mr-1 ${isPromptSaved ? 'fill-[#10162F] text-[#10162F]' : ''}`} />
                           <span>{isPromptSaved ? 'SAVED' : 'SAVE'}</span>
                         </button>
                         <button
                           type="button"
                           onClick={handleCopyPrompt}
-                          className="workspace-btn px-3 py-1 text-xs font-bold gap-1 bg-zinc-900 text-white dark:bg-purple-600"
+                          className="cc-btn-primary px-4 py-1.5 text-xs font-bold"
                         >
                           {copied ? (
                             <>
-                              <Check className="h-3 w-3 text-emerald-400" />
+                              <Check className="h-3.5 w-3.5 mr-1 text-[#008A5E]" />
                               <span>COPIED!</span>
                             </>
                           ) : (
                             <>
-                              <Copy className="h-3 w-3" />
+                              <Copy className="h-3.5 w-3.5 mr-1" />
                               <span>COPY PROMPT</span>
                             </>
                           )}
@@ -695,10 +705,10 @@ Output complete, verified code with zero conversational fluff.`,
                 <div className="space-y-6">
                   {/* Tools Deep Dive */}
                   {step.tools && step.tools.length > 0 && (
-                    <div className="bg-white dark:bg-[#141418] border border-zinc-300 dark:border-zinc-800 rounded-[4px] p-4 sm:p-5 shadow-xs space-y-3">
+                    <div className="bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] p-5 shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000] space-y-3">
                       <div className="flex items-center gap-2">
-                        <Wrench className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                        <h3 className="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
+                        <Wrench className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
+                        <h3 className="font-display text-base font-bold text-[#10162F] dark:text-white">
                           Recommended Tool Stack
                         </h3>
                       </div>
@@ -706,12 +716,12 @@ Output complete, verified code with zero conversational fluff.`,
                         {step.tools.map((t, idx) => (
                           <div
                             key={idx}
-                            className="p-3 rounded-[3px] border border-zinc-200 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-zinc-900/60"
+                            className="p-3.5 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021]"
                           >
-                            <span className="font-heading font-bold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 block mb-0.5">
+                            <span className="font-display font-bold text-sm text-[#10162F] dark:text-white block mb-0.5">
                               {t.name}
                             </span>
-                            <p className="text-[11px] text-zinc-600 dark:text-zinc-400 font-sans">
+                            <p className="text-xs text-[#10162F]/70 dark:text-slate-300 font-sans">
                               {t.purpose || t.description || 'Core tool in workflow'}
                             </p>
                           </div>
@@ -720,34 +730,36 @@ Output complete, verified code with zero conversational fluff.`,
                     </div>
                   )}
 
-                  {/* Official Documentation & Deep Dives */}
+                  {/* Official Documentation */}
                   {resources.length > 0 && (
-                    <div className="bg-white dark:bg-[#141418] border border-zinc-300 dark:border-zinc-800 rounded-[4px] p-4 sm:p-5 shadow-xs space-y-3">
+                    <div className="bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] p-5 shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000] space-y-3">
                       <div className="flex items-center gap-2">
-                        <BookOpen className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                        <h3 className="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
+                        <BookOpen className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
+                        <h3 className="font-display text-base font-bold text-[#10162F] dark:text-white">
                           Official Documentation &amp; Deep Dives
                         </h3>
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-2.5">
                         {resources.map((res, idx) => (
                           <a
                             key={idx}
                             href={sanitizeExternalUrl(res.url)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="workspace-card p-3 flex items-center justify-between text-xs transition-all block group"
+                            className="cc-card p-3.5 flex items-center justify-between text-xs transition-all block group"
                           >
                             <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                              <FileCode className="h-4 w-4 text-purple-600 dark:text-purple-400 shrink-0" />
-                              <span className="font-semibold text-zinc-900 dark:text-zinc-100 truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                              <FileCode className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300] shrink-0" />
+                              <span className="font-display font-bold text-sm text-[#10162F] dark:text-white truncate group-hover:text-[#3A10E5] transition-colors">
                                 {res.title}
                               </span>
-                              <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] border border-zinc-300 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 shrink-0 uppercase">
+                              <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] border border-[#10162F] bg-[#FFD300] text-[#10162F] shrink-0 uppercase">
                                 {res.badge || 'DOC'}
                               </span>
                             </div>
-                            <ExternalLink className="h-3.5 w-3.5 text-zinc-400 group-hover:text-purple-600 shrink-0" />
+                            <span className="font-mono text-xs font-bold text-[#10162F] dark:text-white group-hover:text-[#3A10E5] shrink-0">
+                              VISIT ↗
+                            </span>
                           </a>
                         ))}
                       </div>
@@ -759,17 +771,17 @@ Output complete, verified code with zero conversational fluff.`,
           </div>
 
           {/* 3. Sticky Bottom Mechanical Footer */}
-          <div className="relative z-30 px-4 sm:px-6 py-3 border-t-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-[#121215] flex items-center justify-between gap-3 text-xs shrink-0 shadow-xs font-mono">
+          <div className="relative z-30 px-4 sm:px-6 py-3.5 border-t-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] flex items-center justify-between gap-3 text-xs shrink-0 font-display">
             {/* Prev step */}
             <button
               type="button"
               onClick={handlePrevStep}
               disabled={!hasPrev}
-              className={`workspace-btn px-3 py-1.5 text-xs font-bold gap-1 ${
+              className={`cc-btn-secondary px-3.5 py-2 text-xs font-bold gap-1.5 ${
                 !hasPrev ? 'opacity-40 cursor-not-allowed' : ''
               }`}
             >
-              <ChevronLeft className="h-3.5 w-3.5" />
+              <ChevronLeft className="h-4 w-4" />
               <span>← PREV</span>
             </button>
 
@@ -777,10 +789,10 @@ Output complete, verified code with zero conversational fluff.`,
             <button
               type="button"
               onClick={() => onToggleComplete(step.id)}
-              className={`workspace-btn px-4 py-1.5 text-xs font-bold ${
+              className={`px-5 py-2 text-xs font-bold rounded-[4px] border-2 border-[#10162F] transition-all cursor-pointer ${
                 isCompleted
-                  ? 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-600'
-                  : 'bg-zinc-900 text-white dark:bg-purple-600'
+                  ? 'bg-[#008A5E] text-white shadow-[2px_2px_0px_0px_#10162F]'
+                  : 'cc-btn-primary'
               }`}
             >
               {isCompleted ? '✓ COMPLETED' : 'MARK COMPLETE'}
@@ -791,12 +803,12 @@ Output complete, verified code with zero conversational fluff.`,
               type="button"
               onClick={handleNextStep}
               disabled={!hasNext}
-              className={`workspace-btn px-3 py-1.5 text-xs font-bold gap-1 ${
+              className={`cc-btn-secondary px-3.5 py-2 text-xs font-bold gap-1.5 ${
                 !hasNext ? 'opacity-40 cursor-not-allowed' : ''
               }`}
             >
               <span>NEXT →</span>
-              <ChevronRight className="h-3.5 w-3.5" />
+              <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         </div>

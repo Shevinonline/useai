@@ -60,7 +60,7 @@ function App() {
         <WorkspaceProvider>
           <CommandPaletteProvider>
             <RouteWatcher />
-            <div className="min-h-screen flex flex-col bg-app-bg text-app-text swiss-grid-bg selection:bg-brand-accent/20 selection:text-brand-accent">
+            <div className="min-h-screen flex flex-col bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-[#F8F7F4] selection:bg-[#FFD300] selection:text-[#10162F]">
               <Navbar />
               <CommandPalette />
               <SavedBackupModal />

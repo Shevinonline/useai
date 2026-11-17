@@ -235,17 +235,17 @@ export default function RoadmapDetail() {
   if (!roadmapMeta) {
     return (
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-16 text-center">
-        <div className="workspace-card p-8 text-center max-w-lg mx-auto">
+        <div className="cc-card p-8 text-center max-w-lg mx-auto">
           <ShieldAlert className="h-10 w-10 text-amber-500 mx-auto mb-4" />
-          <h1 className="font-heading font-bold text-2xl text-zinc-900 dark:text-zinc-100 mb-2">
+          <h1 className="font-display font-bold text-2xl text-[#10162F] dark:text-white mb-2">
             Roadmap Not Found
           </h1>
-          <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mb-6">
+          <p className="text-xs font-mono text-[#10162F]/60 dark:text-slate-400 mb-6">
             No roadmap exists with identifier &ldquo;{id}&rdquo;.
           </p>
           <Link
             to="/roadmaps"
-            className="workspace-btn px-4 py-2 text-xs font-mono font-bold inline-flex items-center gap-1.5"
+            className="cc-btn-primary px-4 py-2 text-xs font-mono font-bold inline-flex items-center gap-1.5"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>Return to Roadmaps</span>
@@ -261,49 +261,49 @@ export default function RoadmapDetail() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <Link
           to="/roadmaps"
-          className="workspace-btn inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium mb-8"
+          className="cc-btn-secondary inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-bold mb-8"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>← Back to All Roadmaps</span>
         </Link>
 
-        <div className="workspace-card p-8 text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] border border-amber-500/40 bg-amber-500/10 text-xs font-mono font-bold text-amber-700 dark:text-amber-400 mb-4 uppercase">
+        <div className="cc-card p-8 text-center max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[3px] border-2 border-[#10162F] bg-[#FFD300] text-xs font-mono font-bold text-[#10162F] mb-4 uppercase shadow-[2px_2px_0px_0px_#10162F]">
             <Clock className="h-3.5 w-3.5" />
             <span>Curriculum In Development</span>
           </div>
 
-          <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-zinc-900 dark:text-zinc-100 mb-3">
+          <h1 className="font-display font-bold text-2xl sm:text-3xl text-[#10162F] dark:text-white mb-3">
             {roadmapMeta.title}
           </h1>
 
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-sans max-w-lg mx-auto mb-6 leading-relaxed">
+          <p className="text-sm sm:text-base text-[#10162F]/80 dark:text-slate-300 font-sans max-w-lg mx-auto mb-6 leading-relaxed">
             {roadmapMeta.description}
           </p>
 
-          <div className="p-4 rounded-[3px] border border-zinc-300 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-zinc-900 text-xs font-mono text-zinc-600 dark:text-zinc-400 text-left mb-6 space-y-2">
-            <div className="flex items-center justify-between pb-2 border-b border-zinc-200 dark:border-zinc-800">
+          <div className="p-4 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] text-xs font-mono text-[#10162F] dark:text-slate-300 text-left mb-6 space-y-2">
+            <div className="flex items-center justify-between pb-2 border-b border-[#10162F]/15 dark:border-white/10">
               <span>Category:</span>
-              <span className="text-zinc-900 dark:text-zinc-200 font-semibold">{roadmapMeta.category}</span>
+              <span className="font-bold">{roadmapMeta.category}</span>
             </div>
-            <div className="flex items-center justify-between pb-2 border-b border-zinc-200 dark:border-zinc-800">
+            <div className="flex items-center justify-between pb-2 border-b border-[#10162F]/15 dark:border-white/10">
               <span>Planned Steps:</span>
-              <span className="text-zinc-900 dark:text-zinc-200 font-semibold">{roadmapMeta.stepCount} nodes</span>
+              <span className="font-bold">{roadmapMeta.stepCount} nodes</span>
             </div>
             <div className="flex items-center justify-between">
               <span>Status:</span>
-              <span className="text-amber-600 dark:text-amber-400 font-bold">COMMUNITY PEER REVIEW</span>
+              <span className="text-[#3A10E5] dark:text-[#FFD300] font-bold">COMMUNITY PEER REVIEW</span>
             </div>
           </div>
 
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 font-sans mb-6">
+          <p className="text-xs text-[#10162F]/70 dark:text-slate-400 font-sans mb-6">
             This roadmap is currently being curated by senior engineers. Enter your email below to be notified the moment this roadmap goes live.
           </p>
 
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               to="/roadmaps"
-              className="workspace-btn px-4 py-2 text-xs font-mono font-medium"
+              className="cc-btn-secondary px-4 py-2 text-xs font-mono font-bold"
             >
               Browse Ready Roadmaps
             </Link>
@@ -311,7 +311,7 @@ export default function RoadmapDetail() {
               href={import.meta.env.VITE_GITHUB_REPO_URL || 'https://github.com'}
               target="_blank"
               rel="noopener noreferrer"
-              className="workspace-btn px-4 py-2 text-xs font-mono font-bold inline-flex items-center gap-1.5"
+              className="cc-btn-primary px-4 py-2 text-xs font-mono font-bold inline-flex items-center gap-1.5"
             >
               <GitBranch className="h-3.5 w-3.5" />
               <span>Contribute Curriculum</span>
@@ -342,15 +342,15 @@ export default function RoadmapDetail() {
   const formatStepNumber = (num) => (num < 10 ? `0${num}` : `${num}`);
 
   return (
-    <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-6 pb-20">
-      {/* 1. Codecademy-Inspired Structured Course Console Header */}
-      <header className="bg-white dark:bg-[#121215] border-2 border-zinc-900 dark:border-zinc-800 rounded-[4px] shadow-[4px_4px_0px_0px_#18181B] dark:shadow-[4px_4px_0px_0px_#27272A] p-5 sm:p-7 mb-10">
-        {/* Console Action Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-zinc-200 dark:border-zinc-800">
+    <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-20">
+      {/* 1. Codecademy Course Syllabus Header Card */}
+      <header className="bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] shadow-[5px_5px_0px_0px_#10162F] dark:shadow-[5px_5px_0px_0px_#000000] p-6 sm:p-8 mb-10 transition-colors">
+        {/* Action Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-5 border-b-2 border-[#10162F]/15 dark:border-white/10">
           <Link
             to="/roadmaps"
             onClick={() => setActiveStep(null)}
-            className="workspace-btn px-3 py-1.5 text-xs font-mono font-medium gap-1.5"
+            className="cc-btn-secondary px-3.5 py-1.5 text-xs font-mono font-bold gap-1.5"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>← ALL TRACKS</span>
@@ -361,39 +361,39 @@ export default function RoadmapDetail() {
             <button
               type="button"
               onClick={handleExportMarkdown}
-              title="Export complete roadmap as Markdown blueprint for Cursor, Notion & Obsidian"
+              title="Export complete roadmap as Markdown blueprint"
               aria-label="Export complete roadmap as Markdown blueprint"
-              className="workspace-btn px-3 py-1.5 text-xs font-mono font-medium gap-1.5"
+              className="cc-btn-secondary px-3 py-1.5 text-xs font-mono font-bold gap-1.5"
             >
               {exportedMd ? (
                 <>
-                  <Check className="h-3.5 w-3.5 text-emerald-600" />
+                  <Check className="h-3.5 w-3.5 text-[#008A5E]" />
                   <span>DOWNLOADED!</span>
                 </>
               ) : (
                 <>
-                  <FileDown className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+                  <FileDown className="h-3.5 w-3.5 text-[#3A10E5] dark:text-[#FFD300]" />
                   <span>EXPORT .MD</span>
                 </>
               )}
             </button>
 
-            {/* Share / Copy Link Button */}
+            {/* Share Link Button */}
             <button
               type="button"
               onClick={handleCopyRoadmapLink}
               title="Copy shareable link to this roadmap"
               aria-label="Copy shareable link to this roadmap"
-              className="workspace-btn px-3 py-1.5 text-xs font-mono font-medium gap-1.5"
+              className="cc-btn-secondary px-3 py-1.5 text-xs font-mono font-bold gap-1.5"
             >
               {copiedRoadmapLink ? (
                 <>
-                  <Check className="h-3.5 w-3.5 text-emerald-600" />
+                  <Check className="h-3.5 w-3.5 text-[#008A5E]" />
                   <span>LINK COPIED!</span>
                 </>
               ) : (
                 <>
-                  <Share2 className="h-3.5 w-3.5 text-zinc-600 dark:text-zinc-400" />
+                  <Share2 className="h-3.5 w-3.5" />
                   <span>SHARE</span>
                 </>
               )}
@@ -404,9 +404,11 @@ export default function RoadmapDetail() {
               type="button"
               onClick={() => toggleRoadmapBookmark(roadmapMeta)}
               aria-label={isRoadmapSaved ? 'Remove Roadmap from Saved' : 'Save Roadmap'}
-              className="workspace-btn px-3 py-1.5 text-xs font-mono font-medium gap-1.5"
+              className={`cc-btn-secondary px-3 py-1.5 text-xs font-mono font-bold gap-1.5 ${
+                isRoadmapSaved ? 'bg-[#FFD300] text-[#10162F]' : ''
+              }`}
             >
-              <Bookmark className={`h-3.5 w-3.5 ${isRoadmapSaved ? 'fill-purple-600 text-purple-600 dark:fill-purple-400 dark:text-purple-400' : ''}`} />
+              <Bookmark className={`h-3.5 w-3.5 ${isRoadmapSaved ? 'fill-[#10162F] text-[#10162F]' : ''}`} />
               <span>{isRoadmapSaved ? 'SAVED' : 'SAVE'}</span>
             </button>
           </div>
@@ -414,93 +416,93 @@ export default function RoadmapDetail() {
 
         {/* Course Title & Overview */}
         <div className="mb-6">
-          <div className="inline-flex items-center gap-2 mb-2">
-            <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded-[2px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 mb-3">
+            <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-[3px] bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] uppercase tracking-wider shadow-[1px_1px_0px_0px_#10162F]">
               {roadmapMeta.category}
             </span>
-            <span className="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
-              CURRICULUM v2.0
+            <span className="font-mono text-xs font-bold text-[#10162F]/60 dark:text-slate-400">
+              TRACK // {roadmapMeta.id.toUpperCase()}
             </span>
           </div>
 
-          <h1 className="font-heading font-extrabold text-2xl sm:text-3xl md:text-4xl text-zinc-900 dark:text-zinc-100 tracking-tight mb-2.5">
+          <h1 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-[#10162F] dark:text-white tracking-tight mb-3">
             {roadmapData.title}
           </h1>
 
-          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-3xl leading-relaxed font-sans">
+          <p className="font-sans text-sm sm:text-base text-[#10162F]/80 dark:text-slate-300 max-w-3xl leading-relaxed">
             {roadmapData.description}
           </p>
         </div>
 
         {/* Boxed Metadata Specs Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 mb-6">
-          <div className="rounded-[4px] border border-zinc-300 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-zinc-900/60 p-2.5 sm:p-3">
-            <span className="block font-mono text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-0.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+          <div className="rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] p-3 text-left">
+            <span className="block font-mono text-[10px] font-bold text-[#10162F]/60 dark:text-slate-400 uppercase tracking-wider mb-1">
               DIFFICULTY
             </span>
-            <span className="font-mono text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100 uppercase">
+            <span className="font-mono text-xs sm:text-sm font-bold text-[#10162F] dark:text-white uppercase">
               {roadmapMeta.difficulty || 'PRACTICAL'}
             </span>
           </div>
 
-          <div className="rounded-[4px] border border-zinc-300 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-zinc-900/60 p-2.5 sm:p-3">
-            <span className="block font-mono text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-0.5">
+          <div className="rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] p-3 text-left">
+            <span className="block font-mono text-[10px] font-bold text-[#10162F]/60 dark:text-slate-400 uppercase tracking-wider mb-1">
               EST. DURATION
             </span>
-            <span className="font-mono text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100">
+            <span className="font-mono text-xs sm:text-sm font-bold text-[#10162F] dark:text-white">
               {roadmapMeta.duration || `~${Math.max(2, Math.ceil(totalSteps * 0.4))} WEEKS`}
             </span>
           </div>
 
-          <div className="rounded-[4px] border border-zinc-300 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-zinc-900/60 p-2.5 sm:p-3">
-            <span className="block font-mono text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-0.5">
+          <div className="rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] p-3 text-left">
+            <span className="block font-mono text-[10px] font-bold text-[#10162F]/60 dark:text-slate-400 uppercase tracking-wider mb-1">
               MODULES
             </span>
-            <span className="font-mono text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100">
+            <span className="font-mono text-xs sm:text-sm font-bold text-[#10162F] dark:text-white">
               {totalSteps} TRACK NODES
             </span>
           </div>
 
-          <div className="rounded-[4px] border border-zinc-300 dark:border-zinc-800 bg-[#F9F8F6] dark:bg-zinc-900/60 p-2.5 sm:p-3">
-            <span className="block font-mono text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-0.5">
+          <div className="rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] p-3 text-left">
+            <span className="block font-mono text-[10px] font-bold text-[#10162F]/60 dark:text-slate-400 uppercase tracking-wider mb-1">
               COMPLETION
             </span>
-            <span className="font-mono text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400">
+            <span className="font-mono text-xs sm:text-sm font-bold text-[#008A5E]">
               {progressPercent}% DONE ({completedCount}/{totalSteps})
             </span>
           </div>
         </div>
 
         {/* Segmented Emerald Progress Bar & Filter Bar */}
-        <div className="space-y-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+        <div className="space-y-3 pt-4 border-t-2 border-[#10162F]/15 dark:border-white/10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2 font-mono">
-              <span className="font-bold text-zinc-900 dark:text-zinc-100">COURSE PROGRESS:</span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+              <span className="font-bold text-[#10162F] dark:text-white">COURSE PROGRESS:</span>
+              <span className="text-[#008A5E] font-bold">
                 {completedCount} of {totalSteps} modules completed
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               {completedCount > 0 && (
                 <button
                   onClick={handleResetProgress}
                   type="button"
-                  className="text-zinc-500 hover:text-red-500 inline-flex items-center gap-1 text-xs cursor-pointer font-mono font-medium pr-2"
+                  className="text-[#10162F]/60 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 inline-flex items-center gap-1 text-xs cursor-pointer font-mono font-bold pr-2"
                 >
                   <RotateCcw className="h-3 w-3" />
                   <span>RESET</span>
                 </button>
               )}
 
-              <div className="inline-flex rounded-[3px] border border-zinc-300 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-zinc-900 p-0.5 font-mono text-[11px]">
+              <div className="inline-flex rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] p-0.5 font-mono text-xs">
                 <button
                   type="button"
                   onClick={() => setFilterStatus('all')}
-                  className={`px-2.5 py-1 rounded-[2px] transition-colors cursor-pointer ${
+                  className={`px-3 py-1 rounded-[3px] transition-all cursor-pointer font-bold ${
                     filterStatus === 'all'
-                      ? 'bg-zinc-900 text-white dark:bg-purple-600 font-bold'
-                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
+                      ? 'bg-[#3A10E5] text-white shadow-[1px_1px_0px_0px_#10162F]'
+                      : 'text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
                   }`}
                 >
                   ALL ({totalSteps})
@@ -508,10 +510,10 @@ export default function RoadmapDetail() {
                 <button
                   type="button"
                   onClick={() => setFilterStatus('pending')}
-                  className={`px-2.5 py-1 rounded-[2px] transition-colors cursor-pointer ${
+                  className={`px-3 py-1 rounded-[3px] transition-all cursor-pointer font-bold ${
                     filterStatus === 'pending'
-                      ? 'bg-zinc-900 text-white dark:bg-purple-600 font-bold'
-                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
+                      ? 'bg-[#3A10E5] text-white shadow-[1px_1px_0px_0px_#10162F]'
+                      : 'text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
                   }`}
                 >
                   PENDING ({totalSteps - completedCount})
@@ -519,10 +521,10 @@ export default function RoadmapDetail() {
                 <button
                   type="button"
                   onClick={() => setFilterStatus('completed')}
-                  className={`px-2.5 py-1 rounded-[2px] transition-colors cursor-pointer ${
+                  className={`px-3 py-1 rounded-[3px] transition-all cursor-pointer font-bold ${
                     filterStatus === 'completed'
-                      ? 'bg-zinc-900 text-white dark:bg-purple-600 font-bold'
-                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
+                      ? 'bg-[#3A10E5] text-white shadow-[1px_1px_0px_0px_#10162F]'
+                      : 'text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
                   }`}
                 >
                   DONE ({completedCount})
@@ -531,10 +533,10 @@ export default function RoadmapDetail() {
             </div>
           </div>
 
-          {/* Clean Segmented Progress Bar */}
-          <div className="w-full h-2.5 rounded-[2px] bg-zinc-200 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 overflow-hidden">
+          {/* Segmented #008A5E Progress Bar */}
+          <div className="w-full h-3 rounded-[3px] bg-[#F5EFE6] dark:bg-[#0B1021] border-2 border-[#10162F] dark:border-[#3B497E] overflow-hidden">
             <div
-              className="h-full bg-emerald-600 dark:bg-emerald-500 transition-all duration-300"
+              className="h-full bg-[#008A5E] transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -542,32 +544,32 @@ export default function RoadmapDetail() {
       </header>
 
       {/* 2. Structured Phases & Step Blocks */}
-      <div className="space-y-10">
+      <div className="space-y-12">
         {roadmapData.phases.map((phase, pIdx) => {
           const phaseSteps = displaySteps.filter((s) => s.phaseId === phase.id);
           if (phaseSteps.length === 0) return null;
 
           return (
             <section key={phase.id} className="relative">
-              {/* Clean Swiss Architectural Phase Header */}
-              <div className="border-y border-zinc-300 dark:border-zinc-800 bg-[#F2F0EC]/80 dark:bg-zinc-900/60 px-4 sm:px-6 py-2.5 my-6 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <span className="font-mono text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100 tracking-wider">
-                    PHASE {formatStepNumber(pIdx + 1)} // {phase.title.toUpperCase()}
-                  </span>
+              {/* Clean Phase Header Bar */}
+              <div className="border-b-2 border-[#10162F] dark:border-[#3B497E] pb-3 mb-6 flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-3">
+                  <h2 className="font-display font-bold text-xl sm:text-2xl text-[#10162F] dark:text-white">
+                    Phase {formatStepNumber(pIdx + 1)}: {phase.title}
+                  </h2>
                   {phase.description && (
-                    <span className="hidden md:inline text-xs text-zinc-500 dark:text-zinc-400 font-sans">
+                    <span className="hidden md:inline text-xs text-[#10162F]/70 dark:text-slate-400 font-sans">
                       — {phase.description}
                     </span>
                   )}
                 </div>
-                <span className="font-mono text-[11px] font-semibold px-2 py-0.5 rounded-[2px] border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300">
-                  [{phaseSteps.length} MODULES]
+                <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-[3px] bg-[#F5EFE6] dark:bg-[#131A33] text-[#10162F] dark:text-[#F8F7F4] border-2 border-[#10162F] dark:border-[#3B497E]">
+                  {phaseSteps.length} Modules
                 </span>
               </div>
 
-              {/* Steps in this phase */}
-              <div className="space-y-3.5">
+              {/* Module Cards in this phase */}
+              <div className="space-y-4">
                 {phaseSteps.map((step) => {
                   const isDone = completedSteps.includes(step.id);
 
@@ -583,15 +585,15 @@ export default function RoadmapDetail() {
                           handleOpenStep(step);
                         }
                       }}
-                      className={`workspace-card group relative p-4 sm:p-5 cursor-pointer text-left select-none flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+                      className={`cc-card group relative p-5 cursor-pointer text-left select-none flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
                         isDone
-                          ? 'border-emerald-600 dark:border-emerald-500/60 bg-emerald-50/15 dark:bg-emerald-950/10'
+                          ? 'border-[#008A5E] bg-[#008A5E]/5'
                           : ''
                       }`}
                     >
-                      {/* Left: Step Block Content */}
+                      {/* Left: Module Content */}
                       <div className="flex-1 min-w-0 pr-2">
-                        <div className="flex items-center gap-2.5 mb-1.5">
+                        <div className="flex items-center gap-2.5 mb-2">
                           {/* Checkbox toggle button */}
                           <button
                             type="button"
@@ -599,67 +601,67 @@ export default function RoadmapDetail() {
                               e.stopPropagation();
                               toggleStepCompletion(step.id);
                             }}
-                            className="text-zinc-400 hover:text-emerald-600 transition-colors cursor-pointer shrink-0"
+                            className="transition-transform active:scale-90 cursor-pointer shrink-0"
                             title={isDone ? 'Mark as incomplete' : 'Mark as complete'}
                             aria-label={isDone ? 'Mark as incomplete' : 'Mark as complete'}
                           >
                             {isDone ? (
-                              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                              <CheckCircle2 className="h-5 w-5 text-[#008A5E] fill-[#008A5E]/20" />
                             ) : (
-                              <Circle className="h-4 w-4 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200" />
+                              <Circle className="h-5 w-5 text-[#10162F]/40 hover:text-[#10162F] dark:text-slate-400" />
                             )}
                           </button>
 
-                          {/* Boxed Number Badge */}
-                          <span className="font-mono text-xs font-bold px-1.5 py-0.5 rounded-[2px] border border-zinc-300 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 shrink-0">
-                            [{formatStepNumber(step.stepNumber)}]
+                          {/* Tactile Numbered Badge: [01], [02], ... */}
+                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] border-2 border-[#10162F] bg-[#FFD300] text-[#10162F] shadow-[1px_1px_0px_0px_#10162F] shrink-0">
+                            {formatStepNumber(step.stepNumber)}
                           </span>
 
                           <h3
-                            className={`font-heading font-bold text-base sm:text-lg tracking-tight transition-colors duration-150 truncate ${
+                            className={`font-display font-bold text-base sm:text-lg tracking-tight transition-colors duration-150 truncate ${
                               isDone
-                                ? 'text-zinc-700 dark:text-zinc-300 line-through opacity-85'
-                                : 'text-zinc-900 dark:text-zinc-100 group-hover:text-purple-700 dark:group-hover:text-purple-400'
+                                ? 'text-[#10162F]/70 dark:text-slate-400 line-through'
+                                : 'text-[#10162F] dark:text-white group-hover:text-[#3A10E5] dark:group-hover:text-[#FFD300]'
                             }`}
                           >
                             {step.title}
                           </h3>
                         </div>
 
-                        <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2 leading-relaxed ml-7">
+                        <p className="font-sans text-xs sm:text-sm text-[#10162F]/75 dark:text-slate-300 line-clamp-2 leading-relaxed ml-7">
                           {step.summary}
                         </p>
 
                         {/* Tool badges */}
                         {step.tools && step.tools.length > 0 && (
-                          <div className="flex flex-wrap items-center gap-1.5 mt-2.5 ml-7">
+                          <div className="flex flex-wrap items-center gap-1.5 mt-3 ml-7">
                             {step.tools.map((t, idx) => (
                               <span
                                 key={idx}
-                                className="rounded-[3px] border border-zinc-300 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-zinc-900 px-2 py-0.5 font-mono text-[11px] text-zinc-700 dark:text-zinc-300"
+                                className="bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-slate-200 border border-[#10162F]/30 font-mono text-xs px-2 py-0.5 rounded-[3px]"
                               >
                                 {t.name}
                               </span>
                             ))}
                             {step.proPrompt && (
-                              <span className="rounded-[3px] border border-purple-500/40 bg-purple-500/10 text-purple-700 dark:text-purple-300 px-2 py-0.5 font-mono text-[11px] font-bold">
-                                + PROMPT LAB
+                              <span className="bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] px-2 py-0.5 font-mono text-xs font-bold rounded-[3px] shadow-[1px_1px_0px_0px_#10162F]">
+                                PROMPT LAB
                               </span>
                             )}
                           </div>
                         )}
                       </div>
 
-                      {/* Right: Mechanical Status Indicator */}
-                      <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-200 dark:border-zinc-800 shrink-0">
+                      {/* Right: Tactile Indicator */}
+                      <div className="flex items-center justify-between sm:justify-end gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-[#10162F]/15 dark:border-white/10 shrink-0">
                         {isDone ? (
-                          <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-[2px] border border-emerald-600 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 shrink-0 flex items-center gap-1">
-                            <span>[COMPLETED ✓]</span>
+                          <span className="font-mono text-xs font-bold px-3 py-1.5 rounded-[3px] border-2 border-[#008A5E] bg-[#008A5E] text-white shrink-0 flex items-center gap-1 shadow-[2px_2px_0px_0px_#10162F]">
+                            <span>COMPLETED ✓</span>
                           </span>
                         ) : (
-                          <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-[2px] border border-zinc-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 group-hover:border-purple-600 group-hover:text-purple-600 dark:group-hover:text-purple-400 shrink-0 transition-colors flex items-center gap-1">
-                            <span>[OPEN MODULE]</span>
-                            <ArrowUpRight className="h-3 w-3" />
+                          <span className="font-mono text-xs font-bold px-3 py-1.5 rounded-[3px] border-2 border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white group-hover:bg-[#3A10E5] group-hover:text-white group-hover:border-[#10162F] shrink-0 transition-all flex items-center gap-1 shadow-[2px_2px_0px_0px_#10162F]">
+                            <span>OPEN MODULE</span>
+                            <ArrowUpRight className="h-3.5 w-3.5" />
                           </span>
                         )}
                       </div>
@@ -672,7 +674,7 @@ export default function RoadmapDetail() {
         })}
       </div>
 
-      {/* Side Drawer Component with Prev / Next Navigation & Deep-Linking */}
+      {/* Side Drawer Component */}
       <StepDrawer
         step={activeStep}
         isOpen={Boolean(activeStep)}

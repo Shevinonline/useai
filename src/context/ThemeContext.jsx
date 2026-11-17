@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
+const THEME_STORAGE_KEY = 'useai-theme-v2';
+
 const ThemeContext = createContext({
   theme: 'light',
   toggleTheme: () => {},
@@ -8,12 +10,12 @@ const ThemeContext = createContext({
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('useai_theme');
+      const stored = localStorage.getItem(THEME_STORAGE_KEY);
       if (stored === 'light' || stored === 'dark') {
         return stored;
       }
     }
-    return 'light'; // Default to Light Mode (Codecademy Warm Paper + Stripe Precision)
+    return 'light'; // Default to Light Mode (Codecademy Warm Cream & Midnight Navy)
   });
 
   useEffect(() => {
@@ -25,7 +27,7 @@ export function ThemeProvider({ children }) {
       root.classList.remove('dark');
       root.classList.add('light');
     }
-    localStorage.setItem('useai_theme', theme);
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
 
   const toggleTheme = () => {

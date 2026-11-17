@@ -105,9 +105,9 @@ export default function RoadmapRequestBox() {
 
     // Check domain labels
     const domainLabels = domainPart.split('.');
-    const sld = domainLabels[0]; // second-level domain name (e.g., 'gmail' in 'gmail.com')
+    const sld = domainLabels[0]; // second-level domain name
 
-    // Block if second-level domain is single-character (e.g. user@a.com)
+    // Block if second-level domain is single-character
     if (sld.length < 2) {
       setError('Please enter a real, active email address');
       emailInputRef.current?.focus();
@@ -119,7 +119,6 @@ export default function RoadmapRequestBox() {
       (blocked) => domainPart === blocked || domainPart.endsWith('.' + blocked)
     );
 
-    // Block if domain is blocked, exact test email matches, or localPart is identical to domain name (e.g. test@test.co)
     if (
       isBlockedDomain ||
       BLOCKED_EXACT_EMAILS.includes(trimmedEmail.toLowerCase()) ||
@@ -141,7 +140,6 @@ export default function RoadmapRequestBox() {
     };
 
     try {
-      // mode: 'no-cors' prevents browser CORS preflight blocks on Google Apps Script Web Apps
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -170,40 +168,40 @@ export default function RoadmapRequestBox() {
   };
 
   return (
-    <section id="request-roadmap" className="mt-16 sm:mt-20">
-      <div className="relative p-6 sm:p-8 md:p-10 rounded-lg border border-app-border bg-app-surface transition-colors duration-150">
+    <section id="request-roadmap" className="mt-16 sm:mt-20 w-full">
+      <div className="relative p-6 sm:p-8 md:p-10 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFD300]/25 dark:bg-[#131A33] shadow-[6px_6px_0px_0px_#10162F] dark:shadow-[6px_6px_0px_0px_#000000] transition-colors">
         {/* Subtle Pill Tag */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-app-border bg-app-bg text-xs font-semibold text-app-muted mb-3 font-sans">
-            <Sparkles className="h-3.5 w-3.5 text-brand-accent" />
-            <span>Community Updates & Requests</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[3px] border-2 border-[#10162F] bg-[#FFD300] text-xs font-mono font-bold text-[#10162F] mb-3 shadow-[2px_2px_0px_0px_#10162F]">
+            <Sparkles className="h-3.5 w-3.5 text-[#3A10E5]" />
+            <span>COMMUNITY UPDATES &amp; REQUESTS</span>
           </div>
 
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-app-text mb-2.5">
-            Request a Roadmap & Get Notified
+          <h2 className="font-display font-bold text-2xl sm:text-3xl tracking-tight text-[#10162F] dark:text-white mb-2">
+            Request a Roadmap &amp; Get Notified
           </h2>
 
-          <p className="text-sm sm:text-base text-app-muted leading-relaxed max-w-xl mx-auto font-sans">
+          <p className="text-sm sm:text-base text-[#10162F]/80 dark:text-slate-300 leading-relaxed max-w-xl mx-auto font-sans">
             Suggest an AI workflow or tool stack you want us to cover next, and get notified when new roadmaps drop.
           </p>
         </div>
 
         {/* Success State */}
         {status === 'success' ? (
-          <div className="max-w-md mx-auto text-center py-6 px-4 rounded-md border border-emerald-500/30 bg-emerald-500/10">
-            <div className="h-10 w-10 mx-auto rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
+          <div className="max-w-md mx-auto text-center py-6 px-4 rounded-[4px] border-2 border-[#008A5E] bg-[#008A5E]/10">
+            <div className="h-10 w-10 mx-auto rounded-full bg-[#008A5E]/20 text-[#008A5E] flex items-center justify-center mb-3">
               <Check className="h-5 w-5" />
             </div>
-            <h3 className="font-heading font-semibold text-base text-app-text mb-1.5">
-              Request Recorded
+            <h3 className="font-display font-bold text-base text-[#10162F] dark:text-white mb-1.5">
+              Request Recorded!
             </h3>
-            <p className="text-sm text-app-muted leading-relaxed mb-4 font-sans">
+            <p className="text-sm text-[#10162F]/80 dark:text-slate-300 leading-relaxed mb-4 font-sans">
               Thanks! Your request has been recorded. We&apos;ll notify you when it&apos;s live. You can also follow discussions on{' '}
               <a
                 href={GITHUB_REPO_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-brand-accent hover:underline font-semibold"
+                className="text-[#3A10E5] dark:text-[#FFD300] hover:underline font-bold"
               >
                 GitHub
               </a>
@@ -211,7 +209,7 @@ export default function RoadmapRequestBox() {
             </p>
             <button
               onClick={handleReset}
-              className="text-xs font-semibold text-brand-accent hover:underline cursor-pointer font-sans"
+              className="text-xs font-bold text-[#3A10E5] dark:text-[#FFD300] hover:underline cursor-pointer font-sans"
             >
               Submit another request
             </button>
@@ -219,12 +217,12 @@ export default function RoadmapRequestBox() {
         ) : (
           /* Interactive Form */
           <form onSubmit={handleSubmit} noValidate className="max-w-2xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-3.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               {/* Roadmap Request Input Field */}
               <div className="space-y-1.5 text-left">
                 <label
                   htmlFor="roadmap-request-input"
-                  className="block text-xs font-semibold text-app-text font-sans"
+                  className="block text-xs font-display font-bold text-[#10162F] dark:text-white"
                 >
                   Roadmap Suggestion
                 </label>
@@ -236,9 +234,9 @@ export default function RoadmapRequestBox() {
                     setRequestTopic(e.target.value);
                     if (error) setError('');
                   }}
-                  placeholder="e.g., WordPress & AI Site Builder, AI Agents..."
+                  placeholder="e.g., WordPress & AI Site Builder..."
                   disabled={status === 'loading'}
-                  className="w-full px-3.5 py-2.5 text-sm rounded-md border border-app-border bg-app-bg text-app-text placeholder:text-app-muted/60 focus:outline-none focus:border-brand-accent transition-colors duration-150 font-sans disabled:opacity-50"
+                  className="w-full px-3.5 py-2.5 text-sm rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#0B1021] text-[#10162F] dark:text-white placeholder:text-[#10162F]/40 dark:placeholder:text-slate-500 focus:outline-none focus:shadow-[3px_3px_0px_0px_#10162F] font-sans disabled:opacity-50 transition-all"
                 />
               </div>
 
@@ -246,7 +244,7 @@ export default function RoadmapRequestBox() {
               <div className="space-y-1.5 text-left">
                 <label
                   htmlFor="roadmap-email-input"
-                  className="block text-xs font-semibold text-app-text font-sans"
+                  className="block text-xs font-display font-bold text-[#10162F] dark:text-white"
                 >
                   Your Email Address
                 </label>
@@ -261,16 +259,15 @@ export default function RoadmapRequestBox() {
                   }}
                   placeholder="Enter your email address..."
                   disabled={status === 'loading'}
-                  className={`w-full px-3.5 py-2.5 text-sm rounded-md border bg-app-bg text-app-text placeholder:text-app-muted/60 focus:outline-none transition-colors duration-150 font-sans disabled:opacity-50 ${
+                  className={`w-full px-3.5 py-2.5 text-sm rounded-[4px] border-2 bg-white dark:bg-[#0B1021] text-[#10162F] dark:text-white placeholder:text-[#10162F]/40 dark:placeholder:text-slate-500 focus:outline-none focus:shadow-[3px_3px_0px_0px_#10162F] font-sans disabled:opacity-50 transition-all ${
                     error
-                      ? 'border-red-500 focus:border-red-500 ring-1 ring-red-500/20'
-                      : 'border-app-border focus:border-brand-accent'
+                      ? 'border-red-600 focus:border-red-600'
+                      : 'border-[#10162F] dark:border-[#3B497E]'
                   }`}
                 />
-                {/* Specific Error Message directly below input */}
                 {error && (
-                  <p className="text-xs text-red-500 font-medium flex items-center gap-1 mt-1.5 font-sans">
-                    <AlertCircle className="h-3.5 w-3.5 shrink-0 text-red-500" />
+                  <p className="text-xs text-red-600 font-bold flex items-center gap-1 mt-1.5 font-sans">
+                    <AlertCircle className="h-3.5 w-3.5 shrink-0 text-red-600" />
                     <span>{error}</span>
                   </p>
                 )}
@@ -278,14 +275,14 @@ export default function RoadmapRequestBox() {
             </div>
 
             {/* Footer row with note & submit button */}
-            <div className="pt-1 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <p className="text-xs text-app-muted text-center sm:text-left font-sans">
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-xs text-[#10162F]/70 dark:text-slate-400 text-center sm:text-left font-sans">
                 Zero spam. Only notified when the requested roadmap goes live. Or submit via{' '}
                 <a
                   href={GITHUB_REPO_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-brand-accent hover:underline font-semibold"
+                  className="text-[#3A10E5] dark:text-[#FFD300] hover:underline font-bold"
                 >
                   GitHub
                 </a>
@@ -295,11 +292,11 @@ export default function RoadmapRequestBox() {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-md bg-brand-accent text-white font-semibold text-sm hover:opacity-95 disabled:opacity-50 transition-opacity cursor-pointer font-sans shrink-0 shadow-xs"
+                className="cc-btn-primary px-6 py-2.5 text-sm w-full sm:w-auto"
               >
                 {status === 'loading' ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin mr-1.5" />
                     <span>Sending...</span>
                   </>
                 ) : (

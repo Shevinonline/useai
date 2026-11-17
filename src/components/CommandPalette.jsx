@@ -141,212 +141,204 @@ export default function CommandPalette() {
 
     // D. Tools
     const tools = (toolsData || []).map((t, idx) => {
-      const tName = safeExtractToolName(t);
+      const tName = safeString(t?.name || `Tool ${idx + 1}`);
+      const tDesc = safeString(t?.description);
+      const tPricing = safeString(t?.pricing || 'Freemium');
       const tWorkflows = Array.isArray(t?.workflows) ? t.workflows : [];
+
       return {
-        id: `tool-${t?.id || tName || idx}`,
+        id: `tool-${t?.id || t?.name || idx}`,
         type: 'tool',
-        rawId: t?.id || tName,
-        title: tName || `AI Tool ${idx + 1}`,
-        subtitle: `${safeString(t?.pricing || 'Freemium')} • ${safeString(t?.bestFor || 'Workflow')}`,
-        pricing: safeString(t?.pricing || 'Freemium'),
-        workflows: tWorkflows,
-        description: safeString(t?.description)
+        rawId: t?.id || t?.name || `tool-${idx}`,
+        title: tName,
+        subtitle: `${tPricing} • ${tWorkflows.slice(0, 2).join(', ')}`,
+        pricing: tPricing,
+        url: t?.url,
+        description: tDesc,
+        tools: [tName]
       };
     });
 
-    // E. Commands & Navigation
+    // E. System Quick Actions
     const actions = [
       {
-        id: 'action-roadmaps',
+        id: 'action-theme-toggle',
         type: 'action',
-        title: 'Go to All Roadmaps',
-        subtitle: 'Explore 32+ step-by-step developer curriculums',
-        path: '/roadmaps'
-      },
-      {
-        id: 'action-prompts',
-        type: 'action',
-        title: 'Go to Prompts Directory',
-        subtitle: '330+ customizable AI prompt blueprints',
-        path: '/prompts'
-      },
-      {
-        id: 'action-tools',
-        type: 'action',
-        title: 'Go to AI Tools Directory',
-        subtitle: 'Curated models, extensions, and engineering tools',
-        path: '/tools'
-      },
-      {
-        id: 'action-request',
-        type: 'action',
-        title: 'Request a New Roadmap',
-        subtitle: 'Vote or submit curriculum topic for community review',
-        actionType: 'request'
-      },
-      {
-        id: 'action-theme',
-        type: 'action',
+        actionType: 'theme',
         title: `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`,
-        subtitle: 'Toggle workspace visual contrast',
-        actionType: 'theme'
+        subtitle: 'Appearance'
+      },
+      {
+        id: 'action-nav-roadmaps',
+        type: 'action',
+        actionType: 'navigate',
+        path: '/roadmaps',
+        title: 'Browse All AI Roadmaps',
+        subtitle: 'Navigation'
+      },
+      {
+        id: 'action-nav-prompts',
+        type: 'action',
+        actionType: 'navigate',
+        path: '/prompts',
+        title: 'Explore Battle-Tested Prompts',
+        subtitle: 'Navigation'
+      },
+      {
+        id: 'action-nav-tools',
+        type: 'action',
+        actionType: 'navigate',
+        path: '/tools',
+        title: 'Explore Curated AI Tools Directory',
+        subtitle: 'Navigation'
+      },
+      {
+        id: 'action-request-roadmap',
+        type: 'action',
+        actionType: 'request',
+        title: 'Request a New Roadmap',
+        subtitle: 'Community'
       }
     ];
 
-    return { roadmaps, steps, prompts, tools, actions };
+    return {
+      roadmaps,
+      steps,
+      prompts,
+      tools,
+      actions
+    };
   }, [theme]);
 
-  // 2. Filter & Group Results
-  const groupedResults = useMemo(() => {
+  // 2. Perform Weighted Multi-Field Search
+  const filteredResults = useMemo(() => {
     const q = safeLower(query);
-
     if (!q) {
-      return [
-        {
-          category: 'QUICK ACTIONS',
-          items: indexData.actions
-        },
-        {
-          category: 'FEATURED ROADMAPS',
-          items: indexData.roadmaps.slice(0, 5)
-        },
-        {
-          category: 'POPULAR AI TOOLS',
-          items: indexData.tools.slice(0, 4)
-        }
-      ];
+      // Default initial view: quick actions + popular roadmaps
+      return {
+        actions: indexData.actions,
+        roadmaps: indexData.roadmaps.slice(0, 4),
+        steps: [],
+        prompts: [],
+        tools: indexData.tools.slice(0, 3)
+      };
     }
 
-    const matchesSearch = (item) => {
-      if (!item) return false;
-      const titleMatch = safeLower(item.title).includes(q);
-      const subtitleMatch = safeLower(item.subtitle).includes(q);
-      const descMatch = item.description ? safeLower(item.description).includes(q) : false;
-      const summaryMatch = item.summary ? safeLower(item.summary).includes(q) : false;
-      const templateMatch = item.template ? safeLower(item.template).includes(q) : false;
-      const toolsMatch = Array.isArray(item.tools)
-        ? item.tools.some((t) => safeLower(t).includes(q))
-        : false;
+    const matchesQuery = (text) => safeLower(text).includes(q);
 
-      return titleMatch || subtitleMatch || descMatch || summaryMatch || templateMatch || toolsMatch;
+    // Filter roadmaps
+    const matchedRoadmaps = indexData.roadmaps
+      .filter((r) => matchesQuery(r.title) || matchesQuery(r.description) || matchesQuery(r.category) || r.tools.some(matchesQuery))
+      .slice(0, 5);
+
+    // Filter steps
+    const matchedSteps = indexData.steps
+      .filter((s) => matchesQuery(s.title) || matchesQuery(s.summary) || matchesQuery(s.roadmapTitle) || s.tools.some(matchesQuery))
+      .slice(0, 6);
+
+    // Filter prompts
+    const matchedPrompts = indexData.prompts
+      .filter((p) => matchesQuery(p.title) || matchesQuery(p.template) || matchesQuery(p.roadmapTitle) || p.tools.some(matchesQuery))
+      .slice(0, 6);
+
+    // Filter tools
+    const matchedTools = indexData.tools
+      .filter((t) => matchesQuery(t.title) || matchesQuery(t.description) || matchesQuery(t.pricing) || t.tools.some(matchesQuery))
+      .slice(0, 4);
+
+    // Filter actions
+    const matchedActions = indexData.actions
+      .filter((a) => matchesQuery(a.title) || matchesQuery(a.subtitle))
+      .slice(0, 3);
+
+    return {
+      actions: matchedActions,
+      roadmaps: matchedRoadmaps,
+      steps: matchedSteps,
+      prompts: matchedPrompts,
+      tools: matchedTools
     };
-
-    const matchingRoadmaps = indexData.roadmaps.filter(matchesSearch).slice(0, 4);
-    const matchingSteps = indexData.steps.filter(matchesSearch).slice(0, 5);
-    const matchingPrompts = indexData.prompts.filter(matchesSearch).slice(0, 4);
-    const matchingTools = indexData.tools.filter(matchesSearch).slice(0, 4);
-    const matchingActions = indexData.actions.filter(matchesSearch);
-
-    const groups = [];
-    if (matchingRoadmaps.length > 0) {
-      groups.push({ category: 'ROADMAPS', items: matchingRoadmaps });
-    }
-    if (matchingSteps.length > 0) {
-      groups.push({ category: 'WORKFLOW NODES & STEPS', items: matchingSteps });
-    }
-    if (matchingPrompts.length > 0) {
-      groups.push({ category: 'PROMPT BLUEPRINTS', items: matchingPrompts });
-    }
-    if (matchingTools.length > 0) {
-      groups.push({ category: 'AI TOOLS', items: matchingTools });
-    }
-    if (matchingActions.length > 0) {
-      groups.push({ category: 'COMMANDS', items: matchingActions });
-    }
-
-    return groups;
   }, [query, indexData]);
 
-  // Flattened array for keyboard navigation
+  // Group results for categorized rendering
+  const groupedResults = useMemo(() => {
+    const groups = [];
+    if (filteredResults.actions.length > 0) {
+      groups.push({ category: 'Actions', items: filteredResults.actions });
+    }
+    if (filteredResults.roadmaps.length > 0) {
+      groups.push({ category: 'Roadmaps', items: filteredResults.roadmaps });
+    }
+    if (filteredResults.steps.length > 0) {
+      groups.push({ category: 'Modules & Playbooks', items: filteredResults.steps });
+    }
+    if (filteredResults.prompts.length > 0) {
+      groups.push({ category: 'Prompt Blueprints', items: filteredResults.prompts });
+    }
+    if (filteredResults.tools.length > 0) {
+      groups.push({ category: 'AI Tools & Models', items: filteredResults.tools });
+    }
+    return groups;
+  }, [filteredResults]);
+
+  // Flat list for keyboard index navigation
   const flatResults = useMemo(() => {
-    return (groupedResults || []).flatMap((group) => group.items || []);
+    return groupedResults.flatMap((g) => g.items || []);
   }, [groupedResults]);
 
-  // Ensure active element is scrolled into view
-  useEffect(() => {
-    if (listRef.current) {
-      const activeEl = listRef.current.querySelector('[data-selected="true"]');
-      if (activeEl) {
-        activeEl.scrollIntoView({ block: 'nearest' });
-      }
-    }
-  }, [selectedIndex]);
-
-  // 3. Execution / Triggering of Selected Item
+  // Handle Item Selection / Execution
   const handleSelectItem = (item) => {
     if (!item) return;
     closeCommandPalette();
 
-    const itemType = item.type;
-    const itemStatus = item.status;
-    const itemTitle = typeof item.title === 'string' ? item.title : safeExtractToolName(item.title);
-
-    switch (itemType) {
-      case 'action':
-        if (item.actionType === 'theme') {
-          toggleTheme();
-        } else if (item.actionType === 'request') {
+    if (item.type === 'action') {
+      if (item.actionType === 'theme') {
+        toggleTheme();
+      } else if (item.actionType === 'navigate') {
+        navigate(item.path);
+      } else if (item.actionType === 'request') {
+        if (window.location.pathname === '/') {
           const el = document.getElementById('request-roadmap');
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth' });
-          } else {
-            navigate('/#request-roadmap');
-          }
-        } else if (item.path) {
-          navigate(item.path);
-        }
-        break;
-
-      case 'roadmap':
-        if (itemStatus === 'coming-soon') {
-          const reqEl = document.getElementById('request-roadmap');
-          if (reqEl) {
-            reqEl.scrollIntoView({ behavior: 'smooth' });
-            window.dispatchEvent(
-              new CustomEvent('useai_prefill_request', {
-                detail: { topic: `Notify me when "${itemTitle}" is ready` }
-              })
-            );
-          } else {
-            navigate(
-              `/?request=${encodeURIComponent(
-                `Notify me when "${itemTitle}" is ready`
-              )}#request-roadmap`
-            );
-          }
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
         } else {
-          navigate(`/roadmap/${item.rawId}`);
+          navigate('/#request-roadmap');
         }
-        break;
+      }
+      return;
+    }
 
-      case 'step':
-        navigate(`/roadmap/${item.roadmapId}?step=${item.rawId}`);
-        break;
+    if (item.type === 'roadmap') {
+      navigate(`/roadmap/${item.rawId}`);
+      return;
+    }
 
-      case 'prompt':
+    if (item.type === 'step') {
+      navigate(`/roadmap/${item.roadmapId}?step=${item.rawId}&tab=playbook`);
+      return;
+    }
+
+    if (item.type === 'prompt') {
+      if (item.roadmapId && item.stepId) {
         navigate(`/roadmap/${item.roadmapId}?step=${item.stepId}&tab=promptLab`);
-        break;
+      } else {
+        navigate('/prompts');
+      }
+      return;
+    }
 
-      case 'tool':
-        navigate(`/tools?search=${encodeURIComponent(itemTitle)}`);
-        break;
-
-      default:
-        break;
+    if (item.type === 'tool') {
+      navigate('/tools');
     }
   };
 
-  // Keyboard Navigation Handlers
+  // Keyboard navigation inside list
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setSelectedIndex((prev) => (prev + 1) % (flatResults.length || 1));
+      setSelectedIndex((prev) => (prev < flatResults.length - 1 ? prev + 1 : 0));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setSelectedIndex((prev) =>
-        prev <= 0 ? (flatResults.length ? flatResults.length - 1 : 0) : prev - 1
-      );
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : flatResults.length - 1));
     } else if (e.key === 'Enter') {
       e.preventDefault();
       if (flatResults[selectedIndex]) {
@@ -364,27 +356,27 @@ export default function CommandPalette() {
   const renderItemIcon = (item) => {
     switch (item.type) {
       case 'roadmap':
-        return <Layers className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400 shrink-0" />;
+        return <Layers className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300] shrink-0" />;
       case 'step':
-        return <GitBranch className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />;
+        return <GitBranch className="h-4 w-4 text-[#008A5E] shrink-0" />;
       case 'prompt':
-        return <Terminal className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400 shrink-0" />;
+        return <Terminal className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300] shrink-0" />;
       case 'tool':
-        return <Wrench className="h-3.5 w-3.5 text-zinc-700 dark:text-zinc-300 shrink-0" />;
+        return <Wrench className="h-4 w-4 text-[#10162F] dark:text-white shrink-0" />;
       case 'action':
         if (item.actionType === 'theme') {
           return theme === 'dark' ? (
-            <Sun className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+            <Sun className="h-4 w-4 text-[#FFD300] shrink-0" />
           ) : (
-            <Moon className="h-3.5 w-3.5 text-zinc-700 shrink-0" />
+            <Moon className="h-4 w-4 text-[#10162F] shrink-0" />
           );
         }
         if (item.actionType === 'request') {
-          return <Sparkles className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400 shrink-0" />;
+          return <Sparkles className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300] shrink-0" />;
         }
-        return <Compass className="h-3.5 w-3.5 text-zinc-700 dark:text-zinc-300 shrink-0" />;
+        return <Compass className="h-4 w-4 text-[#10162F] dark:text-white shrink-0" />;
       default:
-        return <ArrowRight className="h-3.5 w-3.5 text-zinc-400 shrink-0" />;
+        return <ArrowRight className="h-4 w-4 text-[#10162F]/60 shrink-0" />;
     }
   };
 
@@ -405,13 +397,13 @@ export default function CommandPalette() {
 
       {/* Modal Surface */}
       <div
-        className="relative w-full max-w-2xl rounded-[4px] border-2 border-zinc-900 dark:border-zinc-700 bg-white dark:bg-[#121215] shadow-[6px_6px_0px_0px_#18181B] dark:shadow-[6px_6px_0px_0px_#7C3AED] overflow-hidden font-sans z-10 animate-in zoom-in-95 duration-150"
+        className="relative w-full max-w-2xl rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] shadow-[6px_6px_0px_0px_#10162F] dark:shadow-[6px_6px_0px_0px_#000000] overflow-hidden font-sans z-10 animate-in zoom-in-95 duration-150"
         onKeyDown={handleKeyDown}
       >
         {/* Top Search Input Bar */}
-        <div className="relative flex items-center px-4 py-3 border-b-2 border-zinc-900 dark:border-zinc-700 bg-[#F9F8F6] dark:bg-[#0E0E11] gap-2">
-          <span className="font-mono text-xs font-bold px-2 py-1 bg-zinc-900 text-white dark:bg-purple-600 rounded-[2px] shrink-0 select-none tracking-wider">
-            [ SEARCH ]
+        <div className="relative flex items-center px-4 py-3.5 border-b-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] gap-2.5">
+          <span className="font-mono text-xs font-bold px-2 py-0.5 bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] rounded-[3px] shrink-0 select-none shadow-[1px_1px_0px_0px_#10162F]">
+            SEARCH
           </span>
 
           <input
@@ -423,7 +415,7 @@ export default function CommandPalette() {
               setSelectedIndex(0);
             }}
             placeholder="Search roadmaps, steps, prompts, AI tools..."
-            className="w-full bg-transparent text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none font-sans"
+            className="w-full bg-transparent text-sm sm:text-base text-[#10162F] dark:text-white placeholder:text-[#10162F]/50 dark:placeholder:text-slate-400 focus:outline-none font-sans"
           />
 
           <div className="flex items-center gap-2 ml-2">
@@ -431,13 +423,13 @@ export default function CommandPalette() {
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="p-1 rounded text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
+                className="p-1 rounded text-[#10162F]/60 hover:text-[#10162F] dark:text-slate-400 dark:hover:text-white cursor-pointer"
                 aria-label="Clear search"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-4 w-4" />
               </button>
             )}
-            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono rounded-[2px] border border-zinc-300 dark:border-zinc-700 bg-[#F2F0EC] dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 select-none font-bold">
+            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono rounded-[2px] border border-[#10162F]/40 bg-[#F5EFE6] dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 select-none font-bold">
               ESC
             </kbd>
           </div>
@@ -446,18 +438,18 @@ export default function CommandPalette() {
         {/* Results Container */}
         <div
           ref={listRef}
-          className="max-h-[60vh] overflow-y-auto divide-y divide-zinc-200 dark:divide-zinc-800 p-2 scrollbar-thin"
+          className="max-h-[60vh] overflow-y-auto divide-y-2 divide-[#10162F]/10 dark:divide-white/10 p-2.5"
         >
           {groupedResults.length > 0 ? (
             groupedResults.map((group) => (
               <div key={group.category} className="py-2 first:pt-1 last:pb-1">
                 {/* Group Category Header */}
-                <div className="px-3 py-1 text-[10px] font-mono font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                <div className="px-3 py-1 text-xs font-mono font-bold text-[#10162F]/60 dark:text-slate-400 uppercase tracking-wider">
                   {group.category}
                 </div>
 
                 {/* Group Item List */}
-                <div className="space-y-1 mt-1 font-sans">
+                <div className="space-y-1.5 mt-1 font-sans">
                   {(group.items || []).map((item, itemIdx) => {
                     const currentIndex = globalItemIndex;
                     globalItemIndex += 1;
@@ -479,38 +471,50 @@ export default function CommandPalette() {
                         onMouseEnter={() => setSelectedIndex(currentIndex)}
                         role="button"
                         tabIndex={0}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-[3px] text-left transition-all cursor-pointer select-none ${
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-[4px] text-left transition-all cursor-pointer select-none ${
                           isSelected
-                            ? 'bg-zinc-100 dark:bg-zinc-800/90 border-l-2 border-zinc-900 dark:border-purple-500 text-zinc-900 dark:text-zinc-100 font-medium'
-                            : 'text-zinc-700 dark:text-zinc-300 hover:bg-[#F9F8F6] dark:hover:bg-zinc-900 border-l-2 border-transparent'
+                            ? 'bg-[#3A10E5] text-white border-2 border-[#10162F] shadow-[2px_2px_0px_0px_#10162F]'
+                            : 'text-[#10162F] dark:text-slate-200 hover:bg-[#F5EFE6] dark:hover:bg-[#1B2447] border-2 border-transparent'
                         }`}
                       >
                         {/* Left: Icon & Titles */}
-                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                          <div className="p-1.5 rounded-[2px] bg-[#F2F0EC] dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 shrink-0">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <div className={`p-1.5 rounded-[3px] border shrink-0 ${
+                            isSelected
+                              ? 'bg-white text-[#10162F] border-[#10162F]'
+                              : 'bg-[#FFF8F2] dark:bg-[#0B1021] border-[#10162F]/20 dark:border-[#3B497E]'
+                          }`}>
                             {renderItemIcon(item)}
                           </div>
 
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
-                              <span className="font-heading font-bold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 truncate">
+                              <span className={`font-display font-bold text-sm truncate ${
+                                isSelected ? 'text-white' : 'text-[#10162F] dark:text-white'
+                              }`}>
                                 {titleText}
                               </span>
 
                               {/* Badge indicators */}
                               {item?.type === 'roadmap' && item?.status === 'coming-soon' && (
-                                <span className="px-1.5 py-0.2 rounded-[2px] text-[10px] font-mono bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 font-bold shrink-0">
+                                <span className="px-1.5 py-0.5 rounded-[2px] text-[10px] font-mono bg-[#FFD300] text-[#10162F] border border-[#10162F] font-bold shrink-0">
                                   SOON
                                 </span>
                               )}
                               {item?.type === 'step' && (
-                                <span className="px-1.5 py-0.2 rounded-[2px] text-[10px] font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-bold shrink-0">
+                                <span className={`px-1.5 py-0.5 rounded-[2px] text-[10px] font-mono border font-bold shrink-0 ${
+                                  isSelected
+                                    ? 'bg-white text-[#10162F] border-[#10162F]'
+                                    : 'bg-[#008A5E]/15 border-[#008A5E] text-[#008A5E]'
+                                }`}>
                                   NODE #{String(item.stepNumber ?? '')}
                                 </span>
                               )}
                             </div>
 
-                            <p className="text-[11px] text-zinc-500 truncate mt-0.5 font-sans">
+                            <p className={`text-xs truncate mt-0.5 font-sans ${
+                              isSelected ? 'text-white/80' : 'text-[#10162F]/60 dark:text-slate-400'
+                            }`}>
                               {subtitleText}
                             </p>
                           </div>
@@ -518,13 +522,15 @@ export default function CommandPalette() {
 
                         {/* Right: Tag / Action indicator */}
                         <div className="flex items-center gap-2 shrink-0 ml-3">
-                          <span className="text-[10px] font-mono text-zinc-500 uppercase hidden sm:inline">
+                          <span className={`text-[10px] font-mono uppercase hidden sm:inline ${
+                            isSelected ? 'text-white/80' : 'text-[#10162F]/50 dark:text-slate-400'
+                          }`}>
                             {item?.type === 'action' ? 'Action' : String(item?.type || '')}
                           </span>
 
                           {isSelected && (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-mono text-zinc-900 dark:text-purple-400 font-bold">
-                              <CornerDownLeft className="h-3 w-3" />
+                            <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-white">
+                              <CornerDownLeft className="h-3.5 w-3.5" />
                             </span>
                           )}
                         </div>
@@ -536,11 +542,11 @@ export default function CommandPalette() {
             ))
           ) : (
             <div className="text-center py-12 px-4">
-              <Search className="h-8 w-8 text-zinc-400 mx-auto mb-2 opacity-50" />
-              <p className="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100 mb-1">
+              <Search className="h-8 w-8 text-[#10162F]/40 mx-auto mb-2" />
+              <p className="font-display font-bold text-sm text-[#10162F] dark:text-white mb-1">
                 No matching results found
               </p>
-              <p className="text-xs text-zinc-500 max-w-sm mx-auto font-sans">
+              <p className="text-xs text-[#10162F]/60 dark:text-slate-400 max-w-sm mx-auto font-sans">
                 Try searching for broader keywords like &ldquo;coding&rdquo;, &ldquo;video&rdquo;, &ldquo;Cursor&rdquo;, or &ldquo;PRD&rdquo;.
               </p>
             </div>
@@ -548,22 +554,22 @@ export default function CommandPalette() {
         </div>
 
         {/* Footer Helper Bar */}
-        <div className="px-4 py-2.5 bg-[#F2F0EC]/80 dark:bg-zinc-900/80 border-t border-zinc-300 dark:border-zinc-800 flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400 font-mono">
+        <div className="px-4 py-2.5 bg-[#F5EFE6] dark:bg-[#0B1021] border-t-2 border-[#10162F] dark:border-[#3B497E] flex items-center justify-between text-xs text-[#10162F]/70 dark:text-slate-400 font-mono">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded-[2px] bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-[10px] font-bold">
+              <kbd className="px-1.5 py-0.5 rounded-[2px] bg-white dark:bg-[#131A33] border border-[#10162F]/40 text-[#10162F] dark:text-white text-[10px] font-bold">
                 ↑↓
               </kbd>
               <span>navigate</span>
             </span>
             <span className="inline-flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded-[2px] bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-[10px] font-bold">
+              <kbd className="px-1.5 py-0.5 rounded-[2px] bg-white dark:bg-[#131A33] border border-[#10162F]/40 text-[#10162F] dark:text-white text-[10px] font-bold">
                 ↵
               </kbd>
               <span>select</span>
             </span>
             <span className="inline-flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded-[2px] bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-[10px] font-bold">
+              <kbd className="px-1.5 py-0.5 rounded-[2px] bg-white dark:bg-[#131A33] border border-[#10162F]/40 text-[#10162F] dark:text-white text-[10px] font-bold">
                 ESC
               </kbd>
               <span>close</span>
@@ -572,7 +578,7 @@ export default function CommandPalette() {
 
           <div className="flex items-center gap-1.5">
             <span className="text-[11px] hidden sm:inline">Shortcut:</span>
-            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono rounded-[2px] border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 font-bold">
+            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono rounded-[2px] border border-[#10162F]/40 bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white font-bold">
               {shortcutBadge}
             </kbd>
           </div>
