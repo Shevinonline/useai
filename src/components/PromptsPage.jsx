@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { getAllPrompts } from '../utils/promptAggregator';
 import roadmapsData from '../data/roadmaps.json';
 import PromptCard from './PromptCard';
@@ -8,14 +8,12 @@ import {
   X,
   ChevronDown,
   RotateCcw,
-  SlidersHorizontal,
+  Terminal,
   Layers,
-  Wrench
+  ArrowRight
 } from 'lucide-react';
-import { getShortcutBadge } from '../utils/osDetector';
 
 export default function PromptsPage() {
-  const shortcutBadge = getShortcutBadge();
   const allPrompts = useMemo(() => getAllPrompts(), []);
 
   // Filter states
@@ -27,21 +25,33 @@ export default function PromptsPage() {
   // Progressive loading / pagination state (20 per page)
   const [displayCount, setDisplayCount] = useState(20);
 
+  // Reset pagination when filters change during render
+  const filterKey = `${searchQuery}|${selectedCategory}|${selectedRoadmap}|${selectedTool}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (prevFilterKey !== filterKey) {
+    setPrevFilterKey(filterKey);
+    setDisplayCount(20);
+  }
+
   // Compute category counts
   const categoryCounts = useMemo(() => {
     const total = allPrompts.length;
     const workflow = allPrompts.filter((p) => {
       const parent = roadmapsData.find((r) => r.id === p.roadmapId);
-      return parent?.category === 'Role & Workflow Roadmaps' || parent?.category === 'workflow';
+      return parent?.category === 'Role & Workflow Roadmaps' || parent?.category === 'workflow' || p.category === 'workflow';
+    }).length;
+    const role = allPrompts.filter((p) => {
+      const parent = roadmapsData.find((r) => r.id === p.roadmapId);
+      return parent?.category === 'AI Role-Based Roadmaps' || parent?.category === 'role' || p.category === 'role';
     }).length;
     const tool = allPrompts.filter((p) => {
       const parent = roadmapsData.find((r) => r.id === p.roadmapId);
-      return parent?.category === 'Tool Mastery Roadmaps' || parent?.category === 'tool' || parent?.category === 'tool-specific';
+      return parent?.category === 'Tool Mastery Roadmaps' || parent?.category === 'tool' || parent?.category === 'tool-specific' || p.category === 'tool';
     }).length;
-    return { total, workflow, tool };
+    return { total, workflow, role, tool };
   }, [allPrompts]);
 
-  // Unique tools for secondary pill filter
+  // Unique tools for filter pills
   const popularTools = useMemo(() => {
     const toolCountMap = {};
     allPrompts.forEach((p) => {
@@ -81,20 +91,23 @@ export default function PromptsPage() {
       // 1. Search Query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        const matchTitle = p.title.toLowerCase().includes(q);
-        const matchTemplate = p.template.toLowerCase().includes(q);
-        const matchRoadmap = p.roadmapTitle.toLowerCase().includes(q);
-        const matchTools = Array.isArray(p.recommendedTools) && p.recommendedTools.some((t) => t.toLowerCase().includes(q));
+        const matchTitle = (p?.title || '').toLowerCase().includes(q);
+        const matchTemplate = (p?.template || '').toLowerCase().includes(q);
+        const matchRoadmap = (p?.roadmapTitle || '').toLowerCase().includes(q);
+        const matchTools = Array.isArray(p?.recommendedTools) && p.recommendedTools.some((t) => t.toLowerCase().includes(q));
         if (!matchTitle && !matchTemplate && !matchRoadmap && !matchTools) return false;
       }
 
       // 2. Category Filter
       if (selectedCategory !== 'all') {
         const parent = roadmapsData.find((r) => r.id === p.roadmapId);
-        if (selectedCategory === 'workflow' && !(parent?.category === 'Role & Workflow Roadmaps' || parent?.category === 'workflow')) {
+        if (selectedCategory === 'workflow' && !(parent?.category === 'Role & Workflow Roadmaps' || parent?.category === 'workflow' || p.category === 'workflow')) {
           return false;
         }
-        if (selectedCategory === 'tool' && !(parent?.category === 'Tool Mastery Roadmaps' || parent?.category === 'tool' || parent?.category === 'tool-specific')) {
+        if (selectedCategory === 'role' && !(parent?.category === 'AI Role-Based Roadmaps' || parent?.category === 'role' || p.category === 'role')) {
+          return false;
+        }
+        if (selectedCategory === 'tool' && !(parent?.category === 'Tool Mastery Roadmaps' || parent?.category === 'tool' || parent?.category === 'tool-specific' || p.category === 'tool')) {
           return false;
         }
       }
@@ -114,11 +127,6 @@ export default function PromptsPage() {
       return true;
     });
   }, [allPrompts, searchQuery, selectedCategory, selectedRoadmap, selectedTool]);
-
-  // Reset display count when filters change
-  useEffect(() => {
-    setDisplayCount(20);
-  }, [searchQuery, selectedCategory, selectedRoadmap, selectedTool]);
 
   const visiblePrompts = useMemo(() => {
     return filteredPrompts.slice(0, displayCount);
@@ -146,195 +154,221 @@ export default function PromptsPage() {
 
   return (
     <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-20">
-      {/* 1. Codecademy Brutalist Hero */}
-      <section className="pt-6 pb-12 text-center">
-        <div className="inline-flex items-center gap-1.5 bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] font-mono text-xs font-bold px-3 py-1 rounded-[3px] shadow-[2px_2px_0px_0px_#10162F] mb-5 select-none">
-          {allPrompts.length} PRODUCTION PROMPT BLUEPRINTS
+      {/* 1. Editorial Hero & Search */}
+      <section className="pt-6 pb-10 text-center">
+        <div className="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-mono text-xs font-semibold px-3 py-1 rounded-full mb-4 select-none shadow-2xs">
+          <Terminal className="h-3 w-3 text-[#4F46E5] dark:text-[#6366F1]" />
+          <span>{allPrompts.length}+ PRODUCTION PROMPT BLUEPRINTS</span>
         </div>
 
-        <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl tracking-tight text-[#10162F] dark:text-white leading-[1.1] mb-4">
-          Battle-Tested AI Prompts
+        <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl tracking-tight text-[#0F172A] dark:text-white leading-[1.15] mb-4">
+          AI Prompt Directory
         </h1>
-        <p className="font-sans text-base sm:text-lg text-[#10162F]/80 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          Search, customize dynamic variables in real-time, and run directly in ChatGPT or Perplexity.
+        <p className="font-sans text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          Tested, variable-primed prompt templates extracted from our 38 production roadmaps. Customize variables, copy directly, or launch in 1-click.
         </p>
 
-        {/* Codecademy Search Bar */}
+        {/* Global Search Bar */}
         <div className="mt-8 max-w-2xl mx-auto w-full">
-          <div className="relative flex items-center w-full bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] shadow-[5px_5px_0px_0px_#10162F] dark:shadow-[5px_5px_0px_0px_#FFD300] p-1.5 gap-2 transition-all">
-            <Search className="h-5 w-5 text-[#10162F] dark:text-slate-300 ml-2 shrink-0" />
+          <div className="relative flex items-center w-full bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm hover:border-slate-400 dark:hover:border-slate-600 p-2 gap-2 transition-all focus-within:border-[#4F46E5] dark:focus-within:border-[#6366F1] focus-within:ring-2 focus-within:ring-[#4F46E5]/10">
+            <Search className="h-5 w-5 text-slate-400 dark:text-slate-500 ml-2 shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search prompts by title, keywords, tools, or roadmap..."
-              className="w-full py-1.5 px-2 bg-transparent text-sm sm:text-base text-[#10162F] dark:text-white placeholder:text-[#10162F]/50 dark:placeholder:text-slate-400 focus:outline-none font-sans"
-              aria-label="Filter prompts inline"
+              placeholder="Search prompts by title, code keywords, or tool..."
+              className="w-full py-1.5 px-2 bg-transparent text-sm sm:text-base text-[#0F172A] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none font-sans"
+              aria-label="Search prompts"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="p-1 rounded text-[#10162F]/60 hover:text-[#10162F] dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
+                className="p-1 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer"
                 title="Clear"
               >
                 <X className="h-4 w-4" />
               </button>
             )}
-            <span className="inline-flex items-center px-2.5 py-1 text-xs font-mono font-bold rounded-[3px] bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] shadow-[1px_1px_0px_0px_#10162F] shrink-0 select-none">
-              {shortcutBadge}
-            </span>
           </div>
         </div>
       </section>
 
-      {/* 2. Multi-Faceted Filter & Controls Surface */}
-      <section className="cc-card mb-10 p-5 sm:p-6 space-y-4">
-        {/* Top Controls Row */}
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 font-display">
-          {/* Category Filter Buttons */}
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setSelectedCategory('all')}
-              className={`px-3.5 py-1.5 rounded-[4px] border-2 transition-all cursor-pointer inline-flex items-center gap-2 text-xs font-bold ${
+      {/* 2. Category Navigation Tabs */}
+      <section className="mb-6">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-200 dark:border-slate-800">
+          <button
+            type="button"
+            onClick={() => setSelectedCategory('all')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              selectedCategory === 'all'
+                ? 'bg-[#4F46E5] text-white shadow-xs'
+                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+            }`}
+          >
+            <span>All Prompts</span>
+            <span
+              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
                 selectedCategory === 'all'
-                  ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                  : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-200 hover:-translate-y-0.5'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
               }`}
             >
-              <span>All Prompts</span>
-              <span className="font-mono text-xs opacity-80">[{categoryCounts.total}]</span>
-            </button>
+              {categoryCounts.total}
+            </span>
+          </button>
 
-            <button
-              type="button"
-              onClick={() => setSelectedCategory('workflow')}
-              className={`px-3.5 py-1.5 rounded-[4px] border-2 transition-all cursor-pointer inline-flex items-center gap-2 text-xs font-bold ${
+          <button
+            type="button"
+            onClick={() => setSelectedCategory('workflow')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              selectedCategory === 'workflow'
+                ? 'bg-[#4F46E5] text-white shadow-xs'
+                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+            }`}
+          >
+            <span>Workflows</span>
+            <span
+              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
                 selectedCategory === 'workflow'
-                  ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                  : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-200 hover:-translate-y-0.5'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
               }`}
             >
-              <Layers className="h-3.5 w-3.5" />
-              <span>Workflow</span>
-              <span className="font-mono text-xs opacity-80">[{categoryCounts.workflow}]</span>
-            </button>
+              {categoryCounts.workflow}
+            </span>
+          </button>
 
-            <button
-              type="button"
-              onClick={() => setSelectedCategory('tool')}
-              className={`px-3.5 py-1.5 rounded-[4px] border-2 transition-all cursor-pointer inline-flex items-center gap-2 text-xs font-bold ${
+          <button
+            type="button"
+            onClick={() => setSelectedCategory('role')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              selectedCategory === 'role'
+                ? 'bg-[#4F46E5] text-white shadow-xs'
+                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+            }`}
+          >
+            <span>Role-Based Tracks</span>
+            <span
+              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
+                selectedCategory === 'role'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              {categoryCounts.role}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSelectedCategory('tool')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              selectedCategory === 'tool'
+                ? 'bg-[#4F46E5] text-white shadow-xs'
+                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+            }`}
+          >
+            <span>Tools</span>
+            <span
+              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
                 selectedCategory === 'tool'
-                  ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                  : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-200 hover:-translate-y-0.5'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
               }`}
             >
-              <Wrench className="h-3.5 w-3.5" />
-              <span>Tool-Specific</span>
-              <span className="font-mono text-xs opacity-80">[{categoryCounts.tool}]</span>
-            </button>
-          </div>
+              {categoryCounts.tool}
+            </span>
+          </button>
+        </div>
+      </section>
 
-          {/* Right Side Controls */}
-          <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
-            {/* Roadmap Select Dropdown */}
-            <div className="relative flex-1 sm:w-64">
+      {/* 3. Secondary Filter Toolbar (Roadmap Select & Tool Pills) */}
+      <section className="mb-8 space-y-4">
+        <div className="p-4 rounded-lg bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+          {/* Roadmap Filter Dropdown */}
+          <div className="flex items-center gap-2 flex-1 max-w-md">
+            <Layers className="h-4 w-4 text-[#4F46E5] dark:text-[#6366F1] shrink-0" />
+            <div className="relative w-full">
               <select
                 value={selectedRoadmap}
                 onChange={(e) => setSelectedRoadmap(e.target.value)}
-                className="w-full appearance-none px-3.5 py-2 pr-8 text-xs font-mono font-bold rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white focus:outline-none cursor-pointer"
+                className="w-full appearance-none px-3.5 py-2 text-xs font-semibold rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#0B0F17] text-slate-700 dark:text-slate-200 focus:outline-none focus:border-[#4F46E5] pr-8 cursor-pointer font-sans"
               >
-                <option value="all">Filter by Roadmap (All)</option>
-                {roadmapOptions.map((rm) => (
-                  <option key={rm.id} value={rm.id}>
-                    {rm.title} ({rm.count})
+                <option value="all">All Roadmaps ({allPrompts.length} Prompts)</option>
+                {roadmapOptions.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.title} ({opt.count})
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#10162F] dark:text-slate-400 pointer-events-none" />
+              <ChevronDown className="h-4 w-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
-
-            {/* Reset Filters Button */}
-            {isFiltered && (
-              <button
-                type="button"
-                onClick={handleResetFilters}
-                className="cc-btn-secondary px-3 py-2 text-xs font-mono font-bold gap-1.5"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                <span>RESET</span>
-              </button>
-            )}
           </div>
+
+          {/* Reset Action */}
+          {isFiltered && (
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="text-xs font-semibold text-[#4F46E5] dark:text-[#6366F1] hover:underline inline-flex items-center gap-1 self-start md:self-auto cursor-pointer"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+              <span>Reset Filters</span>
+            </button>
+          )}
         </div>
 
-        {/* Bottom Controls Row: Quick Tool Filter Pills */}
-        <div className="pt-3 border-t-2 border-[#10162F]/15 dark:border-white/10">
-          <div className="flex items-center gap-2 mb-2 font-mono text-xs text-[#10162F]/60 dark:text-slate-400">
-            <SlidersHorizontal className="h-3.5 w-3.5" />
-            <span className="font-bold uppercase tracking-wider">
-              FILTER BY TOOL:
+        {/* Popular Tool Filter Pills */}
+        {popularTools.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+            <span className="font-mono text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase mr-1">
+              Filter by Tool:
             </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
             <button
               type="button"
               onClick={() => setSelectedTool('all')}
-              className={`px-3 py-1 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
+              className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
                 selectedTool === 'all'
-                  ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[1px_1px_0px_0px_#10162F]'
-                  : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 hover:-translate-y-0.5'
+                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
               All Tools
             </button>
-
-            {popularTools.map(({ tool, count }) => {
-              const isSelected = selectedTool === tool;
-              return (
-                <button
-                  key={tool}
-                  type="button"
-                  onClick={() => setSelectedTool(isSelected ? 'all' : tool)}
-                  className={`px-3 py-1 rounded-[3px] border-2 transition-all cursor-pointer inline-flex items-center gap-1.5 font-bold ${
-                    isSelected
-                      ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[1px_1px_0px_0px_#10162F]'
-                      : 'border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 hover:-translate-y-0.5'
-                  }`}
-                >
-                  <span>{tool}</span>
-                  <span className="text-[10px] opacity-70">({count})</span>
-                </button>
-              );
-            })}
+            {popularTools.map(({ tool, count }) => (
+              <button
+                key={tool}
+                type="button"
+                onClick={() => setSelectedTool(selectedTool === tool ? 'all' : tool)}
+                className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
+                  selectedTool === tool
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                }`}
+              >
+                {tool} <span className="opacity-70 font-mono text-[10px]">({count})</span>
+              </button>
+            ))}
           </div>
+        )}
+      </section>
+
+      {/* 4. Results Header */}
+      <section className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-2 font-display text-sm font-semibold text-[#0F172A] dark:text-white">
+          <span>Showing</span>
+          <span className="font-mono font-bold text-[#4F46E5] dark:text-[#6366F1]">
+            {filteredPrompts.length}
+          </span>
+          <span>of {allPrompts.length} Prompts</span>
         </div>
       </section>
 
-      {/* 3. Section Divider & Live Counter */}
-      <div className="border-b-2 border-[#10162F] dark:border-[#3B497E] pb-3 mb-8 flex items-center justify-between font-mono text-xs">
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-[#10162F] dark:text-white">
-            PROMPT TEMPLATES
-          </span>
-          <span className="text-[#10162F]/60 dark:text-slate-400">
-            ({visiblePrompts.length} OF {filteredPrompts.length} MATCHES)
-          </span>
-        </div>
-
-        {filteredPrompts.length > 0 && (
-          <span className="text-[#10162F]/60 dark:text-slate-400 hidden sm:inline">
-            TOTAL CATALOG: <strong className="text-[#10162F] dark:text-white font-bold">{allPrompts.length}</strong>
-          </span>
-        )}
-      </div>
-
-      {/* 4. Responsive Grid of Prompt Cards */}
-      {visiblePrompts.length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+      {/* 5. Prompt Grid */}
+      {filteredPrompts.length > 0 ? (
+        <div className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {visiblePrompts.map((prompt) => (
               <PromptCard key={prompt.id} prompt={prompt} />
             ))}
@@ -342,48 +376,39 @@ export default function PromptsPage() {
 
           {/* Load More Button */}
           {hasMore && (
-            <div className="mt-12 text-center">
+            <div className="text-center pt-6">
               <button
                 type="button"
                 onClick={handleLoadMore}
-                className="cc-btn-primary px-8 py-3 text-xs font-mono font-bold inline-flex items-center gap-2"
+                className="cc-btn-primary px-8 py-3 text-sm font-semibold gap-2 shadow-xs"
               >
-                <span>LOAD MORE PROMPTS (+20)</span>
-                <span className="text-xs opacity-75">
-                  ({filteredPrompts.length - visiblePrompts.length} remaining)
-                </span>
+                <span>Load More Prompts ({filteredPrompts.length - visiblePrompts.length} Remaining)</span>
+                <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           )}
-
-          {!hasMore && filteredPrompts.length > 20 && (
-            <div className="mt-12 text-center">
-              <span className="inline-block px-4 py-1.5 rounded-[3px] border-2 border-[#10162F] bg-[#F5EFE6] dark:bg-[#131A33] text-xs font-mono font-bold text-[#10162F] dark:text-white shadow-[1px_1px_0px_0px_#10162F]">
-                ✓ All {filteredPrompts.length} matching prompts loaded
-              </span>
-            </div>
-          )}
-        </>
+        </div>
       ) : (
-        <div className="cc-card p-12 text-center">
-          <Search className="h-10 w-10 text-[#10162F]/40 dark:text-slate-500 mx-auto mb-3" />
-          <h3 className="font-display font-bold text-lg text-[#10162F] dark:text-white mb-2">
-            No prompt templates found
+        <div className="cc-card p-12 text-center my-6">
+          <Search className="h-10 w-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+          <h3 className="font-display font-bold text-lg text-[#0F172A] dark:text-white mb-2">
+            No prompts match your criteria
           </h3>
-          <p className="text-sm text-[#10162F]/70 dark:text-slate-300 max-w-sm mx-auto mb-5 leading-relaxed font-sans">
-            No prompts matched your search query or filter criteria. Try clearing some filters or searching for broader terms.
+          <p className="text-sm text-slate-600 dark:text-slate-300 max-w-sm mx-auto mb-5 leading-relaxed font-sans">
+            Try adjusting your search query, or clear your category, roadmap, and tool filters to view all prompts.
           </p>
           <button
             type="button"
             onClick={handleResetFilters}
-            className="cc-btn-secondary px-5 py-2 text-xs font-mono font-bold"
+            className="cc-btn-primary px-5 py-2 text-xs font-semibold gap-1.5"
           >
-            Reset All Filters
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span>Reset All Filters</span>
           </button>
         </div>
       )}
 
-      {/* Community Roadmap Request Box */}
+      {/* Community Roadmap Request Section */}
       <div className="mt-16">
         <RoadmapRequestBox />
       </div>

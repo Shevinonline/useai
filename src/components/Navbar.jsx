@@ -48,14 +48,14 @@ export default function Navbar() {
     }
   };
 
-  const isRoadmapsActive = location.pathname === '/roadmaps';
+  const isRoadmapsActive = location.pathname === '/roadmaps' || location.pathname.startsWith('/roadmap');
   const isPromptsActive = location.pathname === '/prompts';
   const isToolsActive = location.pathname === '/tools';
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#FFF8F2] dark:bg-[#0B1021] border-b-2 border-[#10162F] dark:border-[#263159] transition-colors">
+    <header className="sticky top-0 z-50 w-full bg-[#FAF8F5]/90 dark:bg-[#0B0F17]/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        {/* Brand Logo */}
+        {/* Left: Brand Logo */}
         <Link
           to="/"
           onClick={() => {
@@ -65,16 +65,16 @@ export default function Navbar() {
           className="flex items-center gap-2 group select-none shrink-0"
           aria-label="useai.sh homepage"
         >
-          <span className="font-display font-bold text-xl tracking-tight text-[#10162F] dark:text-white group-hover:text-[#3A10E5] transition-colors">
+          <span className="font-display font-bold text-xl tracking-tight text-[#0F172A] dark:text-white group-hover:text-[#4F46E5] dark:group-hover:text-[#6366F1] transition-colors">
             useai
           </span>
-          <span className="bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] font-mono font-bold px-1.5 py-0.5 text-xs rounded-[3px] shadow-[1px_1px_0px_0px_#10162F]">
+          <span className="bg-[#4F46E5] text-white font-mono font-bold px-1.5 py-0.5 text-xs rounded shadow-sm">
             .sh
           </span>
         </Link>
 
-        {/* Center Nav Links */}
-        <nav className="hidden md:flex items-center gap-7 h-full font-display">
+        {/* Center: Main Navigation Links */}
+        <nav className="hidden md:flex items-center gap-8 h-full font-display">
           <Link
             to="/roadmaps"
             onClick={() => {
@@ -83,13 +83,13 @@ export default function Navbar() {
             }}
             className={`h-full flex items-center px-1 text-sm font-semibold transition-colors relative ${
               isRoadmapsActive
-                ? 'text-[#3A10E5] dark:text-[#FFD300]'
-                : 'text-[#10162F] dark:text-slate-200 hover:text-[#3A10E5] dark:hover:text-[#FFD300]'
+                ? 'text-[#4F46E5] dark:text-[#6366F1]'
+                : 'text-slate-600 dark:text-slate-300 hover:text-[#0F172A] dark:hover:text-white'
             }`}
           >
             <span>Roadmaps</span>
             {isRoadmapsActive && (
-              <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#3A10E5] dark:bg-[#FFD300]" />
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#4F46E5] dark:bg-[#6366F1]" />
             )}
           </Link>
           <Link
@@ -100,13 +100,13 @@ export default function Navbar() {
             }}
             className={`h-full flex items-center px-1 text-sm font-semibold transition-colors relative ${
               isPromptsActive
-                ? 'text-[#3A10E5] dark:text-[#FFD300]'
-                : 'text-[#10162F] dark:text-slate-200 hover:text-[#3A10E5] dark:hover:text-[#FFD300]'
+                ? 'text-[#4F46E5] dark:text-[#6366F1]'
+                : 'text-slate-600 dark:text-slate-300 hover:text-[#0F172A] dark:hover:text-white'
             }`}
           >
             <span>Prompts</span>
             {isPromptsActive && (
-              <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#3A10E5] dark:bg-[#FFD300]" />
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#4F46E5] dark:bg-[#6366F1]" />
             )}
           </Link>
           <Link
@@ -117,28 +117,43 @@ export default function Navbar() {
             }}
             className={`h-full flex items-center px-1 text-sm font-semibold transition-colors relative ${
               isToolsActive
-                ? 'text-[#3A10E5] dark:text-[#FFD300]'
-                : 'text-[#10162F] dark:text-slate-200 hover:text-[#3A10E5] dark:hover:text-[#FFD300]'
+                ? 'text-[#4F46E5] dark:text-[#6366F1]'
+                : 'text-slate-600 dark:text-slate-300 hover:text-[#0F172A] dark:hover:text-white'
             }`}
           >
             <span>AI Tools</span>
             {isToolsActive && (
-              <span className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#3A10E5] dark:bg-[#FFD300]" />
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#4F46E5] dark:bg-[#6366F1]" />
             )}
           </Link>
           <button
             onClick={handleRequestRoadmap}
             type="button"
-            className="h-full flex items-center gap-1.5 px-1 text-sm font-semibold text-[#10162F] dark:text-slate-200 hover:text-[#3A10E5] dark:hover:text-[#FFD300] transition-colors cursor-pointer"
+            className="h-full flex items-center gap-1.5 px-1 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-[#0F172A] dark:hover:text-white transition-colors cursor-pointer"
           >
-            <Sparkles className="h-3.5 w-3.5 text-[#3A10E5] dark:text-[#FFD300]" />
+            <Sparkles className="h-3.5 w-3.5 text-[#4F46E5] dark:text-[#6366F1]" />
             <span>Request</span>
           </button>
         </nav>
 
-        {/* Right Actions: Clean .cc-btn-secondary */}
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-          {/* Saved [N] Button */}
+        {/* Right: Actions (Cmd+K Search, Saved Workspace, GitHub, Theme Toggle) */}
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Cmd+K Search Trigger */}
+          <button
+            onClick={openCommandPalette}
+            type="button"
+            className="hidden sm:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-slate-500 hover:text-[#0F172A] dark:text-slate-400 dark:hover:text-white bg-slate-100 hover:bg-slate-200/70 dark:bg-slate-800/80 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/80 rounded-md transition-colors cursor-pointer font-sans"
+            title={`Search platform (${shortcutBadge})`}
+            aria-label={`Search platform (${shortcutBadge})`}
+          >
+            <Search className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
+            <span className="hidden lg:inline text-xs">Search...</span>
+            <kbd className="font-mono text-[10px] font-semibold bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700 shadow-2xs">
+              {shortcutBadge}
+            </kbd>
+          </button>
+
+          {/* Saved Workspace [N] */}
           <button
             onClick={() => openSavedModal('library')}
             type="button"
@@ -148,16 +163,16 @@ export default function Navbar() {
           >
             <Bookmark
               className={`h-3.5 w-3.5 transition-colors ${
-                totalSavedCount > 0 ? 'fill-[#FFD300] text-[#10162F]' : 'text-[#10162F] dark:text-slate-300'
+                totalSavedCount > 0 ? 'fill-amber-400 text-amber-500' : 'text-slate-500 dark:text-slate-400'
               }`}
             />
-            <span className="font-display">Saved</span>
+            <span className="font-display hidden xs:inline">Saved</span>
             <span className="font-mono text-[11px] font-bold">
               [{totalSavedCount}]
             </span>
           </button>
 
-          {/* GitHub Button */}
+          {/* GitHub Star Button */}
           <a
             href={githubRepoUrl}
             target="_blank"
@@ -165,7 +180,7 @@ export default function Navbar() {
             aria-label="Star on GitHub"
             className="cc-btn-secondary hidden sm:inline-flex px-3 py-1.5 text-xs font-display font-semibold gap-1.5"
           >
-            <Star className="h-3.5 w-3.5 fill-[#FFD300] text-[#10162F]" />
+            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-500" />
             <span className="font-display">GitHub</span>
           </a>
 
@@ -178,9 +193,9 @@ export default function Navbar() {
             className="cc-btn-secondary h-8 w-8 sm:h-9 sm:w-9 p-0"
           >
             {theme === 'dark' ? (
-              <Sun className="h-4 w-4 text-[#FFD300]" />
+              <Sun className="h-4 w-4 text-amber-400" />
             ) : (
-              <Moon className="h-4 w-4 text-[#10162F]" />
+              <Moon className="h-4 w-4 text-slate-700" />
             )}
           </button>
 
@@ -198,7 +213,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b-2 border-[#10162F] dark:border-[#263159] bg-[#FFF8F2] dark:bg-[#0B1021] px-4 pt-4 pb-6 space-y-2.5 font-display shadow-lg">
+        <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-[#FAF8F5] dark:bg-[#0B0F17] px-4 pt-4 pb-6 space-y-2.5 font-display shadow-lg">
           {/* Mobile Search Button */}
           <button
             onClick={() => {
@@ -206,13 +221,13 @@ export default function Navbar() {
               openCommandPalette();
             }}
             type="button"
-            className="w-full flex items-center justify-between px-3.5 py-2.5 text-xs font-bold rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white shadow-[2px_2px_0px_0px_#10162F] mb-3 cursor-pointer"
+            className="w-full flex items-center justify-between px-3.5 py-2.5 text-xs font-semibold rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111827] text-slate-800 dark:text-white shadow-2xs mb-3 cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <Search className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
+              <Search className="h-4 w-4 text-[#4F46E5] dark:text-[#6366F1]" />
               <span>Search everything...</span>
             </div>
-            <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-[#FFD300] text-[#10162F] border border-[#10162F] font-bold">
+            <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-bold">
               {shortcutBadge}
             </kbd>
           </button>
@@ -223,10 +238,10 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/roadmaps' } }));
             }}
-            className={`block px-3.5 py-2 text-sm font-bold rounded-[4px] border-2 transition-all ${
+            className={`block px-3.5 py-2 text-sm font-semibold rounded-md border transition-all ${
               isRoadmapsActive
-                ? 'bg-[#3A10E5] text-white border-[#10162F] shadow-[2px_2px_0px_0px_#10162F]'
-                : 'border-transparent text-[#10162F] dark:text-white hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
+                ? 'bg-[#4F46E5] text-white border-[#4338CA] shadow-xs'
+                : 'border-transparent text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             Roadmaps
@@ -237,10 +252,10 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/prompts' } }));
             }}
-            className={`block px-3.5 py-2 text-sm font-bold rounded-[4px] border-2 transition-all ${
+            className={`block px-3.5 py-2 text-sm font-semibold rounded-md border transition-all ${
               isPromptsActive
-                ? 'bg-[#3A10E5] text-white border-[#10162F] shadow-[2px_2px_0px_0px_#10162F]'
-                : 'border-transparent text-[#10162F] dark:text-white hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
+                ? 'bg-[#4F46E5] text-white border-[#4338CA] shadow-xs'
+                : 'border-transparent text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             Prompts
@@ -251,10 +266,10 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/tools' } }));
             }}
-            className={`block px-3.5 py-2 text-sm font-bold rounded-[4px] border-2 transition-all ${
+            className={`block px-3.5 py-2 text-sm font-semibold rounded-md border transition-all ${
               isToolsActive
-                ? 'bg-[#3A10E5] text-white border-[#10162F] shadow-[2px_2px_0px_0px_#10162F]'
-                : 'border-transparent text-[#10162F] dark:text-white hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
+                ? 'bg-[#4F46E5] text-white border-[#4338CA] shadow-xs'
+                : 'border-transparent text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             AI Tools
@@ -262,20 +277,20 @@ export default function Navbar() {
           <button
             onClick={handleRequestRoadmap}
             type="button"
-            className="w-full text-left px-3.5 py-2 text-sm font-bold rounded-[4px] border-2 border-transparent text-[#10162F] dark:text-white hover:bg-[#F5EFE6] dark:hover:bg-[#131A33] cursor-pointer flex items-center gap-2"
+            className="w-full text-left px-3.5 py-2 text-sm font-semibold rounded-md border border-transparent text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer flex items-center gap-2"
           >
-            <Sparkles className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
+            <Sparkles className="h-4 w-4 text-[#4F46E5] dark:text-[#6366F1]" />
             <span>Request Roadmap</span>
           </button>
 
-          <div className="pt-3 border-t-2 border-[#10162F] dark:border-[#263159]">
+          <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
             <a
               href={githubRepoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="cc-btn-secondary flex items-center justify-center gap-2 w-full py-2.5 text-xs font-bold"
+              className="cc-btn-secondary flex items-center justify-center gap-2 w-full py-2.5 text-xs font-semibold"
             >
-              <Star className="h-4 w-4 fill-[#FFD300] text-[#10162F]" />
+              <Star className="h-4 w-4 fill-amber-400 text-amber-500" />
               <span>Star on GitHub</span>
             </a>
           </div>

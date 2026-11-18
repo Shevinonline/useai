@@ -1,21 +1,56 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import roadmapsData from '../data/roadmaps.json';
 import RoadmapCard from './RoadmapCard';
 import RoadmapRequestBox from './RoadmapRequestBox';
 import {
   Search,
   X,
-  CheckCircle2,
-  Filter
+  Sparkles,
+  RotateCcw
 } from 'lucide-react';
 import { safeJsonParse } from '../utils/validation';
 
+function getDifficulty(roadmap) {
+  if (roadmap.difficulty) {
+    const d = String(roadmap.difficulty).toLowerCase();
+    if (d.includes('beg') || d.includes('found')) return 'Beginner';
+    if (d.includes('adv') || d.includes('expert') || d.includes('arch')) return 'Advanced';
+    return 'Intermediate';
+  }
+  const title = String(roadmap.title || '').toLowerCase();
+  const stepCount = Number(roadmap.stepCount) || 10;
+  if (stepCount <= 8 || title.includes('intro') || title.includes('prompting basics') || title.includes('beginner')) {
+    return 'Beginner';
+  }
+  if (stepCount >= 14 || title.includes('architect') || title.includes('full-stack') || title.includes('swarms') || title.includes('rag')) {
+    return 'Advanced';
+  }
+  return 'Intermediate';
+}
+
 export default function RoadmapsPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Search, category, difficulty & status filter states
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    const cat = searchParams.get('category');
+    if (cat === 'workflow' || cat === 'role' || cat === 'tool') return cat;
+    return 'all';
+  });
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
 
-  // Completed steps tracking across all roadmaps for status count
+  // Sync category if URL search changes
+  useEffect(() => {
+    const cat = searchParams.get('category');
+    if (cat === 'workflow' || cat === 'role' || cat === 'tool') {
+      setSelectedCategory(cat);
+    }
+  }, [searchParams]);
+
+  // Track completed steps per roadmap from localStorage
   const [completedMap, setCompletedMap] = useState({});
 
   useEffect(() => {
@@ -54,25 +89,46 @@ export default function RoadmapsPage() {
     return { total, workflow, role, tool };
   }, []);
 
+  // Compute difficulty counts
+  const difficultyCounts = useMemo(() => {
+    const beginner = roadmapsData.filter((r) => getDifficulty(r) === 'Beginner').length;
+    const intermediate = roadmapsData.filter((r) => getDifficulty(r) === 'Intermediate').length;
+    const advanced = roadmapsData.filter((r) => getDifficulty(r) === 'Advanced').length;
+    return { all: roadmapsData.length, beginner, intermediate, advanced };
+  }, []);
+
   // Compute status counts
   const statusCounts = useMemo(() => {
     const total = roadmapsData.length;
     const ready = roadmapsData.filter((r) => r.status === 'ready').length;
-    const inProgress = roadmapsData.filter((r) => (completedMap[r.id]?.length || 0) >= 1).length;
+    const inProgress = roadmapsData.filter((r) => {
+      const done = completedMap[r.id]?.length || 0;
+      const count = Number(r.stepCount) || 10;
+      return done > 0 && done < count;
+    }).length;
+    const completed = roadmapsData.filter((r) => {
+      const done = completedMap[r.id]?.length || 0;
+      const count = Number(r.stepCount) || 10;
+      return done >= count;
+    }).length;
     const comingSoon = roadmapsData.filter((r) => r.status === 'coming-soon').length;
-    return { total, ready, inProgress, comingSoon };
+    return { total, ready, inProgress, completed, comingSoon };
   }, [completedMap]);
 
-  // Filter roadmaps
+  // Main filter pipeline
   const filteredRoadmaps = useMemo(() => {
     return roadmapsData.filter((r) => {
       // 1. Search Query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        const matchTitle = r.title.toLowerCase().includes(q);
-        const matchDesc = r.description.toLowerCase().includes(q);
-        const matchCat = r.category.toLowerCase().includes(q);
-        if (!matchTitle && !matchDesc && !matchCat) return false;
+        const matchTitle = (r?.title || '').toLowerCase().includes(q);
+        const matchDesc = (r?.description || '').toLowerCase().includes(q);
+        const matchCat = (r?.category || '').toLowerCase().includes(q);
+        const matchTools = Array.isArray(r?.tools) && r.tools.some((t) => {
+          const toolStr = typeof t === 'string' ? t : String(t?.name || t?.title || '');
+          return toolStr.toLowerCase().includes(q);
+        });
+        if (!matchTitle && !matchDesc && !matchCat && !matchTools) return false;
       }
 
       // 2. Category Filter
@@ -86,13 +142,25 @@ export default function RoadmapsPage() {
         return false;
       }
 
-      // 3. Status Filter
+      // 3. Difficulty Filter
+      if (selectedDifficulty !== 'all') {
+        const diff = getDifficulty(r).toLowerCase();
+        if (diff !== selectedDifficulty.toLowerCase()) return false;
+      }
+
+      // 4. Progress / Status Filter
       if (selectedStatus === 'ready' && r.status !== 'ready') {
         return false;
       }
       if (selectedStatus === 'in-progress') {
-        const stepsDone = completedMap[r.id]?.length || 0;
-        if (stepsDone === 0) return false;
+        const done = completedMap[r.id]?.length || 0;
+        const total = Number(r.stepCount) || 10;
+        if (done === 0 || done >= total) return false;
+      }
+      if (selectedStatus === 'completed') {
+        const done = completedMap[r.id]?.length || 0;
+        const total = Number(r.stepCount) || 10;
+        if (done < total) return false;
       }
       if (selectedStatus === 'coming-soon' && r.status !== 'coming-soon') {
         return false;
@@ -100,81 +168,66 @@ export default function RoadmapsPage() {
 
       return true;
     });
-  }, [searchQuery, selectedCategory, selectedStatus, completedMap]);
+  }, [searchQuery, selectedCategory, selectedDifficulty, selectedStatus, completedMap]);
 
-  // Category subsets for 'all' mode
-  const workflowFiltered = useMemo(
-    () => filteredRoadmaps.filter((r) => r.category === 'Role & Workflow Roadmaps' || r.category === 'workflow'),
-    [filteredRoadmaps]
-  );
-
-  const roleFiltered = useMemo(
-    () => filteredRoadmaps.filter((r) => r.category === 'AI Role-Based Roadmaps' || r.category === 'role'),
-    [filteredRoadmaps]
-  );
-
-  const toolFiltered = useMemo(
-    () => filteredRoadmaps.filter((r) => r.category === 'Tool Mastery Roadmaps' || r.category === 'tool' || r.category === 'tool-specific'),
-    [filteredRoadmaps]
-  );
+  const handleCategorySelect = (categoryKey) => {
+    setSelectedCategory(categoryKey);
+    if (categoryKey === 'all') {
+      searchParams.delete('category');
+    } else {
+      searchParams.set('category', categoryKey);
+    }
+    setSearchParams(searchParams, { replace: true });
+  };
 
   const handleResetFilters = () => {
     setSearchQuery('');
     setSelectedCategory('all');
+    setSelectedDifficulty('all');
     setSelectedStatus('all');
+    searchParams.delete('category');
+    setSearchParams(searchParams, { replace: true });
   };
 
-  const isFiltered = searchQuery.trim() !== '' || selectedCategory !== 'all' || selectedStatus !== 'all';
-
-  const getHeadingLabel = () => {
-    let catLabel = 'All Roadmaps';
-    if (selectedCategory === 'workflow') catLabel = 'Workflow Roadmaps';
-    if (selectedCategory === 'role') catLabel = 'AI Role-Based Roadmaps';
-    if (selectedCategory === 'tool') catLabel = 'Tool-Specific Roadmaps';
-
-    let statusLabel = '';
-    if (selectedStatus === 'ready') statusLabel = 'Available Now';
-    if (selectedStatus === 'in-progress') statusLabel = 'In Progress';
-    if (selectedStatus === 'coming-soon') statusLabel = 'Coming Soon';
-
-    if (statusLabel) {
-      return `${catLabel} • ${statusLabel}`;
-    }
-    return catLabel;
-  };
+  const isFiltered =
+    searchQuery.trim() !== '' ||
+    selectedCategory !== 'all' ||
+    selectedDifficulty !== 'all' ||
+    selectedStatus !== 'all';
 
   return (
     <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-20">
-      {/* 1. Codecademy Brutalist Hero */}
-      <section className="pt-6 pb-12 text-center">
-        <div className="inline-flex items-center gap-1.5 bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] font-mono text-xs font-bold px-3 py-1 rounded-[3px] shadow-[2px_2px_0px_0px_#10162F] mb-5 select-none">
-          {roadmapsData.length} TOTAL CURRICULUMS
+      {/* 1. Editorial Hero & Search */}
+      <section className="pt-6 pb-10 text-center">
+        <div className="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-mono text-xs font-semibold px-3 py-1 rounded-full mb-4 select-none shadow-2xs">
+          <Sparkles className="h-3 w-3 text-[#4F46E5] dark:text-[#6366F1]" />
+          <span>{roadmapsData.length} TOTAL CURRICULUMS</span>
         </div>
 
-        <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl tracking-tight text-[#10162F] dark:text-white leading-[1.1] mb-4">
+        <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl tracking-tight text-[#0F172A] dark:text-white leading-[1.15] mb-4">
           Explore AI Roadmaps
         </h1>
-        <p className="font-sans text-base sm:text-lg text-[#10162F]/80 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          Step-by-step interactive workflows, tool masterclasses, and engineering playbooks.
+        <p className="font-sans text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          Interactive step-by-step developer playbooks, role specializations, and tool mastery tracks with tested prompts.
         </p>
 
-        {/* Codecademy Search Bar */}
+        {/* Global Search Bar */}
         <div className="mt-8 max-w-2xl mx-auto w-full">
-          <div className="relative flex items-center w-full bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] shadow-[5px_5px_0px_0px_#10162F] dark:shadow-[5px_5px_0px_0px_#FFD300] p-1.5 gap-2 transition-all">
-            <Search className="h-5 w-5 text-[#10162F] dark:text-slate-300 ml-2 shrink-0" />
+          <div className="relative flex items-center w-full bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm hover:border-slate-400 dark:hover:border-slate-600 p-2 gap-2 transition-all focus-within:border-[#4F46E5] dark:focus-within:border-[#6366F1] focus-within:ring-2 focus-within:ring-[#4F46E5]/10">
+            <Search className="h-5 w-5 text-slate-400 dark:text-slate-500 ml-2 shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search roadmaps by title, tool, or workflow..."
-              className="w-full py-1.5 px-2 bg-transparent text-sm sm:text-base text-[#10162F] dark:text-white placeholder:text-[#10162F]/50 dark:placeholder:text-slate-400 focus:outline-none font-sans"
+              className="w-full py-1.5 px-2 bg-transparent text-sm sm:text-base text-[#0F172A] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none font-sans"
               aria-label="Search roadmaps"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="p-1 rounded text-[#10162F]/60 hover:text-[#10162F] dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer"
+                className="p-1 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer"
                 title="Clear"
               >
                 <X className="h-4 w-4" />
@@ -184,260 +237,212 @@ export default function RoadmapsPage() {
         </div>
       </section>
 
-      {/* Two-Column Layout (Sidebar + Grid) */}
-      <div className="flex flex-col md:flex-row gap-8 items-start">
-        {/* Left Filter Sidebar */}
-        <aside className="w-full md:w-64 shrink-0 space-y-5">
-          {/* Active Filter Clear Button */}
-          {isFiltered && (
-            <div className="flex items-center justify-between p-3.5 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] shadow-[2px_2px_0px_0px_#10162F] font-mono">
-              <span className="text-xs font-bold text-[#10162F] dark:text-white">FILTERS ACTIVE</span>
-              <button
-                type="button"
-                onClick={handleResetFilters}
-                className="text-xs font-bold text-[#3A10E5] dark:text-[#FFD300] hover:underline cursor-pointer inline-flex items-center gap-1"
-              >
-                <X className="h-3.5 w-3.5" />
-                <span>RESET</span>
-              </button>
-            </div>
-          )}
+      {/* 2. Primary Category Navigation Tabs */}
+      <section className="mb-6">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-200 dark:border-slate-800">
+          <button
+            type="button"
+            onClick={() => handleCategorySelect('all')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              selectedCategory === 'all'
+                ? 'bg-[#4F46E5] text-white shadow-xs'
+                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+            }`}
+          >
+            <span>All Roadmaps</span>
+            <span
+              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
+                selectedCategory === 'all'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              {categoryCounts.total}
+            </span>
+          </button>
 
-          {/* Group 1: Categories */}
-          <div className="cc-card p-4 space-y-2">
-            <div className="flex items-center gap-2 mb-3 pb-2 border-b-2 border-[#10162F]/15 dark:border-white/10 text-xs font-bold text-[#10162F] dark:text-white uppercase tracking-wider font-mono">
-              <Filter className="h-3.5 w-3.5 text-[#3A10E5] dark:text-[#FFD300]" />
-              <span>CATEGORIES</span>
-            </div>
-            <div className="space-y-1.5 font-display text-xs">
-              <button
-                type="button"
-                onClick={() => setSelectedCategory('all')}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
-                  selectedCategory === 'all'
-                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                    : 'border-transparent text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
-                }`}
-              >
-                <span>All Roadmaps</span>
-                <span className="font-mono text-xs opacity-80">[{categoryCounts.total}]</span>
-              </button>
+          <button
+            type="button"
+            onClick={() => handleCategorySelect('workflow')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              selectedCategory === 'workflow'
+                ? 'bg-[#4F46E5] text-white shadow-xs'
+                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+            }`}
+          >
+            <span>Workflows</span>
+            <span
+              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
+                selectedCategory === 'workflow'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              {categoryCounts.workflow}
+            </span>
+          </button>
 
-              <button
-                type="button"
-                onClick={() => setSelectedCategory('workflow')}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
-                  selectedCategory === 'workflow'
-                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                    : 'border-transparent text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
-                }`}
-              >
-                <span>Workflow Roadmaps</span>
-                <span className="font-mono text-xs opacity-80">[{categoryCounts.workflow}]</span>
-              </button>
+          <button
+            type="button"
+            onClick={() => handleCategorySelect('role')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              selectedCategory === 'role'
+                ? 'bg-[#4F46E5] text-white shadow-xs'
+                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+            }`}
+          >
+            <span>Role-Based Tracks</span>
+            <span
+              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
+                selectedCategory === 'role'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              {categoryCounts.role}
+            </span>
+          </button>
 
-              <button
-                type="button"
-                onClick={() => setSelectedCategory('role')}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
-                  selectedCategory === 'role'
-                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                    : 'border-transparent text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
-                }`}
-              >
-                <span>AI Role Tracks</span>
-                <span className="font-mono text-xs opacity-80">[{categoryCounts.role}]</span>
-              </button>
+          <button
+            type="button"
+            onClick={() => handleCategorySelect('tool')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              selectedCategory === 'tool'
+                ? 'bg-[#4F46E5] text-white shadow-xs'
+                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+            }`}
+          >
+            <span>Tool Mastery</span>
+            <span
+              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
+                selectedCategory === 'tool'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+              }`}
+            >
+              {categoryCounts.tool}
+            </span>
+          </button>
+        </div>
+      </section>
 
-              <button
-                type="button"
-                onClick={() => setSelectedCategory('tool')}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
-                  selectedCategory === 'tool'
-                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                    : 'border-transparent text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
-                }`}
-              >
-                <span>Tool Mastery</span>
-                <span className="font-mono text-xs opacity-80">[{categoryCounts.tool}]</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Group 2: Status Filter */}
-          <div className="cc-card p-4 space-y-2">
-            <div className="flex items-center gap-2 mb-3 pb-2 border-b-2 border-[#10162F]/15 dark:border-white/10 text-xs font-bold text-[#10162F] dark:text-white uppercase tracking-wider font-mono">
-              <span>STATUS</span>
-            </div>
-            <div className="space-y-1.5 font-display text-xs">
-              <button
-                type="button"
-                onClick={() => setSelectedStatus('all')}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
-                  selectedStatus === 'all'
-                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                    : 'border-transparent text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
-                }`}
-              >
-                <span>All Statuses</span>
-                <span className="font-mono text-xs opacity-80">[{statusCounts.total}]</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setSelectedStatus('ready')}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
-                  selectedStatus === 'ready'
-                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                    : 'border-transparent text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
-                }`}
-              >
-                <span>Available Now</span>
-                <span className="font-mono text-xs opacity-80">[{statusCounts.ready}]</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setSelectedStatus('in-progress')}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
-                  selectedStatus === 'in-progress'
-                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                    : 'border-transparent text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
-                }`}
-              >
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-[#008A5E]" />
-                  <span>In Progress</span>
-                </div>
-                <span className="font-mono text-xs opacity-80">[{statusCounts.inProgress}]</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setSelectedStatus('coming-soon')}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-[3px] border-2 transition-all cursor-pointer font-bold ${
-                  selectedStatus === 'coming-soon'
-                    ? 'border-[#10162F] bg-[#3A10E5] text-white shadow-[2px_2px_0px_0px_#10162F]'
-                    : 'border-transparent text-[#10162F] dark:text-slate-300 hover:bg-[#F5EFE6] dark:hover:bg-[#131A33]'
-                }`}
-              >
-                <span>Coming Soon</span>
-                <span className="font-mono text-xs opacity-80">[{statusCounts.comingSoon}]</span>
-              </button>
-            </div>
-          </div>
-        </aside>
-
-        {/* Right Content Area */}
-        <section className="flex-1 w-full">
-          {/* Active Filter Heading */}
-          <div className="flex items-center justify-between pb-3 mb-6 border-b-2 border-[#10162F] dark:border-[#3B497E]">
-            <h2 className="font-display font-bold text-xl text-[#10162F] dark:text-white flex items-center gap-3">
-              <span>{getHeadingLabel()}</span>
-              <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] border-2 border-[#10162F] bg-[#FFD300] text-[#10162F]">
-                {filteredRoadmaps.length} Tracks
+      {/* 3. Secondary Multi-Filter Toolbar (Difficulty & Status) */}
+      <section className="mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-lg bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-2xs">
+          {/* Left: Filter Groups */}
+          <div className="flex flex-wrap items-center gap-4 text-xs font-sans">
+            {/* Difficulty Filter */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="font-mono text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mr-1">
+                DIFFICULTY:
               </span>
-            </h2>
-            {isFiltered && (
-              <button
-                type="button"
-                onClick={handleResetFilters}
-                className="cc-btn-secondary px-3 py-1.5 text-xs font-mono font-bold"
-              >
-                Clear Filters
-              </button>
-            )}
+              {[
+                { key: 'all', label: 'All Levels', count: difficultyCounts.all },
+                { key: 'beginner', label: 'Beginner', count: difficultyCounts.beginner },
+                { key: 'intermediate', label: 'Intermediate', count: difficultyCounts.intermediate },
+                { key: 'advanced', label: 'Advanced', count: difficultyCounts.advanced },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => setSelectedDifficulty(item.key)}
+                  className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
+                    selectedDifficulty === item.key
+                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="hidden lg:block w-px h-5 bg-slate-200 dark:bg-slate-800" />
+
+            {/* Status / Progress Filter */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="font-mono text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mr-1">
+                STATUS:
+              </span>
+              {[
+                { key: 'all', label: 'All', count: statusCounts.total },
+                { key: 'ready', label: 'Available Now', count: statusCounts.ready },
+                { key: 'in-progress', label: 'In Progress', count: statusCounts.inProgress },
+                { key: 'completed', label: 'Completed', count: statusCounts.completed },
+                { key: 'coming-soon', label: 'Coming Soon', count: statusCounts.comingSoon },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => setSelectedStatus(item.key)}
+                  className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
+                    selectedStatus === item.key
+                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  {item.label}
+                  {item.count > 0 && item.key !== 'all' && (
+                    <span className="ml-1 opacity-75 font-mono text-[10px]">({item.count})</span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Grid of Roadmap Cards */}
-          {filteredRoadmaps.length > 0 ? (
-            selectedCategory === 'all' ? (
-              <div className="space-y-12">
-                {/* 1. Workflow Roadmaps */}
-                {workflowFiltered.length > 0 && (
-                  <div>
-                    <div className="border-b-2 border-[#10162F] dark:border-[#3B497E] pb-2 mb-5 flex items-center justify-between font-display">
-                      <span className="text-base font-bold text-[#10162F] dark:text-white">
-                        Workflow Roadmaps
-                      </span>
-                      <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] border border-[#10162F] bg-[#F5EFE6] dark:bg-[#131A33] text-[#10162F] dark:text-white">
-                        {workflowFiltered.length} Tracks
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      {workflowFiltered.map((roadmap) => (
-                        <RoadmapCard key={roadmap.id} roadmap={roadmap} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 2. AI Role-Based Roadmaps */}
-                {roleFiltered.length > 0 && (
-                  <div>
-                    <div className="border-b-2 border-[#10162F] dark:border-[#3B497E] pb-2 mb-5 flex items-center justify-between font-display">
-                      <span className="text-base font-bold text-[#10162F] dark:text-white">
-                        AI Role-Based Tracks
-                      </span>
-                      <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] border border-[#10162F] bg-[#F5EFE6] dark:bg-[#131A33] text-[#10162F] dark:text-white">
-                        {roleFiltered.length} Tracks
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      {roleFiltered.map((roadmap) => (
-                        <RoadmapCard key={roadmap.id} roadmap={roadmap} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 3. Tool-Specific Roadmaps */}
-                {toolFiltered.length > 0 && (
-                  <div>
-                    <div className="border-b-2 border-[#10162F] dark:border-[#3B497E] pb-2 mb-5 flex items-center justify-between font-display">
-                      <span className="text-base font-bold text-[#10162F] dark:text-white">
-                        Tool-Specific Roadmaps
-                      </span>
-                      <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] border border-[#10162F] bg-[#F5EFE6] dark:bg-[#131A33] text-[#10162F] dark:text-white">
-                        {toolFiltered.length} Tracks
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      {toolFiltered.map((roadmap) => (
-                        <RoadmapCard key={roadmap.id} roadmap={roadmap} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {filteredRoadmaps.map((roadmap) => (
-                  <RoadmapCard key={roadmap.id} roadmap={roadmap} />
-                ))}
-              </div>
-            )
-          ) : (
-            <div className="cc-card p-12 text-center">
-              <Search className="h-10 w-10 text-[#10162F]/40 dark:text-slate-500 mx-auto mb-3" />
-              <h3 className="font-display font-bold text-lg text-[#10162F] dark:text-white mb-2">
-                No roadmaps match your criteria
-              </h3>
-              <p className="text-sm text-[#10162F]/70 dark:text-slate-300 max-w-sm mx-auto mb-5 leading-relaxed font-sans">
-                Try adjusting your search query, or clear your category and status filters to view all roadmaps.
-              </p>
-              <button
-                type="button"
-                onClick={handleResetFilters}
-                className="cc-btn-secondary px-5 py-2 text-xs font-mono font-bold"
-              >
-                Reset Filters
-              </button>
-            </div>
+          {/* Right: Reset Action if filtered */}
+          {isFiltered && (
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="text-xs font-semibold text-[#4F46E5] dark:text-[#6366F1] hover:underline inline-flex items-center gap-1 self-start md:self-auto cursor-pointer"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+              <span>Reset Filters</span>
+            </button>
           )}
-        </section>
-      </div>
+        </div>
+      </section>
 
+      {/* 4. Results Header & Count */}
+      <section className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-2 font-display text-sm font-semibold text-[#0F172A] dark:text-white">
+          <span>Showing</span>
+          <span className="font-mono font-bold text-[#4F46E5] dark:text-[#6366F1]">
+            {filteredRoadmaps.length}
+          </span>
+          <span>of {roadmapsData.length} Roadmaps</span>
+        </div>
+      </section>
+
+      {/* 5. Grid of Roadmap Cards */}
+      {filteredRoadmaps.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredRoadmaps.map((roadmap) => (
+            <RoadmapCard key={roadmap.id} roadmap={roadmap} />
+          ))}
+        </div>
+      ) : (
+        <div className="cc-card p-12 text-center my-6">
+          <Search className="h-10 w-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+          <h3 className="font-display font-bold text-lg text-[#0F172A] dark:text-white mb-2">
+            No roadmaps match your criteria
+          </h3>
+          <p className="text-sm text-slate-600 dark:text-slate-300 max-w-sm mx-auto mb-5 leading-relaxed font-sans">
+            Try adjusting your search query, or clear your category, difficulty, and status filters to view all roadmaps.
+          </p>
+          <button
+            type="button"
+            onClick={handleResetFilters}
+            className="cc-btn-primary px-5 py-2 text-xs font-semibold gap-1.5"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span>Reset All Filters</span>
+          </button>
+        </div>
+      )}
+
+      {/* 6. Community Roadmap Request Banner */}
       <div className="mt-16">
         <RoadmapRequestBox />
       </div>
