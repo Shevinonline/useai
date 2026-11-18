@@ -24,33 +24,35 @@ code, pre, .font-mono, kbd {
 
 @layer base {
   :root {
-    --bg-main: #FAF8F5;
+    --bg-main: #FFF8F2;
     --bg-surface: #FFFFFF;
-    --bg-muted: #F1EFEA;
-    --border-default: #E2E8F0;
-    --border-strong: #0F172A;
-    --text-primary: #0F172A;
-    --text-muted: #475569;
-    --accent-brand: #4F46E5;
-    --accent-hover-bg: rgba(79, 70, 229, 0.08);
-    --surface-hover: #F8FAFC;
-    --accent-progress: #10B981;
-    --accent-highlight: #F59E0B;
+    --bg-muted: #F5EFE6;
+    --border-default: #10162F;
+    --border-strong: #10162F;
+    --text-primary: #10162F;
+    --text-muted: #4A5568;
+    --accent-brand: #3A10E5;
+    --accent-yellow: #FFD300;
+    --accent-hover-bg: rgba(58, 16, 229, 0.08);
+    --surface-hover: #FFFDF9;
+    --accent-progress: #008A5E;
+    --accent-highlight: #FFD300;
   }
 
   .dark {
-    --bg-main: #0B0F17;
-    --bg-surface: #111827;
-    --bg-muted: #1E293B;
-    --border-default: #1E293B;
-    --border-strong: #334155;
+    --bg-main: #0B1021;
+    --bg-surface: #131A33;
+    --bg-muted: #1A2346;
+    --border-default: #3B497E;
+    --border-strong: #3B497E;
     --text-primary: #F8FAFC;
     --text-muted: #94A3B8;
-    --accent-brand: #6366F1;
-    --accent-hover-bg: rgba(99, 102, 241, 0.15);
+    --accent-brand: #FFD300;
+    --accent-yellow: #FFD300;
+    --accent-hover-bg: rgba(255, 211, 0, 0.15);
     --surface-hover: #1E293B;
-    --accent-progress: #10B981;
-    --accent-highlight: #FBBF24;
+    --accent-progress: #008A5E;
+    --accent-highlight: #FFD300;
   }
 
   * {
@@ -65,11 +67,12 @@ code, pre, .font-mono, kbd {
   }
 }
 
-/* Editorial Workspace Card */
+/* True Codecademy Modern Brutalist Card */
 .cc-card, .workspace-card {
   background-color: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
+  border: 2px solid #10162F;
+  border-radius: 4px;
+  box-shadow: 4px 4px 0px 0px #10162F;
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -77,33 +80,33 @@ code, pre, .font-mono, kbd {
 html.dark .cc-card,
 .dark .workspace-card,
 html.dark .workspace-card {
-  background-color: #111827;
-  border-color: #1E293B;
+  background-color: #131A33;
+  border-color: #3B497E;
+  box-shadow: 4px 4px 0px 0px #000000;
 }
 
 .cc-card:hover, .workspace-card:hover {
-  border-color: #0F172A;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 0 0 #0F172A;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #10162F;
 }
 
 .dark .cc-card:hover,
 html.dark .cc-card:hover,
 .dark .workspace-card:hover,
 html.dark .workspace-card:hover {
-  border-color: #6366F1;
-  box-shadow: 0 4px 0 0 #6366F1;
+  border-color: #FFD300;
+  box-shadow: 6px 6px 0px 0px #FFD300;
 }
 
-/* Editorial Primary Button */
+/* Codecademy Primary Button */
 .cc-btn-primary {
-  background-color: #4F46E5;
+  background-color: #3A10E5;
   color: #FFFFFF;
   font-family: 'Space Grotesk', sans-serif;
-  font-weight: 600;
-  border: 1px solid #4338CA;
-  border-radius: 6px;
-  box-shadow: 0 2px 0 0 #312E81;
+  font-weight: 700;
+  border: 2px solid #10162F;
+  border-radius: 4px;
+  box-shadow: 3px 3px 0px 0px #10162F;
   transition: all 120ms ease;
   cursor: pointer;
   user-select: none;
@@ -113,35 +116,37 @@ html.dark .workspace-card:hover {
 }
 
 .dark .cc-btn-primary {
-  background-color: #6366F1;
-  border-color: #4F46E5;
-  box-shadow: 0 2px 0 0 #312E81;
+  background-color: #FFD300;
+  color: #10162F;
+  border-color: #FFD300;
+  box-shadow: 3px 3px 0px 0px #000000;
 }
 
 .cc-btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 0 0 #312E81;
-  background-color: #4338CA;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #10162F;
+  background-color: #2F09BF;
 }
 
 .dark .cc-btn-primary:hover {
-  background-color: #4F46E5;
+  background-color: #FFE033;
+  box-shadow: 4px 4px 0px 0px #000000;
 }
 
 .cc-btn-primary:active {
-  transform: translateY(1px);
-  box-shadow: 0 0 0 0 transparent !important;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px #10162F !important;
 }
 
-/* Editorial Secondary Button */
+/* Codecademy Secondary / Utility Button */
 .cc-btn-secondary, .workspace-btn {
   background-color: #FFFFFF;
-  color: #0F172A;
+  color: #10162F;
   font-family: 'Space Grotesk', sans-serif;
-  font-weight: 600;
-  border: 1px solid #E2E8F0;
-  border-radius: 6px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  font-weight: 700;
+  border: 2px solid #10162F;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px 0px #10162F;
   transition: all 120ms ease;
   cursor: pointer;
   user-select: none;
@@ -154,29 +159,47 @@ html.dark .workspace-card:hover {
 html.dark .cc-btn-secondary,
 .dark .workspace-btn,
 html.dark .workspace-btn {
-  background-color: #111827;
+  background-color: #131A33;
   color: #F8FAFC;
-  border-color: #1E293B;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  border-color: #3B497E;
+  box-shadow: 2px 2px 0px 0px #000000;
 }
 
 .cc-btn-secondary:hover, .workspace-btn:hover {
-  border-color: #0F172A;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 0 0 #0F172A;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px 0px #10162F;
 }
 
 .dark .cc-btn-secondary:hover,
 html.dark .cc-btn-secondary:hover,
 .dark .workspace-btn:hover,
 html.dark .workspace-btn:hover {
-  border-color: #6366F1;
-  box-shadow: 0 2px 0 0 #6366F1;
+  border-color: #FFD300;
+  box-shadow: 3px 3px 0px 0px #FFD300;
 }
 
 .cc-btn-secondary:active, .workspace-btn:active {
-  transform: translateY(1px);
-  box-shadow: 0 0 0 0 transparent !important;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px 0px #10162F !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
 }
 
 /* Custom scrollbar */

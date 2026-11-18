@@ -53,7 +53,7 @@ export default function Navbar() {
   const isToolsActive = location.pathname === '/tools';
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#FAF8F5]/90 dark:bg-[#0B0F17]/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <header className="sticky top-0 z-50 w-full bg-[#FFF8F2] dark:bg-[#0B1021] border-b-2 border-[#10162F] dark:border-[#3B497E] transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Left: Brand Logo */}
         <Link
@@ -65,10 +65,10 @@ export default function Navbar() {
           className="flex items-center gap-2 group select-none shrink-0"
           aria-label="useai.sh homepage"
         >
-          <span className="font-display font-bold text-xl tracking-tight text-[#0F172A] dark:text-white group-hover:text-[#4F46E5] dark:group-hover:text-[#6366F1] transition-colors">
+          <span className="font-display font-bold text-xl tracking-tight text-[#10162F] dark:text-white group-hover:text-[#3A10E5] dark:group-hover:text-[#FFD300] transition-colors">
             useai
           </span>
-          <span className="bg-[#4F46E5] text-white font-mono font-bold px-1.5 py-0.5 text-xs rounded shadow-sm">
+          <span className="bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] font-mono font-bold px-1.5 py-0.5 text-xs rounded-[3px] shadow-[2px_2px_0px_0px_#10162F]">
             .sh
           </span>
         </Link>
@@ -81,15 +81,15 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/roadmaps' } }));
             }}
-            className={`h-full flex items-center px-1 text-sm font-semibold transition-colors relative ${
+            className={`h-full flex items-center px-1 text-xs uppercase tracking-wider font-bold transition-colors relative ${
               isRoadmapsActive
-                ? 'text-[#4F46E5] dark:text-[#6366F1]'
-                : 'text-slate-600 dark:text-slate-300 hover:text-[#0F172A] dark:hover:text-white'
+                ? 'text-[#3A10E5] dark:text-[#FFD300]'
+                : 'text-[#10162F]/80 dark:text-slate-300 hover:text-[#3A10E5] dark:hover:text-[#FFD300]'
             }`}
           >
             <span>Roadmaps</span>
             {isRoadmapsActive && (
-              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#4F46E5] dark:bg-[#6366F1]" />
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#10162F] dark:bg-[#FFD300]" />
             )}
           </Link>
           <Link
@@ -98,15 +98,15 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/prompts' } }));
             }}
-            className={`h-full flex items-center px-1 text-sm font-semibold transition-colors relative ${
+            className={`h-full flex items-center px-1 text-xs uppercase tracking-wider font-bold transition-colors relative ${
               isPromptsActive
-                ? 'text-[#4F46E5] dark:text-[#6366F1]'
-                : 'text-slate-600 dark:text-slate-300 hover:text-[#0F172A] dark:hover:text-white'
+                ? 'text-[#3A10E5] dark:text-[#FFD300]'
+                : 'text-[#10162F]/80 dark:text-slate-300 hover:text-[#3A10E5] dark:hover:text-[#FFD300]'
             }`}
           >
             <span>Prompts</span>
             {isPromptsActive && (
-              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#4F46E5] dark:bg-[#6366F1]" />
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#10162F] dark:bg-[#FFD300]" />
             )}
           </Link>
           <Link
@@ -115,23 +115,23 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/tools' } }));
             }}
-            className={`h-full flex items-center px-1 text-sm font-semibold transition-colors relative ${
+            className={`h-full flex items-center px-1 text-xs uppercase tracking-wider font-bold transition-colors relative ${
               isToolsActive
-                ? 'text-[#4F46E5] dark:text-[#6366F1]'
-                : 'text-slate-600 dark:text-slate-300 hover:text-[#0F172A] dark:hover:text-white'
+                ? 'text-[#3A10E5] dark:text-[#FFD300]'
+                : 'text-[#10162F]/80 dark:text-slate-300 hover:text-[#3A10E5] dark:hover:text-[#FFD300]'
             }`}
           >
             <span>AI Tools</span>
             {isToolsActive && (
-              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#4F46E5] dark:bg-[#6366F1]" />
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#10162F] dark:bg-[#FFD300]" />
             )}
           </Link>
           <button
             onClick={handleRequestRoadmap}
             type="button"
-            className="h-full flex items-center gap-1.5 px-1 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-[#0F172A] dark:hover:text-white transition-colors cursor-pointer"
+            className="h-full flex items-center gap-1.5 px-1 text-xs uppercase tracking-wider font-bold text-[#10162F]/80 dark:text-slate-300 hover:text-[#3A10E5] dark:hover:text-[#FFD300] transition-colors cursor-pointer"
           >
-            <Sparkles className="h-3.5 w-3.5 text-[#4F46E5] dark:text-[#6366F1]" />
+            <Sparkles className="h-3.5 w-3.5 text-[#3A10E5] dark:text-[#FFD300]" />
             <span>Request</span>
           </button>
         </nav>
@@ -142,13 +142,13 @@ export default function Navbar() {
           <button
             onClick={openCommandPalette}
             type="button"
-            className="hidden sm:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-slate-500 hover:text-[#0F172A] dark:text-slate-400 dark:hover:text-white bg-slate-100 hover:bg-slate-200/70 dark:bg-slate-800/80 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/80 rounded-md transition-colors cursor-pointer font-sans"
+            className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 text-xs border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white font-mono font-bold shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all cursor-pointer"
             title={`Search platform (${shortcutBadge})`}
             aria-label={`Search platform (${shortcutBadge})`}
           >
-            <Search className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
-            <span className="hidden lg:inline text-xs">Search...</span>
-            <kbd className="font-mono text-[10px] font-semibold bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700 shadow-2xs">
+            <Search className="h-3.5 w-3.5 text-[#10162F] dark:text-white" />
+            <span className="hidden lg:inline text-xs">Search</span>
+            <kbd className="font-mono text-[10px] font-bold bg-[#FFD300] text-[#10162F] border border-[#10162F] px-1 py-0.2 rounded-[2px]">
               {shortcutBadge}
             </kbd>
           </button>
@@ -157,17 +157,17 @@ export default function Navbar() {
           <button
             onClick={() => openSavedModal('library')}
             type="button"
-            className="cc-btn-secondary px-3 py-1.5 text-xs font-display font-semibold gap-1.5"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white font-mono font-bold shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all cursor-pointer"
             aria-label={`Open Saved Library (${totalSavedCount} saved items)`}
             title="Saved Steps, Prompts & Local Backup"
           >
             <Bookmark
               className={`h-3.5 w-3.5 transition-colors ${
-                totalSavedCount > 0 ? 'fill-amber-400 text-amber-500' : 'text-slate-500 dark:text-slate-400'
+                totalSavedCount > 0 ? 'fill-[#FFD300] text-[#10162F]' : 'text-[#10162F] dark:text-white'
               }`}
             />
-            <span className="font-display hidden xs:inline">Saved</span>
-            <span className="font-mono text-[11px] font-bold">
+            <span className="hidden xs:inline">Saved</span>
+            <span className="text-[11px] font-bold">
               [{totalSavedCount}]
             </span>
           </button>
@@ -178,10 +178,10 @@ export default function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Star on GitHub"
-            className="cc-btn-secondary hidden sm:inline-flex px-3 py-1.5 text-xs font-display font-semibold gap-1.5"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white font-mono font-bold shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all cursor-pointer"
           >
-            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-500" />
-            <span className="font-display">GitHub</span>
+            <Star className="h-3.5 w-3.5 fill-[#FFD300] text-[#10162F]" />
+            <span>GitHub</span>
           </a>
 
           {/* Theme Toggle Button */}
@@ -190,12 +190,12 @@ export default function Navbar() {
             type="button"
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            className="cc-btn-secondary h-8 w-8 sm:h-9 sm:w-9 p-0"
+            className="inline-flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white font-mono font-bold shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all cursor-pointer"
           >
             {theme === 'dark' ? (
-              <Sun className="h-4 w-4 text-amber-400" />
+              <Sun className="h-4 w-4 text-[#FFD300]" />
             ) : (
-              <Moon className="h-4 w-4 text-slate-700" />
+              <Moon className="h-4 w-4 text-[#10162F]" />
             )}
           </button>
 
@@ -204,7 +204,7 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             type="button"
             aria-label="Toggle navigation menu"
-            className="md:hidden cc-btn-secondary h-8 w-8 p-0"
+            className="md:hidden inline-flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white font-mono font-bold shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] cursor-pointer"
           >
             {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -213,7 +213,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-[#FAF8F5] dark:bg-[#0B0F17] px-4 pt-4 pb-6 space-y-2.5 font-display shadow-lg">
+        <div className="md:hidden border-b-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] px-4 pt-4 pb-6 space-y-2.5 font-display shadow-lg">
           {/* Mobile Search Button */}
           <button
             onClick={() => {
@@ -221,13 +221,13 @@ export default function Navbar() {
               openCommandPalette();
             }}
             type="button"
-            className="w-full flex items-center justify-between px-3.5 py-2.5 text-xs font-semibold rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111827] text-slate-800 dark:text-white shadow-2xs mb-3 cursor-pointer"
+            className="w-full flex items-center justify-between px-3.5 py-2.5 text-xs font-mono font-bold rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] mb-3 cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <Search className="h-4 w-4 text-[#4F46E5] dark:text-[#6366F1]" />
+              <Search className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
               <span>Search everything...</span>
             </div>
-            <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-bold">
+            <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded-[2px] bg-[#FFD300] text-[#10162F] border border-[#10162F] font-bold">
               {shortcutBadge}
             </kbd>
           </button>
@@ -238,10 +238,10 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/roadmaps' } }));
             }}
-            className={`block px-3.5 py-2 text-sm font-semibold rounded-md border transition-all ${
+            className={`block px-3.5 py-2 text-xs uppercase tracking-wider font-bold rounded-[4px] border-2 transition-all ${
               isRoadmapsActive
-                ? 'bg-[#4F46E5] text-white border-[#4338CA] shadow-xs'
-                : 'border-transparent text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'bg-[#3A10E5] text-white border-[#10162F] shadow-[2px_2px_0px_0px_#10162F]'
+                : 'border-transparent text-[#10162F] dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
             Roadmaps
@@ -252,10 +252,10 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/prompts' } }));
             }}
-            className={`block px-3.5 py-2 text-sm font-semibold rounded-md border transition-all ${
+            className={`block px-3.5 py-2 text-xs uppercase tracking-wider font-bold rounded-[4px] border-2 transition-all ${
               isPromptsActive
-                ? 'bg-[#4F46E5] text-white border-[#4338CA] shadow-xs'
-                : 'border-transparent text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'bg-[#3A10E5] text-white border-[#10162F] shadow-[2px_2px_0px_0px_#10162F]'
+                : 'border-transparent text-[#10162F] dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
             Prompts
@@ -266,10 +266,10 @@ export default function Navbar() {
               setMobileMenuOpen(false);
               window.dispatchEvent(new CustomEvent('useai_route_changed', { detail: { pathname: '/tools' } }));
             }}
-            className={`block px-3.5 py-2 text-sm font-semibold rounded-md border transition-all ${
+            className={`block px-3.5 py-2 text-xs uppercase tracking-wider font-bold rounded-[4px] border-2 transition-all ${
               isToolsActive
-                ? 'bg-[#4F46E5] text-white border-[#4338CA] shadow-xs'
-                : 'border-transparent text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'bg-[#3A10E5] text-white border-[#10162F] shadow-[2px_2px_0px_0px_#10162F]'
+                : 'border-transparent text-[#10162F] dark:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
             AI Tools
@@ -277,20 +277,20 @@ export default function Navbar() {
           <button
             onClick={handleRequestRoadmap}
             type="button"
-            className="w-full text-left px-3.5 py-2 text-sm font-semibold rounded-md border border-transparent text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer flex items-center gap-2"
+            className="w-full text-left px-3.5 py-2 text-xs uppercase tracking-wider font-bold rounded-[4px] border-2 border-transparent text-[#10162F] dark:text-white hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer flex items-center gap-2"
           >
-            <Sparkles className="h-4 w-4 text-[#4F46E5] dark:text-[#6366F1]" />
+            <Sparkles className="h-4 w-4 text-[#3A10E5] dark:text-[#FFD300]" />
             <span>Request Roadmap</span>
           </button>
 
-          <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
+          <div className="pt-3 border-t-2 border-[#10162F]/15 dark:border-white/10">
             <a
               href={githubRepoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="cc-btn-secondary flex items-center justify-center gap-2 w-full py-2.5 text-xs font-semibold"
+              className="cc-btn-secondary flex items-center justify-center gap-2 w-full py-2.5 text-xs font-bold"
             >
-              <Star className="h-4 w-4 fill-amber-400 text-amber-500" />
+              <Star className="h-4 w-4 fill-[#FFD300] text-[#10162F]" />
               <span>Star on GitHub</span>
             </a>
           </div>

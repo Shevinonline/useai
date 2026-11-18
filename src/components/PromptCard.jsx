@@ -91,23 +91,23 @@ export default function PromptCard({ prompt }) {
   const stepTargetUrl = `/roadmap/${prompt.roadmapId}?step=${prompt.stepId}&tab=promptLab`;
 
   return (
-    <article className="cc-card group flex flex-col justify-between overflow-hidden text-left shadow-2xs">
+    <article className="bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000] hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#10162F] dark:hover:shadow-[6px_6px_0px_0px_#FFD300] transition-all duration-150 group flex flex-col justify-between overflow-hidden text-left font-sans">
       {/* 1. Card Top Header: Source Roadmap + Step Badge + Bookmark */}
-      <div className="p-4 sm:p-5 pb-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#111827]">
+      <div className="p-4 sm:p-5 pb-4 border-b-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021]">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
           <div className="flex items-center gap-1.5 flex-wrap">
             {/* Roadmap Parent Tag */}
             <Link
               to={`/roadmap/${prompt.roadmapId}`}
-              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-white dark:bg-[#0B0F17] border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-[#4F46E5] dark:hover:text-[#6366F1] transition-colors"
+              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[3px] text-xs font-mono font-bold bg-white dark:bg-[#131A33] border border-[#10162F] text-[#10162F] dark:text-white shadow-[1px_1px_0px_0px_#10162F] hover:text-[#3A10E5] dark:hover:text-[#FFD300] transition-colors"
               title={`Part of ${prompt.roadmapTitle}`}
             >
-              <Layers className="h-3 w-3 text-[#4F46E5] dark:text-[#6366F1] shrink-0" />
+              <Layers className="h-3 w-3 text-[#3A10E5] dark:text-[#FFD300] shrink-0" />
               <span className="truncate max-w-[170px] sm:max-w-[210px]">{prompt.roadmapTitle}</span>
             </Link>
 
             {/* Step badge */}
-            <span className="font-mono text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-50 text-[#4F46E5] dark:bg-indigo-950/40 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60 uppercase">
+            <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-[3px] bg-[#FFD300] text-[#10162F] border border-[#10162F] uppercase shadow-[1px_1px_0px_0px_#10162F]">
               Step {prompt.stepNumber || 1}
             </span>
           </div>
@@ -118,26 +118,26 @@ export default function PromptCard({ prompt }) {
             onClick={handleToggleBookmark}
             title={isSaved ? 'Remove from Saved' : 'Bookmark Prompt'}
             aria-label={isSaved ? 'Remove from Saved' : 'Bookmark Prompt'}
-            className={`p-1.5 rounded border transition-colors cursor-pointer ${
+            className={`border-2 border-[#10162F] rounded-[4px] p-1.5 shadow-[2px_2px_0px_0px_#10162F] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all cursor-pointer ${
               isSaved
-                ? 'border-amber-300 bg-amber-50 text-amber-600 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-400'
-                : 'border-transparent text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800'
+                ? 'bg-[#FFD300] text-[#10162F]'
+                : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white'
             }`}
           >
-            <Bookmark className={`h-3.5 w-3.5 ${isSaved ? 'fill-amber-400 text-amber-500' : ''}`} />
+            <Bookmark className={`h-3.5 w-3.5 ${isSaved ? 'fill-[#10162F] text-[#10162F]' : ''}`} />
           </button>
         </div>
 
         {/* Prompt Title */}
-        <h3 className="font-display font-bold text-base sm:text-lg text-[#0F172A] dark:text-white tracking-tight leading-snug">
+        <h3 className="font-display font-bold text-base sm:text-lg text-[#10162F] dark:text-white tracking-tight leading-snug">
           {prompt.title}
         </h3>
 
         {/* Recommended Model info */}
         {prompt.recommendedModel && (
-          <div className="flex items-center gap-1.5 mt-2 font-mono text-[11px] text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-1.5 mt-2 font-mono text-[11px] text-[#10162F]/70 dark:text-slate-400">
             <span>Model:</span>
-            <span className="font-semibold text-slate-700 dark:text-slate-300">
+            <span className="font-bold text-[#10162F] dark:text-slate-200">
               {prompt.recommendedModel}
             </span>
           </div>
@@ -146,16 +146,16 @@ export default function PromptCard({ prompt }) {
 
       {/* 2. Interactive Variable Customization Chips */}
       {hasVariables && (
-        <div className="px-4 sm:px-5 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827]">
-          <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-slate-600 dark:text-slate-400 mb-2">
-            <Sparkles className="h-3.5 w-3.5 text-[#4F46E5] dark:text-[#6366F1]" />
+        <div className="px-4 sm:px-5 py-3 border-b-2 border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33]">
+          <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#10162F] dark:text-slate-300 mb-2">
+            <Sparkles className="h-3.5 w-3.5 text-[#3A10E5] dark:text-[#FFD300]" />
             <span>Customize Prompt Variables:</span>
           </div>
 
           <div className="space-y-2">
             {prompt.variables.map((variable) => (
               <div key={variable.id} className="space-y-1">
-                <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                <span className="text-[11px] font-mono font-bold text-[#10162F]/70 dark:text-slate-400">
                   [{variable.label || variable.id}]:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
@@ -166,10 +166,10 @@ export default function PromptCard({ prompt }) {
                         key={option}
                         type="button"
                         onClick={() => handleVariableChange(variable.id, option)}
-                        className={`text-xs font-mono px-2.5 py-1 rounded transition-colors cursor-pointer ${
+                        className={`text-xs font-mono font-bold px-2.5 py-1 rounded-[3px] border transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-[#4F46E5] text-white font-semibold shadow-2xs'
-                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                            ? 'bg-[#10162F] text-white dark:bg-[#FFD300] dark:text-[#10162F] border-[#10162F] shadow-[1px_1px_0px_0px_#10162F]'
+                            : 'bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-slate-300 border-[#10162F]/40 hover:border-[#10162F]'
                         }`}
                       >
                         {option}
@@ -184,41 +184,41 @@ export default function PromptCard({ prompt }) {
       )}
 
       {/* 3. Monospace Prompt Preview Container */}
-      <div className="p-4 sm:p-5 bg-white dark:bg-[#111827] flex-1 flex flex-col justify-between">
+      <div className="p-4 sm:p-5 bg-white dark:bg-[#131A33] flex-1 flex flex-col justify-between">
         <div className="space-y-3">
-          <div className="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
+          <div className="flex items-center justify-between text-xs font-mono text-[#10162F]/70 dark:text-slate-400 font-bold">
             <span className="flex items-center gap-1.5">
-              <Terminal className="h-3.5 w-3.5 text-[#4F46E5] dark:text-[#6366F1]" />
+              <Terminal className="h-3.5 w-3.5 text-[#3A10E5] dark:text-[#FFD300]" />
               <span>prompt_blueprint.md</span>
             </span>
             <span className="text-[11px]">Click to select all</span>
           </div>
 
-          <pre className="p-3.5 rounded-lg bg-[#0F172A] dark:bg-[#050811] text-slate-100 font-mono text-xs leading-relaxed max-h-56 overflow-y-auto whitespace-pre-wrap select-all">
+          <pre className="p-3.5 rounded-[4px] bg-[#0F172A] border-2 border-[#10162F] text-slate-100 font-mono text-xs leading-relaxed max-h-56 overflow-y-auto whitespace-pre-wrap select-all">
             {livePromptText}
           </pre>
         </div>
 
         {/* Expected Outputs Accordion */}
         {hasExpectedOutputs && (
-          <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+          <div className="mt-3 pt-3 border-t-2 border-[#10162F]/15 dark:border-white/10">
             <button
               type="button"
               onClick={() => setShowOutput(!showOutput)}
-              className="w-full flex items-center justify-between text-xs font-mono text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer"
+              className="w-full flex items-center justify-between text-xs font-mono font-bold text-[#10162F] hover:text-[#3A10E5] dark:text-slate-300 dark:hover:text-[#FFD300] cursor-pointer"
             >
               <span className="flex items-center gap-1.5">
-                <CheckCircle className="h-3.5 w-3.5 text-[#10B981]" />
+                <CheckCircle className="h-3.5 w-3.5 text-[#008A5E]" />
                 <span>Expected Output Checklist ({prompt.expectedOutputs.length})</span>
               </span>
               {showOutput ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
             </button>
 
             {showOutput && (
-              <div className="mt-2 space-y-1.5 pl-2 text-xs font-sans text-slate-600 dark:text-slate-300">
+              <div className="mt-2 space-y-1.5 pl-2 text-xs font-sans text-[#10162F]/80 dark:text-slate-300">
                 {prompt.expectedOutputs.map((item, idx) => (
                   <div key={idx} className="flex items-start gap-1.5">
-                    <span className="text-[#10B981] font-bold">•</span>
+                    <span className="text-[#008A5E] font-bold">•</span>
                     <span>{item}</span>
                   </div>
                 ))}
@@ -229,14 +229,14 @@ export default function PromptCard({ prompt }) {
       </div>
 
       {/* 4. Footer Action Bar */}
-      <div className="p-3.5 sm:p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0B0F17] flex flex-wrap items-center justify-between gap-2.5 font-sans">
+      <div className="p-3.5 sm:p-4 border-t-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] flex flex-wrap items-center justify-between gap-2.5 font-sans">
         {/* Left: 1-Click AI Runners */}
         <div className="flex items-center gap-2">
           <a
             href={sanitizeExternalUrl(deepLinks.chatgpt)}
             target="_blank"
             rel="noopener noreferrer"
-            className="cc-btn-secondary px-2.5 py-1 text-xs font-semibold text-[#10B981] gap-1"
+            className="border-2 border-[#10162F] rounded-[4px] bg-white dark:bg-[#131A33] px-2.5 py-1 text-xs font-mono font-bold text-[#008A5E] gap-1 shadow-[2px_2px_0px_0px_#10162F] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all inline-flex items-center"
           >
             <Sparkles className="h-3 w-3" />
             <span>ChatGPT ↗</span>
@@ -245,7 +245,7 @@ export default function PromptCard({ prompt }) {
             href={sanitizeExternalUrl(deepLinks.perplexity)}
             target="_blank"
             rel="noopener noreferrer"
-            className="cc-btn-secondary px-2.5 py-1 text-xs font-semibold text-[#4F46E5] dark:text-[#6366F1] gap-1"
+            className="border-2 border-[#10162F] rounded-[4px] bg-white dark:bg-[#131A33] px-2.5 py-1 text-xs font-mono font-bold text-[#3A10E5] dark:text-[#FFD300] gap-1 shadow-[2px_2px_0px_0px_#10162F] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all inline-flex items-center"
           >
             <Compass className="h-3 w-3" />
             <span>Perplexity ↗</span>
@@ -256,7 +256,7 @@ export default function PromptCard({ prompt }) {
         <div className="flex items-center gap-2">
           <Link
             to={stepTargetUrl}
-            className="text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-[#4F46E5] dark:hover:text-[#6366F1] inline-flex items-center gap-1"
+            className="text-xs font-mono font-bold text-[#10162F] dark:text-slate-300 hover:text-[#3A10E5] dark:hover:text-[#FFD300] inline-flex items-center gap-1"
           >
             <span>Open in Lab</span>
             <ArrowRight className="h-3 w-3" />
@@ -265,11 +265,11 @@ export default function PromptCard({ prompt }) {
           <button
             type="button"
             onClick={handleCopy}
-            className="cc-btn-primary px-3 py-1 text-xs font-semibold gap-1"
+            className="bg-[#3A10E5] text-white dark:bg-[#FFD300] dark:text-[#10162F] border-2 border-[#10162F] rounded-[4px] px-3 py-1 text-xs font-mono font-bold shadow-[2px_2px_0px_0px_#10162F] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all cursor-pointer inline-flex items-center gap-1"
           >
             {copied ? (
               <>
-                <Check className="h-3 w-3 text-[#10B981]" />
+                <Check className="h-3 w-3 text-white dark:text-[#10162F]" />
                 <span>Copied!</span>
               </>
             ) : (

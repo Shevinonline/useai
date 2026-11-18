@@ -196,38 +196,38 @@ export default function RoadmapsPage() {
     selectedStatus !== 'all';
 
   return (
-    <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-20">
+    <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-20 font-sans">
       {/* 1. Editorial Hero & Search */}
       <section className="pt-6 pb-10 text-center">
-        <div className="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-mono text-xs font-semibold px-3 py-1 rounded-full mb-4 select-none shadow-2xs">
-          <Sparkles className="h-3 w-3 text-[#4F46E5] dark:text-[#6366F1]" />
+        <div className="inline-flex items-center gap-1.5 border-2 border-[#10162F] bg-[#FFD300] text-[#10162F] font-mono text-xs font-bold px-3.5 py-1 rounded-[3px] shadow-[2px_2px_0px_0px_#10162F] mb-4 select-none">
+          <Sparkles className="h-3 w-3 text-[#3A10E5]" />
           <span>{roadmapsData.length} TOTAL CURRICULUMS</span>
         </div>
 
-        <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl tracking-tight text-[#0F172A] dark:text-white leading-[1.15] mb-4">
+        <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl tracking-tight text-[#10162F] dark:text-white leading-[1.12] mb-4">
           Explore AI Roadmaps
         </h1>
-        <p className="font-sans text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        <p className="font-sans text-base sm:text-lg text-[#10162F]/80 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
           Interactive step-by-step developer playbooks, role specializations, and tool mastery tracks with tested prompts.
         </p>
 
         {/* Global Search Bar */}
         <div className="mt-8 max-w-2xl mx-auto w-full">
-          <div className="relative flex items-center w-full bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm hover:border-slate-400 dark:hover:border-slate-600 p-2 gap-2 transition-all focus-within:border-[#4F46E5] dark:focus-within:border-[#6366F1] focus-within:ring-2 focus-within:ring-[#4F46E5]/10">
-            <Search className="h-5 w-5 text-slate-400 dark:text-slate-500 ml-2 shrink-0" />
+          <div className="relative flex items-center w-full bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] shadow-[5px_5px_0px_0px_#10162F] dark:shadow-[5px_5px_0px_0px_#000000] p-2 gap-2 transition-all">
+            <Search className="h-5 w-5 text-[#10162F]/60 dark:text-slate-400 ml-2 shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search roadmaps by title, tool, or workflow..."
-              className="w-full py-1.5 px-2 bg-transparent text-sm sm:text-base text-[#0F172A] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none font-sans"
+              className="w-full py-1.5 px-2 bg-transparent text-sm sm:text-base text-[#10162F] dark:text-white placeholder:text-[#10162F]/40 dark:placeholder:text-slate-500 focus:outline-none font-sans"
               aria-label="Search roadmaps"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="p-1 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer"
+                className="p-1 rounded text-[#10162F]/60 hover:text-[#10162F] dark:hover:text-white transition-colors cursor-pointer"
                 title="Clear"
               >
                 <X className="h-4 w-4" />
@@ -239,22 +239,22 @@ export default function RoadmapsPage() {
 
       {/* 2. Primary Category Navigation Tabs */}
       <section className="mb-6">
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none border-b-2 border-[#10162F] dark:border-[#3B497E]">
           <button
             type="button"
             onClick={() => handleCategorySelect('all')}
-            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] text-xs font-display font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
               selectedCategory === 'all'
-                ? 'bg-[#4F46E5] text-white shadow-xs'
-                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                ? 'bg-[#FFD300] text-[#10162F] shadow-[3px_3px_0px_0px_#10162F]'
+                : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F]'
             }`}
           >
             <span>All Roadmaps</span>
             <span
-              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
+              className={`font-mono text-xs px-1.5 py-0.2 rounded-[2px] border border-[#10162F] ${
                 selectedCategory === 'all'
-                  ? 'bg-white/20 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                  ? 'bg-black/10 text-[#10162F]'
+                  : 'bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-white'
               }`}
             >
               {categoryCounts.total}
@@ -264,18 +264,18 @@ export default function RoadmapsPage() {
           <button
             type="button"
             onClick={() => handleCategorySelect('workflow')}
-            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] text-xs font-display font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
               selectedCategory === 'workflow'
-                ? 'bg-[#4F46E5] text-white shadow-xs'
-                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                ? 'bg-[#FFD300] text-[#10162F] shadow-[3px_3px_0px_0px_#10162F]'
+                : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F]'
             }`}
           >
             <span>Workflows</span>
             <span
-              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
+              className={`font-mono text-xs px-1.5 py-0.2 rounded-[2px] border border-[#10162F] ${
                 selectedCategory === 'workflow'
-                  ? 'bg-white/20 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                  ? 'bg-black/10 text-[#10162F]'
+                  : 'bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-white'
               }`}
             >
               {categoryCounts.workflow}
@@ -285,18 +285,18 @@ export default function RoadmapsPage() {
           <button
             type="button"
             onClick={() => handleCategorySelect('role')}
-            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] text-xs font-display font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
               selectedCategory === 'role'
-                ? 'bg-[#4F46E5] text-white shadow-xs'
-                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                ? 'bg-[#FFD300] text-[#10162F] shadow-[3px_3px_0px_0px_#10162F]'
+                : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F]'
             }`}
           >
-            <span>Role-Based Tracks</span>
+            <span>Role Tracks</span>
             <span
-              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
+              className={`font-mono text-xs px-1.5 py-0.2 rounded-[2px] border border-[#10162F] ${
                 selectedCategory === 'role'
-                  ? 'bg-white/20 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                  ? 'bg-black/10 text-[#10162F]'
+                  : 'bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-white'
               }`}
             >
               {categoryCounts.role}
@@ -306,18 +306,18 @@ export default function RoadmapsPage() {
           <button
             type="button"
             onClick={() => handleCategorySelect('tool')}
-            className={`px-4 py-2.5 rounded-lg text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] text-xs font-display font-bold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
               selectedCategory === 'tool'
-                ? 'bg-[#4F46E5] text-white shadow-xs'
-                : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                ? 'bg-[#FFD300] text-[#10162F] shadow-[3px_3px_0px_0px_#10162F]'
+                : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F]'
             }`}
           >
             <span>Tool Mastery</span>
             <span
-              className={`font-mono text-xs px-1.5 py-0.2 rounded ${
+              className={`font-mono text-xs px-1.5 py-0.2 rounded-[2px] border border-[#10162F] ${
                 selectedCategory === 'tool'
-                  ? 'bg-white/20 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                  ? 'bg-black/10 text-[#10162F]'
+                  : 'bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-white'
               }`}
             >
               {categoryCounts.tool}
@@ -328,12 +328,12 @@ export default function RoadmapsPage() {
 
       {/* 3. Secondary Multi-Filter Toolbar (Difficulty & Status) */}
       <section className="mb-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-lg bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-2xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-[4px] bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000]">
           {/* Left: Filter Groups */}
           <div className="flex flex-wrap items-center gap-4 text-xs font-sans">
             {/* Difficulty Filter */}
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="font-mono text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mr-1">
+              <span className="font-mono text-[11px] font-bold text-[#10162F] dark:text-slate-300 uppercase mr-1">
                 DIFFICULTY:
               </span>
               {[
@@ -346,10 +346,10 @@ export default function RoadmapsPage() {
                   key={item.key}
                   type="button"
                   onClick={() => setSelectedDifficulty(item.key)}
-                  className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
+                  className={`px-2.5 py-1 rounded-[3px] text-xs font-bold transition-all cursor-pointer border ${
                     selectedDifficulty === item.key
-                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-[#10162F] text-white dark:bg-[#FFD300] dark:text-[#10162F] border-[#10162F] shadow-[1px_1px_0px_0px_#10162F]'
+                      : 'bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-slate-300 border-[#10162F]/40 hover:border-[#10162F]'
                   }`}
                 >
                   {item.label}
@@ -357,11 +357,11 @@ export default function RoadmapsPage() {
               ))}
             </div>
 
-            <div className="hidden lg:block w-px h-5 bg-slate-200 dark:bg-slate-800" />
+            <div className="hidden lg:block w-px h-5 bg-[#10162F]/20 dark:bg-white/20" />
 
             {/* Status / Progress Filter */}
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="font-mono text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase mr-1">
+              <span className="font-mono text-[11px] font-bold text-[#10162F] dark:text-slate-300 uppercase mr-1">
                 STATUS:
               </span>
               {[
@@ -375,10 +375,10 @@ export default function RoadmapsPage() {
                   key={item.key}
                   type="button"
                   onClick={() => setSelectedStatus(item.key)}
-                  className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
+                  className={`px-2.5 py-1 rounded-[3px] text-xs font-bold transition-all cursor-pointer border ${
                     selectedStatus === item.key
-                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-[#10162F] text-white dark:bg-[#FFD300] dark:text-[#10162F] border-[#10162F] shadow-[1px_1px_0px_0px_#10162F]'
+                      : 'bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-slate-300 border-[#10162F]/40 hover:border-[#10162F]'
                   }`}
                 >
                   {item.label}
@@ -395,7 +395,7 @@ export default function RoadmapsPage() {
             <button
               type="button"
               onClick={handleResetFilters}
-              className="text-xs font-semibold text-[#4F46E5] dark:text-[#6366F1] hover:underline inline-flex items-center gap-1 self-start md:self-auto cursor-pointer"
+              className="text-xs font-bold text-[#3A10E5] dark:text-[#FFD300] hover:underline inline-flex items-center gap-1 self-start md:self-auto cursor-pointer font-mono"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               <span>Reset Filters</span>
@@ -406,9 +406,9 @@ export default function RoadmapsPage() {
 
       {/* 4. Results Header & Count */}
       <section className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-2 font-display text-sm font-semibold text-[#0F172A] dark:text-white">
+        <div className="flex items-center gap-2 font-display text-sm font-bold text-[#10162F] dark:text-white">
           <span>Showing</span>
-          <span className="font-mono font-bold text-[#4F46E5] dark:text-[#6366F1]">
+          <span className="font-mono font-bold text-[#3A10E5] dark:text-[#FFD300]">
             {filteredRoadmaps.length}
           </span>
           <span>of {roadmapsData.length} Roadmaps</span>

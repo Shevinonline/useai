@@ -335,20 +335,20 @@ Output complete, verified code with zero conversational fluff.`,
 
       {/* Drawer Panel: Distraction-free Step Learning Workspace */}
       <div className="fixed inset-y-0 right-0 flex max-w-full pl-0 sm:pl-8">
-        <div className="w-screen sm:w-[680px] lg:w-[760px] max-w-full lg:max-w-3xl bg-[#FAF8F5] dark:bg-[#0B0F17] text-[#0F172A] dark:text-[#F8FAFC] border-l border-slate-200 dark:border-slate-800 flex flex-col shadow-2xl font-sans">
+        <div className="w-screen sm:w-[680px] lg:w-[760px] max-w-full lg:max-w-3xl bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-[#F8FAFC] border-l-2 border-[#10162F] dark:border-[#3B497E] flex flex-col shadow-2xl font-sans">
           {/* 1. Sticky Workspace Top Telemetry Bar */}
-          <div className="relative z-30 px-4 sm:px-6 py-2.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 bg-white/95 dark:bg-[#111827]/95 backdrop-blur-sm shrink-0 font-mono text-xs">
+          <div className="relative z-30 px-4 sm:px-6 py-2.5 border-b-2 border-[#10162F] dark:border-[#3B497E] flex items-center justify-between gap-3 bg-white dark:bg-[#131A33] shrink-0 font-mono text-xs">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-bold text-[#4F46E5] dark:text-[#6366F1]">
+              <span className="font-bold text-[#3A10E5] dark:text-[#FFD300]">
                 STEP {formatStepNumber(step.stepNumber)} OF {formatStepNumber(allSteps.length || 10)}
               </span>
-              <span className="hidden sm:inline text-slate-300 dark:text-slate-600">•</span>
-              <span className="hidden sm:inline-flex items-center gap-1 text-slate-500 dark:text-slate-400">
+              <span className="hidden sm:inline text-[#10162F]/40 dark:text-slate-600">•</span>
+              <span className="hidden sm:inline-flex items-center gap-1 text-[#10162F]/70 dark:text-slate-300 font-bold">
                 <Clock className="h-3 w-3" />
                 <span>{stepDuration}</span>
               </span>
-              <span className="hidden sm:inline text-slate-300 dark:text-slate-600">•</span>
-              <span className="hidden sm:inline px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-[10px]">
+              <span className="hidden sm:inline text-[#10162F]/40 dark:text-slate-600">•</span>
+              <span className="hidden sm:inline px-1.5 py-0.2 rounded-[2px] bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-white border border-[#10162F] text-[10px] font-bold">
                 {stepDifficulty}
               </span>
             </div>
@@ -360,12 +360,12 @@ Output complete, verified code with zero conversational fluff.`,
                 type="button"
                 title="Copy shareable link to this step"
                 aria-label="Copy shareable link to this step"
-                className="cc-btn-secondary px-2.5 py-1 text-xs font-mono font-semibold gap-1"
+                className="border-2 border-[#10162F] rounded-[4px] bg-white dark:bg-[#0B1021] text-[#10162F] dark:text-white px-2.5 py-1 text-xs font-mono font-bold shadow-[2px_2px_0px_0px_#10162F] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all cursor-pointer inline-flex items-center gap-1"
               >
                 {copiedStepLink ? (
                   <>
-                    <Check className="h-3 w-3 text-[#10B981]" />
-                    <span className="text-[#10B981]">Copied!</span>
+                    <Check className="h-3 w-3 text-[#008A5E]" />
+                    <span className="text-[#008A5E]">Copied!</span>
                   </>
                 ) : (
                   <>
@@ -381,11 +381,11 @@ Output complete, verified code with zero conversational fluff.`,
                 onClick={handleTogglePromptBookmark}
                 title={isPromptSaved ? 'Remove Step from Saved' : 'Save Step to Workspace'}
                 aria-label={isPromptSaved ? 'Remove Step from Saved' : 'Save Step to Workspace'}
-                className={`cc-btn-secondary h-7 w-7 p-0 ${
-                  isPromptSaved ? 'bg-amber-50 text-amber-600 border-amber-300 dark:bg-amber-950/40 dark:text-amber-400' : ''
+                className={`border-2 border-[#10162F] rounded-[4px] h-7 w-7 p-0 shadow-[2px_2px_0px_0px_#10162F] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all cursor-pointer flex items-center justify-center ${
+                  isPromptSaved ? 'bg-[#FFD300] text-[#10162F]' : 'bg-white dark:bg-[#0B1021] text-[#10162F] dark:text-white'
                 }`}
               >
-                <Bookmark className={`h-3.5 w-3.5 ${isPromptSaved ? 'fill-amber-400 text-amber-500' : ''}`} />
+                <Bookmark className={`h-3.5 w-3.5 ${isPromptSaved ? 'fill-[#10162F] text-[#10162F]' : ''}`} />
               </button>
 
               {/* Close Button */}
@@ -394,7 +394,7 @@ Output complete, verified code with zero conversational fluff.`,
                 type="button"
                 aria-label="Close workspace"
                 title="Close (ESC)"
-                className="cc-btn-secondary h-7 w-7 p-0"
+                className="border-2 border-[#10162F] rounded-[4px] bg-white dark:bg-[#0B1021] text-[#10162F] dark:text-white h-7 w-7 p-0 shadow-[2px_2px_0px_0px_#10162F] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all cursor-pointer flex items-center justify-center"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -404,36 +404,36 @@ Output complete, verified code with zero conversational fluff.`,
           {/* 2. Scrollable Workspace Body */}
           <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
             {/* Step Header Block */}
-            <div ref={headerRef} className="px-5 sm:px-7 pt-5 pb-5 bg-white dark:bg-[#111827] border-b border-slate-200 dark:border-slate-800">
+            <div ref={headerRef} className="px-5 sm:px-7 pt-5 pb-5 bg-white dark:bg-[#131A33] border-b-2 border-[#10162F] dark:border-[#3B497E]">
               <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 text-[#4F46E5] dark:bg-indigo-950/40 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60">
+                <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-[3px] bg-[#FFD300] text-[#10162F] border border-[#10162F] shadow-[1px_1px_0px_0px_#10162F]">
                   MODULE {formatStepNumber(step.stepNumber)}
                 </span>
                 {step.tools && step.tools.length > 0 && (
-                  <span className="font-mono text-xs text-slate-500 dark:text-slate-400">
+                  <span className="font-mono text-xs font-bold text-[#10162F]/70 dark:text-slate-300">
                     {step.tools.map((t) => t.name).join(' • ')}
                   </span>
                 )}
               </div>
 
-              <h2 className="text-xl sm:text-2xl font-display font-bold text-[#0F172A] dark:text-white tracking-tight mb-2 leading-snug">
+              <h2 className="text-xl sm:text-2xl font-display font-bold text-[#10162F] dark:text-white tracking-tight mb-2 leading-snug">
                 {step.title}
               </h2>
 
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-sans">
+              <p className="text-sm text-[#10162F]/80 dark:text-slate-300 leading-relaxed font-sans">
                 {step.description || step.summary}
               </p>
             </div>
 
             {/* Sticky Workspace Tabs */}
-            <div className="sticky top-0 z-20 px-5 sm:px-7 py-2.5 border-b border-slate-200 dark:border-slate-800 bg-[#FAF8F5]/95 dark:bg-[#0B0F17]/95 backdrop-blur-sm flex gap-2">
+            <div className="sticky top-0 z-20 px-5 sm:px-7 py-2.5 border-b-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] flex gap-2">
               <button
                 type="button"
                 onClick={() => handleTabChange('playbook')}
-                className={`px-3.5 py-1.5 font-display text-xs sm:text-sm font-semibold rounded-md border transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 font-display text-xs sm:text-sm font-bold rounded-[4px] border-2 border-[#10162F] transition-all cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'playbook'
-                    ? 'border-[#4338CA] bg-[#4F46E5] text-white shadow-xs'
-                    : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
+                    ? 'bg-[#FFD300] text-[#10162F] shadow-[3px_3px_0px_0px_#10162F]'
+                    : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F]'
                 }`}
               >
                 <Terminal className="h-3.5 w-3.5" />
@@ -443,10 +443,10 @@ Output complete, verified code with zero conversational fluff.`,
               <button
                 type="button"
                 onClick={() => handleTabChange('promptLab')}
-                className={`px-3.5 py-1.5 font-display text-xs sm:text-sm font-semibold rounded-md border transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 font-display text-xs sm:text-sm font-bold rounded-[4px] border-2 border-[#10162F] transition-all cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'promptLab'
-                    ? 'border-[#4338CA] bg-[#4F46E5] text-white shadow-xs'
-                    : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
+                    ? 'bg-[#FFD300] text-[#10162F] shadow-[3px_3px_0px_0px_#10162F]'
+                    : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F]'
                 }`}
               >
                 <Sparkles className="h-3.5 w-3.5" />
@@ -456,10 +456,10 @@ Output complete, verified code with zero conversational fluff.`,
               <button
                 type="button"
                 onClick={() => handleTabChange('learnRefs')}
-                className={`px-3.5 py-1.5 font-display text-xs sm:text-sm font-semibold rounded-md border transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 font-display text-xs sm:text-sm font-bold rounded-[4px] border-2 border-[#10162F] transition-all cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'learnRefs'
-                    ? 'border-[#4338CA] bg-[#4F46E5] text-white shadow-xs'
-                    : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
+                    ? 'bg-[#FFD300] text-[#10162F] shadow-[3px_3px_0px_0px_#10162F]'
+                    : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-white shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F]'
                 }`}
               >
                 <BookOpen className="h-3.5 w-3.5" />
@@ -849,15 +849,15 @@ Output complete, verified code with zero conversational fluff.`,
           </div>
 
           {/* 3. Sticky Bottom Learning Navigation Bar */}
-          <div className="relative z-30 px-4 sm:px-6 py-3 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#111827]/95 backdrop-blur-sm flex items-center justify-between gap-3 text-xs shrink-0 font-display">
+          <div className="relative z-30 px-4 sm:px-6 py-3 border-t-2 border-[#10162F] dark:border-[#3B497E] bg-white dark:bg-[#131A33] flex items-center justify-between gap-3 text-xs shrink-0 font-display">
             {/* Prev step */}
             <button
               type="button"
               onClick={handlePrevStep}
               disabled={!hasPrev}
               title={prevStep ? `Previous: Step ${formatStepNumber(prevStep.stepNumber)} — ${prevStep.title}` : 'No previous step'}
-              className={`cc-btn-secondary px-3.5 py-2 text-xs font-semibold gap-1.5 ${
-                !hasPrev ? 'opacity-40 cursor-not-allowed' : ''
+              className={`border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] bg-white dark:bg-[#0B1021] text-[#10162F] dark:text-white px-3.5 py-2 text-xs font-mono font-bold shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all flex items-center gap-1.5 cursor-pointer ${
+                !hasPrev ? 'opacity-40 cursor-not-allowed hover:translate-x-0 hover:translate-y-0 hover:shadow-[2px_2px_0px_0px_#10162F]' : ''
               }`}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -869,10 +869,10 @@ Output complete, verified code with zero conversational fluff.`,
             <button
               type="button"
               onClick={() => onToggleComplete(step.id)}
-              className={`px-5 py-2 text-xs font-bold rounded-md transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-5 py-2 text-xs font-bold font-mono rounded-[4px] border-2 border-[#10162F] transition-all cursor-pointer flex items-center gap-1.5 shadow-[2px_2px_0px_0px_#10162F] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] ${
                 isCompleted
-                  ? 'bg-[#10B981] text-white border border-[#059669] shadow-xs hover:bg-[#059669]'
-                  : 'cc-btn-primary'
+                  ? 'bg-[#008A5E] text-white'
+                  : 'bg-[#3A10E5] text-white dark:bg-[#FFD300] dark:text-[#10162F]'
               }`}
             >
               {isCompleted ? (
@@ -894,8 +894,8 @@ Output complete, verified code with zero conversational fluff.`,
               onClick={handleNextStep}
               disabled={!hasNext}
               title={nextStep ? `Next: Step ${formatStepNumber(nextStep.stepNumber)} — ${nextStep.title}` : 'No next step'}
-              className={`cc-btn-secondary px-3.5 py-2 text-xs font-semibold gap-1.5 ${
-                !hasNext ? 'opacity-40 cursor-not-allowed' : ''
+              className={`border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] bg-white dark:bg-[#0B1021] text-[#10162F] dark:text-white px-3.5 py-2 text-xs font-mono font-bold shadow-[2px_2px_0px_0px_#10162F] dark:shadow-[2px_2px_0px_0px_#000000] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all flex items-center gap-1.5 cursor-pointer ${
+                !hasNext ? 'opacity-40 cursor-not-allowed hover:translate-x-0 hover:translate-y-0 hover:shadow-[2px_2px_0px_0px_#10162F]' : ''
               }`}
             >
               <span className="hidden xs:inline">Next Step</span>

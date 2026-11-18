@@ -132,20 +132,20 @@ export default function ToolsPage() {
   const renderPricingBadge = (pricing) => {
     if (pricing === 'Free') {
       return (
-        <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-[#10B981] dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 uppercase">
+        <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-[2px] bg-[#008A5E] text-white border-2 border-[#10162F] uppercase shadow-[1px_1px_0px_0px_#10162F]">
           FREE
         </span>
       );
     }
     if (pricing === 'Paid') {
       return (
-        <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 uppercase">
+        <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-[2px] bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] uppercase shadow-[1px_1px_0px_0px_#10162F]">
           PAID
         </span>
       );
     }
     return (
-      <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 uppercase">
+      <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-[2px] bg-[#E8F2FF] dark:bg-[#1C2548] text-[#10162F] dark:text-[#FFF8F2] border-2 border-[#10162F] dark:border-[#3B497E] uppercase shadow-[1px_1px_0px_0px_#10162F]">
         FREEMIUM
       </span>
     );
@@ -155,35 +155,35 @@ export default function ToolsPage() {
     <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-20">
       {/* 1. Editorial Hero & Search */}
       <section className="pt-6 pb-10 text-center">
-        <div className="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-mono text-xs font-semibold px-3 py-1 rounded-full mb-4 select-none shadow-2xs">
-          <Wrench className="h-3 w-3 text-[#4F46E5] dark:text-[#6366F1]" />
+        <div className="inline-flex items-center gap-1.5 bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] font-mono text-xs font-bold px-3 py-1 rounded-[4px] shadow-[2px_2px_0px_0px_#10162F] mb-4 select-none">
+          <Wrench className="h-3.5 w-3.5 text-[#10162F]" />
           <span>{toolsData.length} CURATED AI TOOLS &amp; MODELS</span>
         </div>
 
-        <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl tracking-tight text-[#0F172A] dark:text-white leading-[1.15] mb-4">
+        <h1 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl tracking-tight text-[#10162F] dark:text-[#FFF8F2] leading-[1.15] mb-4">
           Curated AI Tools &amp; Models
         </h1>
-        <p className="font-sans text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        <p className="font-sans text-base sm:text-lg text-[#10162F]/80 dark:text-[#FFF8F2]/80 max-w-2xl mx-auto leading-relaxed">
           The essential developer tool stack: leading frontier models, code generators, UI builders, autonomous agents, and video infrastructure.
         </p>
 
         {/* Global Search Bar */}
         <div className="mt-8 max-w-2xl mx-auto w-full">
-          <div className="relative flex items-center w-full bg-white dark:bg-[#111827] border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm hover:border-slate-400 dark:hover:border-slate-600 p-2 gap-2 transition-all focus-within:border-[#4F46E5] dark:focus-within:border-[#6366F1] focus-within:ring-2 focus-within:ring-[#4F46E5]/10">
-            <Search className="h-5 w-5 text-slate-400 dark:text-slate-500 ml-2 shrink-0" />
+          <div className="relative flex items-center w-full bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] shadow-[5px_5px_0px_0px_#10162F] dark:shadow-[5px_5px_0px_0px_#000000] p-2 gap-2 transition-all focus-within:shadow-[6px_6px_0px_0px_#10162F]">
+            <Search className="h-5 w-5 text-[#10162F]/60 dark:text-[#FFF8F2]/60 ml-2 shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search tools by name, description, capability, or framework..."
-              className="w-full py-1.5 px-2 bg-transparent text-sm sm:text-base text-[#0F172A] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none font-sans"
+              className="w-full py-1.5 px-2 bg-transparent text-sm sm:text-base text-[#10162F] dark:text-[#FFF8F2] placeholder:text-[#10162F]/50 dark:placeholder:text-[#FFF8F2]/50 focus:outline-none font-sans font-medium"
               aria-label="Search tools"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="p-1 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer"
+                className="p-1 rounded-[4px] text-[#10162F] dark:text-[#FFF8F2] hover:bg-[#FFD300] hover:text-[#10162F] transition-colors cursor-pointer"
                 title="Clear"
               >
                 <X className="h-4 w-4" />
@@ -195,7 +195,7 @@ export default function ToolsPage() {
 
       {/* 2. Primary Category Filter Pills */}
       <section className="mb-6">
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
           {CATEGORIES.map((cat) => {
             const count = categoryCounts[cat] || 0;
             const isSelected = selectedCategory === cat;
@@ -204,18 +204,18 @@ export default function ToolsPage() {
                 key={cat}
                 type="button"
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-display font-semibold transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+                className={`px-3.5 py-2 rounded-[4px] text-xs sm:text-sm font-display font-bold border-2 border-[#10162F] dark:border-[#3B497E] transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
                   isSelected
-                    ? 'bg-[#4F46E5] text-white shadow-xs'
-                    : 'bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                    ? 'bg-[#FFD300] text-[#10162F] shadow-[3px_3px_0px_0px_#10162F]'
+                    : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-[#FFF8F2] shadow-[2px_2px_0px_0px_#10162F] hover:bg-[#FFF8F2] dark:hover:bg-[#1C2548]'
                 }`}
               >
                 <span>{cat}</span>
                 <span
-                  className={`font-mono text-xs px-1.5 py-0.2 rounded ${
+                  className={`font-mono text-xs px-1.5 py-0.5 rounded-[2px] font-bold ${
                     isSelected
-                      ? 'bg-white/20 text-white'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                      ? 'bg-[#10162F] text-white'
+                      : 'bg-[#10162F]/10 dark:bg-white/10 text-[#10162F] dark:text-[#FFF8F2]'
                   }`}
                 >
                   {count}
@@ -228,9 +228,9 @@ export default function ToolsPage() {
 
       {/* 3. Secondary Pricing Filter Toolbar */}
       <section className="mb-8">
-        <div className="p-3.5 rounded-lg bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-2xs flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="p-4 rounded-[4px] bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000] flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-mono text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase mr-1">
+            <span className="font-mono text-[11px] font-bold text-[#10162F]/60 dark:text-[#FFF8F2]/60 uppercase mr-1">
               Pricing:
             </span>
             {['All', 'Freemium', 'Free', 'Paid'].map((tier) => (
@@ -238,13 +238,13 @@ export default function ToolsPage() {
                 key={tier}
                 type="button"
                 onClick={() => setSelectedPricing(tier)}
-                className={`px-2.5 py-1 rounded text-xs font-medium transition-colors cursor-pointer ${
+                className={`px-3 py-1 rounded-[4px] text-xs font-mono font-bold border-2 border-[#10162F] dark:border-[#3B497E] transition-all cursor-pointer ${
                   selectedPricing === tier
-                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                    ? 'bg-[#10162F] text-white shadow-[2px_2px_0px_0px_#10162F] dark:bg-[#FFD300] dark:text-[#10162F]'
+                    : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-[#FFF8F2] shadow-[2px_2px_0px_0px_#10162F] hover:bg-[#FFF8F2] dark:hover:bg-[#1C2548]'
                 }`}
               >
-                {tier} ({pricingCounts[tier]})
+                {tier} <span className="opacity-80 font-mono text-[10px]">({pricingCounts[tier]})</span>
               </button>
             ))}
           </div>
@@ -253,7 +253,7 @@ export default function ToolsPage() {
             <button
               type="button"
               onClick={handleResetFilters}
-              className="text-xs font-semibold text-[#4F46E5] dark:text-[#6366F1] hover:underline inline-flex items-center gap-1 cursor-pointer"
+              className="text-xs font-bold font-mono text-[#3A10E5] dark:text-[#FFD300] hover:underline inline-flex items-center gap-1.5 cursor-pointer"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               <span>Reset Filters</span>
@@ -264,9 +264,9 @@ export default function ToolsPage() {
 
       {/* 4. Results Header */}
       <section className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-2 font-display text-sm font-semibold text-[#0F172A] dark:text-white">
+        <div className="flex items-center gap-2 font-display text-sm font-bold text-[#10162F] dark:text-[#FFF8F2]">
           <span>Showing</span>
-          <span className="font-mono font-bold text-[#4F46E5] dark:text-[#6366F1]">
+          <span className="font-mono font-bold px-1.5 py-0.5 bg-[#FFD300] text-[#10162F] border-2 border-[#10162F] rounded-[3px]">
             {filteredTools.length}
           </span>
           <span>of {toolsData.length} Tools</span>
@@ -283,13 +283,13 @@ export default function ToolsPage() {
             return (
               <div
                 key={`${tool.id || tool.name}-${idx}`}
-                className="cc-card group relative flex flex-col justify-between overflow-hidden text-left shadow-2xs"
+                className="group relative flex flex-col justify-between overflow-hidden text-left bg-white dark:bg-[#131A33] border-2 border-[#10162F] dark:border-[#3B497E] rounded-[4px] shadow-[4px_4px_0px_0px_#10162F] dark:shadow-[4px_4px_0px_0px_#000000] hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#10162F] transition-all duration-150"
               >
                 {/* Card Top Header */}
-                <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#111827]">
+                <div className="p-4 sm:p-5 border-b-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021]">
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-mono text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                      <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-[2px] bg-white dark:bg-[#131A33] text-[#10162F] dark:text-[#FFF8F2] border-2 border-[#10162F] dark:border-[#3B497E] shadow-[1px_1px_0px_0px_#10162F]">
                         {tool.category || 'AI Tool'}
                       </span>
                       {renderPricingBadge(tool.pricing)}
@@ -300,31 +300,31 @@ export default function ToolsPage() {
                       onClick={() => toggleToolBookmark(tool)}
                       title={isSaved ? 'Remove from Saved' : 'Save Tool'}
                       aria-label={isSaved ? 'Remove from Saved' : 'Save Tool'}
-                      className={`p-1.5 rounded border transition-colors cursor-pointer ${
+                      className={`p-1.5 rounded-[4px] border-2 border-[#10162F] dark:border-[#3B497E] transition-all cursor-pointer shadow-[2px_2px_0px_0px_#10162F] ${
                         isSaved
-                          ? 'border-amber-300 bg-amber-50 text-amber-600 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-400'
-                          : 'border-transparent text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800'
+                          ? 'bg-[#FFD300] text-[#10162F]'
+                          : 'bg-white dark:bg-[#131A33] text-[#10162F] dark:text-[#FFF8F2] hover:bg-[#FFF8F2]'
                       }`}
                     >
-                      <Bookmark className={`h-3.5 w-3.5 ${isSaved ? 'fill-amber-400 text-amber-500' : ''}`} />
+                      <Bookmark className={`h-3.5 w-3.5 ${isSaved ? 'fill-[#10162F] text-[#10162F]' : ''}`} />
                     </button>
                   </div>
 
-                  <h3 className="font-display font-bold text-lg text-[#0F172A] dark:text-white group-hover:text-[#4F46E5] dark:group-hover:text-[#6366F1] transition-colors">
+                  <h3 className="font-display font-extrabold text-lg text-[#10162F] dark:text-[#FFF8F2] group-hover:text-[#3A10E5] dark:group-hover:text-[#FFD300] transition-colors">
                     {tool.name}
                   </h3>
                 </div>
 
                 {/* Card Body */}
-                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between bg-white dark:bg-[#111827]">
-                  <p className="font-sans text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3 mb-4">
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between bg-white dark:bg-[#131A33]">
+                  <p className="font-sans text-xs sm:text-sm text-[#10162F]/80 dark:text-[#FFF8F2]/80 leading-relaxed line-clamp-3 mb-4">
                     {tool.description}
                   </p>
 
                   {/* Linked Roadmaps */}
                   {linkedRoadmaps.length > 0 ? (
-                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
-                      <span className="font-mono text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase flex items-center gap-1">
+                    <div className="pt-3 border-t-2 border-[#10162F]/15 dark:border-[#3B497E]/40 space-y-1.5">
+                      <span className="font-mono text-[10px] font-bold text-[#10162F]/60 dark:text-[#FFF8F2]/60 uppercase flex items-center gap-1">
                         <Layers className="h-3 w-3" />
                         <span>Used in Roadmaps:</span>
                       </span>
@@ -333,7 +333,7 @@ export default function ToolsPage() {
                           <Link
                             key={r.id}
                             to={`/roadmap/${r.id}`}
-                            className="font-mono text-[10px] px-2 py-0.5 rounded bg-indigo-50 hover:bg-indigo-100 text-[#4F46E5] dark:bg-indigo-950/40 dark:hover:bg-indigo-900/50 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60 transition-colors truncate max-w-[200px]"
+                            className="font-mono text-[10px] font-bold px-2 py-0.5 rounded-[2px] bg-[#FFF8F2] dark:bg-[#0B1021] hover:bg-[#FFD300] hover:text-[#10162F] text-[#10162F] dark:text-[#FFF8F2] border-2 border-[#10162F] dark:border-[#3B497E] transition-colors truncate max-w-[200px]"
                             title={`Open ${r.title}`}
                           >
                             {r.title}
@@ -342,15 +342,15 @@ export default function ToolsPage() {
                       </div>
                     </div>
                   ) : Array.isArray(tool.workflows) && tool.workflows.length > 0 ? (
-                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
-                      <span className="font-mono text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase">
+                    <div className="pt-3 border-t-2 border-[#10162F]/15 dark:border-[#3B497E]/40 space-y-1.5">
+                      <span className="font-mono text-[10px] font-bold text-[#10162F]/60 dark:text-[#FFF8F2]/60 uppercase">
                         Workflows:
                       </span>
                       <div className="flex flex-wrap gap-1">
                         {tool.workflows.slice(0, 2).map((wf, wIdx) => (
                           <span
                             key={wIdx}
-                            className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 truncate max-w-[200px]"
+                            className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded-[2px] bg-[#FFF8F2] dark:bg-[#0B1021] text-[#10162F] dark:text-[#FFF8F2] border border-[#10162F]/40 dark:border-[#3B497E] truncate max-w-[200px]"
                           >
                             {wf}
                           </span>
@@ -361,8 +361,8 @@ export default function ToolsPage() {
                 </div>
 
                 {/* Card Action Footer */}
-                <div className="p-3.5 sm:p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0B0F17] flex items-center justify-between text-xs">
-                  <span className="font-mono text-[11px] text-slate-400">
+                <div className="p-3.5 sm:p-4 border-t-2 border-[#10162F] dark:border-[#3B497E] bg-[#FFF8F2] dark:bg-[#0B1021] flex items-center justify-between text-xs">
+                  <span className="font-mono text-[11px] font-bold text-[#10162F]/60 dark:text-[#FFF8F2]/60">
                     Official Release
                   </span>
 
@@ -371,7 +371,7 @@ export default function ToolsPage() {
                       href={sanitizeExternalUrl(tool.url)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="cc-btn-primary px-3 py-1.5 text-xs font-semibold gap-1.5"
+                      className="inline-flex items-center px-3 py-1.5 text-xs font-bold font-display bg-[#3A10E5] text-white border-2 border-[#10162F] rounded-[4px] shadow-[2px_2px_0px_0px_#10162F] hover:-translate-x-[1px] hover:-translate-y-[1px] hover:shadow-[3px_3px_0px_0px_#10162F] transition-all gap-1.5"
                     >
                       <span>Visit Site</span>
                       <ExternalLink className="h-3 w-3" />
@@ -384,17 +384,17 @@ export default function ToolsPage() {
         </div>
       ) : (
         <div className="cc-card p-12 text-center my-6">
-          <Search className="h-10 w-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-          <h3 className="font-display font-bold text-lg text-[#0F172A] dark:text-white mb-2">
+          <Search className="h-10 w-10 text-[#10162F]/40 dark:text-[#FFF8F2]/40 mx-auto mb-3" />
+          <h3 className="font-display font-bold text-xl text-[#10162F] dark:text-[#FFF8F2] mb-2">
             No tools match your criteria
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-300 max-w-sm mx-auto mb-5 leading-relaxed font-sans">
+          <p className="text-sm text-[#10162F]/80 dark:text-[#FFF8F2]/80 max-w-sm mx-auto mb-5 leading-relaxed font-sans">
             Try adjusting your search query, or clear your category and pricing filters to view all AI tools.
           </p>
           <button
             type="button"
             onClick={handleResetFilters}
-            className="cc-btn-primary px-5 py-2 text-xs font-semibold gap-1.5"
+            className="cc-btn-primary px-5 py-2 text-xs font-bold gap-1.5"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span>Reset All Filters</span>

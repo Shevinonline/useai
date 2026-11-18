@@ -429,7 +429,7 @@ export default function CommandPalette() {
                 <X className="h-4 w-4" />
               </button>
             )}
-            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono rounded-[2px] border border-[#10162F]/40 bg-[#F5EFE6] dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 select-none font-bold">
+            <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono rounded-[2px] border border-[#10162F]/40 bg-[#FFF8F2] dark:bg-[#131A33] text-[#10162F] dark:text-slate-300 select-none font-bold">
               ESC
             </kbd>
           </div>
@@ -474,7 +474,7 @@ export default function CommandPalette() {
                         className={`w-full flex items-center justify-between px-3 py-2.5 rounded-[4px] text-left transition-all cursor-pointer select-none ${
                           isSelected
                             ? 'bg-[#3A10E5] text-white border-2 border-[#10162F] shadow-[2px_2px_0px_0px_#10162F]'
-                            : 'text-[#10162F] dark:text-slate-200 hover:bg-[#F5EFE6] dark:hover:bg-[#1B2447] border-2 border-transparent'
+                            : 'text-[#10162F] dark:text-slate-200 hover:bg-[#FFF8F2] dark:hover:bg-[#1B2447] border-2 border-transparent'
                         }`}
                       >
                         {/* Left: Icon & Titles */}
@@ -554,7 +554,7 @@ export default function CommandPalette() {
         </div>
 
         {/* Footer Helper Bar */}
-        <div className="px-4 py-2.5 bg-[#F5EFE6] dark:bg-[#0B1021] border-t-2 border-[#10162F] dark:border-[#3B497E] flex items-center justify-between text-xs text-[#10162F]/70 dark:text-slate-400 font-mono">
+        <div className="px-4 py-2.5 bg-[#FFF8F2] dark:bg-[#0B1021] border-t-2 border-[#10162F] dark:border-[#3B497E] flex items-center justify-between text-xs text-[#10162F]/70 dark:text-slate-400 font-mono">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1">
               <kbd className="px-1.5 py-0.5 rounded-[2px] bg-white dark:bg-[#131A33] border border-[#10162F]/40 text-[#10162F] dark:text-white text-[10px] font-bold">
